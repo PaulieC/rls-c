@@ -1,5 +1,7 @@
-__author__ = 'jeffrey creighton & anad patel'
-#Purpose: data structure for tracking match history
+__author__ = 'jeffrey creighton & anand patel'
+# Purpose: data structure for tracking match history
+
+
 class ScorekeeperHistoryItem:
     def __init__(self, player1, player2, winner, score1, score2):
         self.player1 = player1
