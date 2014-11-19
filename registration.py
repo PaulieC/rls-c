@@ -3,12 +3,12 @@ __author__ = 'joe kvedaras'
 
 
 class Registration:
-    """Register a player in the tournament"""
 
-    def __init__(self,Tournament):
-        self.tournament = Tournament
+    def __init__(self,tournament):
+        """Initialize Registration with a Tournament"""
+        self.tournament = tournament
 
 
     def register(self, Player):
-        """Register a player in the tournament passed into constructor"""
+        """Register a player in the tournament"""
         self.tournament.add(Player)
