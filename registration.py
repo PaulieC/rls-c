@@ -10,5 +10,5 @@ class Registration:
 
 
     def register(self, Player):
-        """Register a player in the tournament"""
+        """Register a player in the tournament passed into constructor"""
         self.tournament.add(Player)
