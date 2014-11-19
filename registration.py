@@ -9,6 +9,6 @@ class Registration:
         self.tournament = tournament
 
 
-    def register(self, Player):
+    def register(self, player):
         """Register a player in the tournament"""
-        self.tournament.add(Player)
+        self.tournament.add(player)
