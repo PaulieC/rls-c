@@ -5,7 +5,7 @@
 #
 #################################################
 
-# create Game Class 
+
 class Game (Object):
     
 
