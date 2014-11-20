@@ -20,7 +20,7 @@ class Message(object):
         self.players = None
         self.info = None
 
-    def setplayers(self, players):
+    def set_players(self, players):
         """
         Set players in a players related message such as GameEnd
         :param players: the players
@@ -28,7 +28,7 @@ class Message(object):
         """
         self.players = players
 
-    def getplayers(self):
+    def get_players(self):
         """
         Returns players in relating to the message
         :return:
@@ -36,7 +36,7 @@ class Message(object):
         return self.players
 
 
-    def setinfo(self, info):
+    def set_info(self, info):
         """
         Set additional information, such as the result of a match etc,
         that needs to be transported with the message
@@ -45,7 +45,7 @@ class Message(object):
         """
         self.info = info
 
-    def getinfo(self):
+    def get_info(self):
         """
         Returns the information stored in the message
         :return:
