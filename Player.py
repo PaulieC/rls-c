@@ -12,19 +12,21 @@
 #Ex: A Rock Paper Scissors Player that subclasses Player would
 #define some AI in 'play' to return 'rock' 'paper or 'scissors'
 
-def Player(Observer):
+import Observer
+
+class Player(Observer.Observer):
     def __init__(self):
-        self.name = ""
+        self.name = None
     #play should be defined to return a move based on AI/Strategy,
     #it takes in move history of opponent
-    def play(self, movehistory):
+    def play(self):
         pass
     #should be defined to return the Player instance variable 'name'
     def get_name(self):
         pass
     #should be defined to set the Player instance variable name
     def set_name(self, playername):
-        pass
+        self.name = playername
 
 
 
