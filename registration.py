@@ -1,4 +1,4 @@
-__author__ = 'joe kvedaras'
+__author__ = 'Joe Kvedaras and Collin Day'
 #purpose of this file is to register a player in a tournament
 
 
