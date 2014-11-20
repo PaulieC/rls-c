@@ -6,8 +6,6 @@
 #################################################
 
 class Game (Object):
-    
-
     listPlayers = []
 
     listRules = []
