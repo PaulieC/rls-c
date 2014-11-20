@@ -28,6 +28,14 @@ class Message(object):
         """
         self.players = players
 
+    def getplayers(self):
+        """
+        Returns players in relating to the message
+        :return:
+        """
+        return self.players
+
+
     def setinfo(self, info):
         """
         Set additional information, such as the result of a match etc,
@@ -36,6 +44,14 @@ class Message(object):
         :return:
         """
         self.info = info
+
+    def getinfo(self):
+        """
+        Returns the information stored in the message
+        :return:
+        """
+        return self.info
+
 
     def is_match_start_message(self):
         """
