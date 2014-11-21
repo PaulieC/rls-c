@@ -22,27 +22,28 @@ class ExampleRPSPlayer(Player.Player):
     def notify(self, msg):
 
         # We use notifications to store opponent's moves in past rounds
-
-        # Process match end and round end messages
-        if (msg.is_match_end_message()):
+        # Process match-end and round-end messages
+        if msg.is_match_end_message():
             self.reset()
-        elif (msg.is_round_end_message()):
-            # In this case, (by convention) the info is a tuple of the moves made and result e.g. ((1, 0), 1) which
-            # means player 1 played paper (1), the player 2 played rock(0) and the result was that
-            # player 1 won
-
-            moves, result = msg.get_info()
+        elif msg.is_round_end_message():
             players = msg.get_players()
+            # Check if this message is for me and only then proceed
+            if (players[0] == self) or (players[1] == self):
+                # In this case, (by convention) the info is a tuple of the moves made and result e.g. ((1, 0), 1) which
+                # means player 1 played paper (1), the player 2 played rock(0) and the result was that
+                # player 1 won
 
-            # RPS is a two person game; figure out which of the players is me
-            # and which one is the opponent
-            if (players[0] == self):
-                opponent = 1
-            else:
-                opponent = 0
+                moves, result = msg.get_info()
 
-            # Update opponent's past moves history
-            self.opponents_moves.append(moves[opponent])
+                # RPS is a two person game; figure out which of the players is me
+                # and which one is the opponent
+                if players[0] == self:
+                    opponent = 1
+                else:
+                    opponent = 0
+
+                # Update opponent's past moves history
+                self.opponents_moves.append(moves[opponent])
 
 
 
@@ -62,12 +63,12 @@ class RpsPlayingStrategy(object):
         for move in opponents_moves:
             count[move] += 1
 
-        if (count[0] < count[1]):
+        if count[0] < count[1]:
             least = 0
         else:
             least = 1
 
-        if (count[least] > count[2]):
+        if count[least] > count[2]:
             least = 2
 
         # Assuming that opponent's move is going to be the value of least, play to beat it
