@@ -21,20 +21,20 @@ class Message(object):
 
     @staticmethod
     def get_match_start_message(players):
-        return createmessage(Message.Match_Start, players)
+        return Message.createmessage(Message.Match_Start, players)
 
     @staticmethod
     def get_match_end_message(players, result):
-        return createmessage (Message.Match_End, players, result)
+        return Message.createmessage (Message.Match_End, players, result)
 
     @staticmethod
     def get_round_start_message(players):
-        return createmessage(Message.Round_Start, players)
+        return Message.createmessage(Message.Round_Start, players)
 
     @staticmethod
     def get_round_end_message(players, moves, result):
         info = (moves, result)
-        return createmessage(Message.Round_End, players, info)
+        return Message.createmessage(Message.Round_End, players, info)
 
     def __init__(self, msgtype):
         self.msgtype = msgtype
@@ -102,13 +102,19 @@ class Message(object):
         """
         return self.msgtype == Message.Round_End
 
+    @staticmethod
+    def create_message(msgtype, players=None, info=None):
+        """
+        Helper method that builds different kinds of messages
+        :param msgtype: Message type
+        :param players: Players involved in the message if any
+        :param info: Additional information that is contained in the message, such as the moves made in a game and the result etc.
+        :return: the message that is created
+        """
+        m = Message(msgtype)
+        m.set_players(players)
+        m.set_info(info)
+        return m
 
-# Free (global) functions for creating messages of different types
 
 
-
-def createmessage(msgtype, players=None, info=None):
-    m = Message(msgtype)
-    m.set_players(players)
-    m.set_info(info)
-    return m
