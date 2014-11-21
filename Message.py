@@ -8,12 +8,33 @@ class Message(object):
     Message types:
         Defines standard types of messages that are broadcast within the game.
     """
-    TournamentStart = 1
-    TournamentEnd = 2
-    MatchStart = 3
-    MatchEnd = 4
-    RoundStart = 5
-    RoundEnd = 6
+    Tournament_Start = 1
+    Tournament_End = 2
+    Match_Start = 3
+    Match_End = 4
+    Round_Start = 5
+    Round_End = 6
+
+    # Different types of message builders
+    # These are static methods, so use them like this:
+    # m = Message.get_match_start_message(players)
+
+    @staticmethod
+    def get_match_start_message(players):
+        return createmessage(Message.Match_Start, players)
+
+    @staticmethod
+    def get_match_end_message(players, result):
+        return createmessage (Message.Match_End, players, result)
+
+    @staticmethod
+    def get_round_start_message(players):
+        return createmessage(Message.Round_Start, players)
+
+    @staticmethod
+    def get_round_end_message(players, moves, result):
+        info = (moves, result)
+        return createmessage(Message.Round_End, players, info)
 
     def __init__(self, msgtype):
         self.msgtype = msgtype
@@ -58,45 +79,36 @@ class Message(object):
         Whether the message is a start of match notification
         :return: True if message is a start of match notification, False otherwise
         """
-        return self.msgtype == Message.MatchStart
+        return self.msgtype == Message.Match_Start
 
     def is_match_end_message(self):
         """
         Whether the message is a end of match notification
         :return: True if the message is a end of match notification, False otherwise
         """
-        return self.msgtype == Message.MatchEnd
+        return self.msgtype == Message.Match_End
 
     def is_round_start_message(self):
         """
         Whether the message is a start of round notification
         :return: True if the message is a start of round notification, False otherwise
         """
-        return self.msgtype == Message.RoundStart
+        return self.msgtype == Message.Round_Start
 
     def is_round_end_message(self):
         """
         Whether the message is a end of round notification
         :return: True if the message is a end of round notification, False otherwise
         """
-        return self.msgtype == Message.RoundEnd
+        return self.msgtype == Message.Round_End
 
 
 # Free (global) functions for creating messages of different types
-def get_match_start_message(players):
-    return createmessage(Message.MatchStart, players)
 
-def get_match_end_message(players, result):
-    return createmessage (Message.MatchEnd, players, result)
 
-def get_round_start_message(players):
-    return createmessage(Message.RoundStart, players)
-
-def get_round_end_message(players, result):
-    return createmessage(Message.RoundEnd, players, result)
 
 def createmessage(msgtype, players=None, info=None):
     m = Message(msgtype)
-    m.setplayers(players)
-    m.setinfo(info)
+    m.set_players(players)
+    m.set_info(info)
     return m
