@@ -21,20 +21,23 @@ class Message(object):
 
     @staticmethod
     def get_match_start_message(players):
-        return Message.createmessage(Message.Match_Start, players)
+        return Message.create_message(Message.Match_Start, players)
 
     @staticmethod
     def get_match_end_message(players, result):
-        return Message.createmessage (Message.Match_End, players, result)
+        # result format: tuple (wins for each player) eg. (2, 4) means first player won 2, second won 4
+        return Message.create_message (Message.Match_End, players, result)
 
     @staticmethod
     def get_round_start_message(players):
-        return Message.createmessage(Message.Round_Start, players)
+        return Message.create_message(Message.Round_Start, players)
 
     @staticmethod
     def get_round_end_message(players, moves, result):
+        # moves is a tuple. For eg. (2,1) means first player played scissors and the second played paper
+        # result is 0 if tied, 1 if first player won and 2 if second player won
         info = (moves, result)
-        return Message.createmessage(Message.Round_End, players, info)
+        return Message.create_message(Message.Round_End, players, info)
 
     def __init__(self, msgtype):
         self.msgtype = msgtype

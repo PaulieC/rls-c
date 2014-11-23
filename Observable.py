@@ -6,8 +6,8 @@ __author__= 'Dan and Pat'
 #class for Observable
 class Observable(object):
 
-    #list of all observers
-    observer_list = []
+    def __init__(self):
+        self.observer_list = []
 
     #notify all observers
     def notify_all(self, msg):
