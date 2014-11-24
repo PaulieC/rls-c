@@ -6,7 +6,7 @@ from Tournament.py import *
 class TournamentService:
 
     def __init__(self, tournament):
-        """initialize a new tournament with a game"""
+        #Is tournament service the one to create a new tournament?
         self.tournament = tournament
 
 
