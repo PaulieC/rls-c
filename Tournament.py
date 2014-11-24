@@ -30,6 +30,10 @@ class Tournament(Observable):
     def register_player(self, player):
         self.playerList.append(player)
 
+    # stores a reference to the type of game we will be playing
+    def set_game(self, game):
+        self.game = game
+
     # play the next match and return the results
     def play_match(self, match):
         self.start_match(match[0])
@@ -54,7 +58,8 @@ class Tournament(Observable):
 
     # send a message containing a list of all the players in the current match
     def start_match(self, players):
-        message = Message.get_match_start_message(players)	       self.notify_all(message)
+        message = Message.get_match_start_message(players)
+        self.notify_all(message)
 
     # send a message containing the result of the match
     def end_match(self,players, result):
