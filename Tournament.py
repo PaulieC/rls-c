@@ -41,12 +41,12 @@ class Tournament(Observable):
 	self.end_match(match[0], result)
 
     # plays each indvidual game in the match
-    def play_game(self, match):
+    def play_round(self, match):
         for i in range(0, match[1]):
-            self.start_game(match[0])
+            self.start_round(match[0])
             result = match.get_results(match[0])
             # need to find out definite structure of results!!
-            self.end_game(result[0], result[1], result[2])
+            self.end_round(result[0], result[1], result[2])
 
 	# notifies players tournament has begun
     def begin_tournament(self):
@@ -67,11 +67,11 @@ class Tournament(Observable):
         self.notify_all(message)
 
     # send a message containing the players in the next game
-    def start_game(self, players):
+    def start_round(self, players):
         message = Message.get_round_start_message(players)
         self.notify_all(message)
 
     # send a message containing the players, moves, and result of the last game
-    def end_game(players, moves, result):
+    def end_round(players, moves, result):
         message = Message.get_round_end_message(players, moves, result)
         self.notify_all(message)
