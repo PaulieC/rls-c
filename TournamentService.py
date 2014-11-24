@@ -13,7 +13,10 @@ class TournamentService:
 
     def register_player(self, player):
         """register a player in the current tournament"""
-        self.tournament.register_player(player)
+        if self.tournament is None:
+            print("Can not add player. Tournament is null")
+        else:
+            self.tournament.register_player(player)
 
 
     def set_game(self, game):
@@ -35,6 +38,6 @@ class TournamentService:
     def run(self):
         """Set the game and run the tournament"""
         if self.tournament is None:
-            print ("Can not run tournament. Tournament is null")
+            print("Can not run tournament. Tournament is null")
         else:
             self.tournament.run()
