@@ -1,10 +1,11 @@
 __author__ = 'geebzter'
-# Example of how to code an RPS player within the framework
 
+# Example of how to implement an RPS player within the framework
 
 import Player
+import Message
 
-class ExampleRPSPlayer(Player.Player):
+class RPSPlayerExample(Player.Player):
 
     def __init__(self):
         # Call super class constructor
@@ -17,14 +18,20 @@ class ExampleRPSPlayer(Player.Player):
     def reset(self):
         self.opponents_moves = []
 
-
+    def get_name(self):
+        return "Minimizer"
 
     def notify(self, msg):
 
         # We use notifications to store opponent's moves in past rounds
-        # Process match-end and round-end messages
-        if msg.is_match_end_message():
-            self.reset()
+        # Process match-start and round-end messages
+        # At the start of the match, clear opponent moves history since a new match has started
+        # At the end of a round, append move to opponent's move history. Move history is used
+        # to compute the next move played.
+        if msg.is_match_start_message():
+            players = msg.get_players()
+            if players[0] == self or players[1] == self:
+                self.reset()
         elif msg.is_round_end_message():
             players = msg.get_players()
             # Check if this message is for me and only then proceed
@@ -73,6 +80,27 @@ class RpsPlayingStrategy(object):
 
         # Assuming that opponent's move is going to be the value of least, play to beat it
         return (least + 1) % 3
+
+# Test driver
+# Run by typing "python3 RpsPlayerExample.py"
+
+if __name__ == "__main__":
+    player = RPSPlayerExample()
+    opponent = RPSPlayerExample()
+    players = [opponent,player]
+    fakeinfo = ((0,1),1)
+    fakeresult = 1
+    fakemoves = (1,2)
+
+    player.notify(Message.Message.get_match_start_message(players))
+    player.notify(Message.Message.get_round_start_message(players))
+    move = player.play()
+    print ("Move played: ", move)
+    player.notify(Message.Message.get_round_end_message(players,fakemoves,fakeresult))
+
+
+
+
 
 
 
