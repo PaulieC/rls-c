@@ -28,8 +28,3 @@ class AllPlayAll(Tournament.Tournament):
             self.p = self.p+1
             self.q = self.p+1
         return match
-    
-    def run(self):
-        """ Run the All-Play-All Tournament """
-        super(AllPlayAll,self).run()
-
