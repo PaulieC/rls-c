@@ -1,25 +1,32 @@
-__author__ = 'g_ric_000'
+__author__ = 'Greg Richards'
+
+import Game
 
 
 class RPSGame(Game):
-    ## this class simulates two players playing rock, paper, scissors
+    ## this class simulates two players playing a game of rock, paper, scissors
     def __init__(self):
+        super(RPSGame, self).__init__()
 
-
-        def play_game(self, player1, player2):
-            result = ""
-            move1 = player1.get_move()
-            move2 = player2.get_move()
-            if self.is_valid_move(move1) and self.is_valid_move(move2):
+        def get_result(self, moves):
+            move1, move2 = moves    # unpack the tuple that was passed as a parameter
+            x = is_legal(move1)
+            y = is_legal(move2)
+            result = (0,0)          # result is a tuple of the points that each player has earned respectively 
+            if x and y:
                 if move1 == move2:
-                    result = "The match has ended in a tie!"
-                elif (move1 == "rock" and move2 == "scissors") or (move1 == "paper" and move2 == "rock") or (move1 == "scissors" and move2 == "paper"):
-                        result = "Player1 is the winner!"
+                    result = (1,1)
+                elif (move1 == 0 and move2 != 1) or (move1 == 1 and move2 != 2) or (move1 == 2 and move2 != 0):
+                    result = (1,0)
                 else:
-                    result = "Player2 is the winner!"
+                    result = (0,1)
+            elif x and not y:
+                result = (1,0)
+            elif not x and y:
+                result = (0,1)
             else:
-                result = "Valid moves were not made by both teams."
+                result = result
             return result
 
-        def is_valid_move(self, move):
-            return move in ('rock', 'paper', 'scissors')
+        def is_legal(self, move):
+            return move in (0, 1, 2)
