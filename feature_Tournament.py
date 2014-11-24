@@ -3,20 +3,23 @@
 
 #Tournament is observable while players are observers
 
+import Message
+
 class Tournament(Observable):
     # set up a list of players when tournament is initialized
     def __init__(self):
         self.playerList = []
-		registration = True
+	self.game
+
     # run the tournament
-    def run(self):
-		
-		begin_tournament()
+    def run(self):	
+        self.begin_tournament()
         while(True):
-        	match = create_next_match(self)
+        	match = self.create_next_match()
                 if match == None:
                     break
-                play_match(self, match)
+                self.play_match(match)
+        self.end_tournament()
 			
 			
     # get a reference to the next game to be played
@@ -25,52 +28,45 @@ class Tournament(Observable):
 
     # register a player for the tournament by adding them to       # the  list of current players
     def register_player(self, player):
-		if registration
-			self.playerList.append(player)
-		else
-			print ("Sorry, registration is closed")
+        self.playerList.append(player)
 
     # play the next match and return the results
-    # is tournament responsible for looping the match until someone reaches the score limit or is that game's responsiblity? Or some external class we still need???
-	#I believe we talked about a match class that is used only within tournament. I think it loops the game to the score limit
     def play_match(self, match):
-        return match.play()
+        self.start_match(match[0])
+        result = self.play_game(match)
+	self.end_match(match[0], result)
 
-    # update the score board with the winner and loser of the game
-    def update_scoreboard(self, results):
-	#I'm unsure how results are reported from the game
-	# and how they're sent to scoreboard so pass
-	# for now
-        pass
-	
-	# Closes registration and notifies players tournament has begun
-	def begin_tournament(self):
-		registration = False
-		#Dont know how we should notify the players with observable/observer in python
+    # plays each indvidual game in the match
+    def play_game(self, match):
+        for i in range(0, match[1]):
+            self.start_game(match[0])
+            result = match.get_results(match[0])
+            # need to find out definite structure of results!!
+            self.end_game(result[0], result[1], result[2])
+
+	# notifies players tournament has begun
+    def begin_tournament(self):
+        pass	
 	
 	# Announces results of tournament to all players
-	def end_tournament(self)
-		pass
+    def end_tournament(self):
+        pass
 
-		
-		
-#Match class that handles the players playing each other		
-class Match:
-	
-	#Takes 2 players and number of games to play
-	#I believe Dr. Baliga said it was ok to leave it hard coded at 2 players for the first sprint
-	def __init__(self, p, q, num_games):
-		self.p = p
-		self.q = q
-		self.num_games = num_games
-		
-	#Loops until total number of games is played
-	#Here should be taking the players moves and getting the results I think
-	#Unsure of the format that the rules/game class has
-	#Is this also where we have to track the scores for the match?
-	#Also it should notify the scoreboard of who won and the players of the result right?
-	
-	def play(self):
-		for x in range(num_games)
-			
-			
+    # send a message containing a list of all the players in the current match
+    def start_match(self, players):
+        message = Message.get_match_start_message(players)	       self.notify_all(message)
+
+    # send a message containing the result of the match
+    def end_match(self,players, result):
+        message = Message.get_match_end_message(players, result)
+        self.notify_all(message)
+
+    # send a message containing the players in the next game
+    def start_game(self, players):
+        message = Message.get_round_start_message(players)
+        self.notify_all(message)
+
+    # send a message containing the players, moves, and result of the last game
+    def end_game(players, moves, result):
+        message = Message.get_round_end_message(players, moves, result)
+        self.notify_all(message)
