@@ -1,49 +1,35 @@
 __author__ = "Paul Council & William Ezekiel"
-__date__ = "November 19 2014"
-__version__ = "1.0"
+__date__ = "November 24 2014"
+__version__ = "1.0.1"
 
-from Game import *
-from Registration import *
-""" AllPlayAll Tournament Type, every player plays every other player in
-    1 match"""
-class AllPlayAll(Tournament):
-    def __init__(self,game,registration,rounds=1000):
-        """ Initialize AllPlayAll class. Requires Game, Registration
-            and Rounds. Rounds is optional and will be 1000 by default.
+#imports
+import Tournament
+
+""" AllPlayAll Tournament Type, every player is in a match with every other player """
+class AllPlayAll(Tournament.Tournament):
+    
+    def __init__(self,rounds = 100):
+        """ Initialize AllPlayAll
+        :param rounds the number of rounds per match, 100 by default
         """
-        if(rounds>0):
-            self.rounds = rounds
-        else:
-            self.rounds = 1000
-        self.game = game
-        self.registration = registration
+        Tournament.Tournament.__init__(self)
+        # variables to help us pick players 1 and 2.
+        self.p = 0     # player 1 index
+        self.q = 1     # player 2 index
+        self.rounds = rounds
 
-
-    def set_players(self):
-        """ Place all active players into tournament bracket."""
-        self.bracket = self.registration.get_players()
-
-    def create_next_match(self,i,j):
-        """Create a match consisting of two players. Players
-            are determined by positions i and j in bracket"""
-        #i == j will never happen
-        return [bracket[i],bracket[j]]
-
-    def play_match(self,match):
-        """ play match: play a game a certain number of rounds"""
-        self.game.connect()
-        for i in range(0,rounds):
-            self.game.play(match[0],match[1])
-            # assuming games updates scoreboard on winner. 
-        
-        
+    def create_next_match(self):
+        """ Create the next match """
+        if self.q >= len(self.playerList):   # Gone through all possible matchups.
+            return None
+        match = (self.playerList[self.p],self.playerList[self.q])
+        self.q = self.q+1
+        if self.q >= len(self.playerList):    # if index out of bounds
+            self.p = self.p+1
+            self.q = self.p+1
+        return match
     
     def run(self):
-        """ Run the All-Play-All Tournament.
-            Each player plays all other players in one match.
-        """
-        for i in range(0,len(self.bracket)): 
-            for j in range(i+1,len(self.bracket)):
-                match = create_next_match(i,j)
-                play_match(match)
-                
+        """ Run the All-Play-All Tournament """
+        super(AllPlayAll,self).run()
+
