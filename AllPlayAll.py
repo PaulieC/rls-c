@@ -20,9 +20,10 @@ class AllPlayAll(Tournament.Tournament):
 
     def create_next_match(self):
         """ Create the next match """
+        self.playerList = self.get_players()
         if self.q >= len(self.playerList):   # Gone through all possible matchups.
             return None
-        match = (self.playerList[self.p],self.playerList[self.q])
+        match = ((self.playerList[self.p],self.playerList[self.q]), self.rounds)
         self.q = self.q+1
         if self.q >= len(self.playerList):    # if index out of bounds
             self.p = self.p+1
