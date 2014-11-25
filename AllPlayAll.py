@@ -8,7 +8,7 @@ import Tournament
 """ AllPlayAll Tournament Type, every player is in a match with every other player """
 class AllPlayAll(Tournament.Tournament):
     
-    def __init__(self,rounds = 100):
+    def __init__(self,rounds = 5):
         """ Initialize AllPlayAll
         :param rounds the number of rounds per match, 100 by default
         """

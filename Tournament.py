@@ -5,6 +5,7 @@
 
 import Message
 import Observable
+import Display
 
 class Tournament(Observable.Observable):
     # set up a list of players when tournament is initialized
@@ -12,6 +13,11 @@ class Tournament(Observable.Observable):
         Observable.Observable.__init__(self)
         self.playerList = []
         self.game = None
+
+
+    def attach_display(self, display):
+        self.display = display
+        self.add_observer(self.display)
 
     # Returns the players in the tournament
     def get_players(self):

@@ -27,9 +27,18 @@ class TournamentService:
         AllPlayAll tournament type"""
         self.tournament = tournament
 
+    def set_display(self, display):
+        if self.tournament is None:
+            print("Tournament is null")
+        else:
+            self.tournament.attach_display(display)
+
     def run(self):
         """Set the game and run the tournament"""
         if self.tournament is None:
             print("Can not run tournament. Tournament is null")
         else:
+            self.tournament.set_game(self.game)
             self.tournament.run()
+
+

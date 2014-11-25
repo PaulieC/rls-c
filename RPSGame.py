@@ -3,7 +3,7 @@ __author__ = 'Greg Richards'
 import Game
 
 
-class RPSGame(Game):
+class RPSGame(Game.Game):
     # # this class simulates two players playing a game of rock, paper, scissors
     def __init__(self):
         super(RPSGame, self).__init__()

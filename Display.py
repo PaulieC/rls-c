@@ -3,7 +3,7 @@ __author__ = 'Tara Crittenden'
 # Displays the state of the game in a simple text format.
 
 import Observer
-import Message
+from Message import *
 
 class Display(Observer.Observer):
 
@@ -11,34 +11,36 @@ class Display(Observer.Observer):
     def notify(self, msg):
         if msg.msgtype == 1:
             #start of a tournament
-            display_start_tournament(msg)
+            self.display_start_tournament(msg)
         elif msg.msgtype == 2:
             #end of a tournament
-            display_end_tournament(msg)
+            self.display_end_tournament(msg)
         elif msg.msgtype == 3:
             #start of a match
-            display_start_match(msg)
+            self.display_start_match(msg)
         elif msg.msgtype == 4:
             #end of a match
-            display_end_match(msg)
+            pass
+            # TODO: fix display_end_match
+            #self.display_end_match(msg)
         elif msg.msgtype == 5:
             #start of a round
-            display_start_round(msg)
+            self.display_start_round(msg)
         elif msg.msgtype == 6:
             #end of a round
-            display_end_round(msg)
+            self.display_end_round(msg)
         else:
             print('Unknown message type')
 
     #Provides easy readiablity
-    def indent_cushion():
+    def indent_cushion(self):
         for i in range(8):
             print('+')
 
 
     #Helper method for deconstructing the info portion of a end round message
     #Returns the char representation of the move
-    def get_move(mademove):
+    def get_move(self, mademove):
         """
         :param mademove: move that was made in int form
         :return: move that was made in char form
@@ -52,14 +54,14 @@ class Display(Observer.Observer):
             return 'Scissors'
 
     #Display the start of a tournament
-    def display_start_tournament(msg):
+    def display_start_tournament(self, msg):
         """
         :param msg: message to be displayed
 
         """
-        indent_cushion()
+        self.indent_cushion()
         print(' Tournament Start! ')
-        indent_cushion()
+        self.indent_cushion()
         m = Message.get_players(msg)
         print('\nPlayers: ' + m)
         #assuming for the time being that info will hold the specified game
@@ -67,44 +69,46 @@ class Display(Observer.Observer):
         print('\nGame: ' + m)
 
     #Display the end of a tournament
-    def display_end_tournament(msg):
+    def display_end_tournament(self, msg):
         """
         :param msg: message to be displayed
 
         """
-        indent_cushion()
+        self.indent_cushion()
         print(' Tournament End! ')
-        indent_cushion()
+        self.indent_cushion()
         #assuming for the time being that info will hold the winner of the tournament
         m = Message.get_info(msg)
         print('\nWinner: ' + m)
-        indent_cushion()
-        indent_cushion()
+        self.indent_cushion()
+        self.indent_cushion()
         print('\n')
-        indent_cushion()
-        indent_cushion()
+        self.indent_cushion()
+        self.indent_cushion()
 
     #Display the start of a match        
-    def display_start_match(msg):
+    def display_start_match(self, msg):
         """
         :param msg: message to be displayed
 
         """
-        indent_cushion()
+        self.indent_cushion()
         print(' Match Start! ')
-        indent_cushion()
-        m = Message.get_players(msg)
-        print('\nPlayers: ' + m)
+        self.indent_cushion()
+        players = Message.get_players(msg)
+        print('\nPlayers: ')
+        for player in players:
+            print(player.get_name())
 
     #Display the end of a match       
-    def display_end_match(msg):
+    def display_end_match(self, msg):
         """
         :param msg: message to be displayed
 
         """
-        indent_cushion()
+        self.indent_cushion()
         print(' Match End! ')
-        indent_cushion()
+        self.indent_cushion()
         m = Message.get_info(msg)
         #r is the winner
         #winnings is the number of times that r won
@@ -119,7 +123,7 @@ class Display(Observer.Observer):
         print('Winner: ' + r + '( ' + winnings + ' out of ' + (m[1] + m[2]) + ')')
 
     #Display the start of a round       
-    def display_start_round(msg):
+    def display_start_round(self, msg):
         """
         :param msg: message to be displayed
 
@@ -127,7 +131,7 @@ class Display(Observer.Observer):
         pass
     
     #Display the end of a round    
-    def display_end_round(msg):
+    def display_end_round(self, msg):
         """
         :param msg: message to be displayed
 
@@ -135,19 +139,20 @@ class Display(Observer.Observer):
         print('\nRound Results: ')
         m = Message.get_info(msg)
         #r is the winner of the round
-        if m[2] == 0:
+        if m[1] == (0,0):
             r = 'Tied'
-        elif m[2] == 1:
+        elif m[1] == (1,0):
             #player 1 won
             r = 'Player 1 '
-        elif m[2] == 1:
+        #elif m[1] == (0,1):
+        else:
             #player 2 won
             r = 'Player 2 '
         print('Winner: ' + r)
         #find the moves that were played during this round
-        moves = m[1]
-        a = get_move(moves[1])
-        b = get_move(moves[2])
+        moves = m[0]
+        a = self.get_move(moves[0])
+        b = self.get_move(moves[1])
         print('   Moves made: Player 1: ' + a + ' Player 2: ' + b)
 
     
