@@ -20,9 +20,7 @@ class Display(Observer.Observer):
             self.display_start_match(msg)
         elif msg.msgtype == 4:
             #end of a match
-            pass
-            # TODO: fix display_end_match
-            #self.display_end_match(msg)
+            self.display_end_match(msg)
         elif msg.msgtype == 5:
             #start of a round
             self.display_start_round(msg)
@@ -34,7 +32,7 @@ class Display(Observer.Observer):
 
     #Provides easy readiablity
     def indent_cushion(self):
-        for i in range(8):
+        for i in range(4):
             print('+')
 
 
@@ -107,6 +105,11 @@ class Display(Observer.Observer):
 
         """
         self.indent_cushion()
+        print ("Match end!")
+
+        # TODO fix
+        """
+        self.indent_cushion()
         print(' Match End! ')
         self.indent_cushion()
         m = Message.get_info(msg)
@@ -121,6 +124,8 @@ class Display(Observer.Observer):
             r = 'Player 2 '
             winnings = m[2]
         print('Winner: ' + r + '( ' + winnings + ' out of ' + (m[1] + m[2]) + ')')
+        #
+        """
 
     #Display the start of a round       
     def display_start_round(self, msg):
