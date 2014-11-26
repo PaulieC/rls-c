@@ -146,20 +146,5 @@ class RPSMostUsedStrategy(object):
         # Assuming that opponent's move is going to be the value of most, play to beat it
         return (most + 1) % 3
 
-# Test driver
-
-if __name__ == "__main__":
-    player = RPSPlayer()
-    opponent = RPSPlayer()
-    players = [opponent,player]
-    fakeinfo = ((0,1),1)
-    fakeresult = 1
-    fakemoves = (1,2)
-
-    player.notify(Message.Message.get_match_start_message(players))
-    player.notify(Message.Message.get_round_start_message(players))
-    move = player.play()
-    print ("Move played: ", move)
-    player.notify(Message.Message.get_round_end_message(players,fakemoves,fakeresult))
     
     
