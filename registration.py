@@ -4,10 +4,9 @@ __author__ = 'Joe Kvedaras and Collin Day'
 
 class Registration:
 
-    def __init__(self,tournament):
+    def __init__(self, tournament):
         """Initialize Registration with a Tournament"""
         self.tournament = tournament
-
 
     def register(self, player):
         """Register a player in the tournament"""

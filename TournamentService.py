@@ -2,6 +2,7 @@ __author__ = "Joe Kvedaras and Collin Day"
 #Set up a tournament with a game and register players
 from AllPlayAll import *
 
+
 class TournamentService:
 
     def __init__(self):

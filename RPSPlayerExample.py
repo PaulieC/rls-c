@@ -5,6 +5,7 @@ __author__ = 'geebzter'
 import Player
 import Message
 
+
 class RPSPlayerExample(Player.Player):
 
     def __init__(self):
@@ -36,9 +37,9 @@ class RPSPlayerExample(Player.Player):
             players = msg.get_players()
             # Check if this message is for me and only then proceed
             if (players[0] == self) or (players[1] == self):
-                # In this case, (by convention) the info is a tuple of the moves made and result e.g. ((1, 0), (1,0)) which
-                # means player 1 played paper (1), the player 2 played rock(0) and the result was that
-                # player 1 won (got 1 point) and player 2 lost (got 0 point)
+                # In this case, (by convention) the info is a tuple of the moves made and result
+                # e.g. ((1, 0), (1,0)) which means player 1 played paper (1), the player 2 played
+                # rock(0) and the result was that player 1 won (got 1 point) and player 2 lost (got 0 point)
 
                 moves, result = msg.get_info()
 
@@ -51,7 +52,6 @@ class RPSPlayerExample(Player.Player):
 
                 # Update opponent's past moves history
                 self.opponents_moves.append(moves[opponent])
-
 
 
 # An implementation of a simple rps playing strategy
@@ -87,15 +87,15 @@ class RpsPlayingStrategy(object):
 if __name__ == "__main__":
     player = RPSPlayerExample()
     opponent = RPSPlayerExample()
-    players = [opponent,player]
-    fakemoves = (1,2)
-    fakeresult = (0,1)
+    players = [opponent, player]
+    fake_moves = (1, 2)
+    fake_result = (0, 1)
 
     player.notify(Message.Message.get_match_start_message(players))
     player.notify(Message.Message.get_round_start_message(players))
     move = player.play()
-    print ("Move played: ", move)
-    player.notify(Message.Message.get_round_end_message(players,fakemoves,fakeresult))
+    print("Move played: ", move)
+    player.notify(Message.Message.get_round_end_message(players, fake_moves, fake_result))
 
 
 

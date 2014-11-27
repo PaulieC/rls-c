@@ -5,6 +5,7 @@ __author__ = 'Tara Crittenden'
 import Observer
 from Message import *
 
+
 class Display(Observer.Observer):
 
     #Determine which method to display
@@ -30,25 +31,24 @@ class Display(Observer.Observer):
         else:
             print('Unknown message type')
 
-    #Provides easy readiablity
+    #Provides easy readability
     def indent_cushion(self):
         for i in range(4):
             print('+')
 
-
     #Helper method for deconstructing the info portion of a end round message
     #Returns the char representation of the move
-    def get_move(self, mademove):
+    def get_move(self, made_move):
         """
         :param mademove: move that was made in int form
         :return: move that was made in char form
 
         """
-        if mademove == 0:
+        if made_move == 0:
             return 'Rock'
-        elif mademove == 1:
+        elif made_move == 1:
             return 'Paper'
-        elif mademove == 2:
+        elif made_move == 2:
             return 'Scissors'
 
     #Display the start of a tournament
@@ -105,7 +105,7 @@ class Display(Observer.Observer):
 
         """
         self.indent_cushion()
-        print ("Match end!")
+        print("Match end!")
 
         # TODO fix
         """
@@ -144,9 +144,9 @@ class Display(Observer.Observer):
         print('\nRound Results: ')
         m = Message.get_info(msg)
         #r is the winner of the round
-        if m[1] == (0,0):
+        if m[1] == (0, 0):
             r = 'Tied'
-        elif m[1] == (1,0):
+        elif m[1] == (1, 0):
             #player 1 won
             r = 'Player 1 '
         #elif m[1] == (0,1):
@@ -159,5 +159,3 @@ class Display(Observer.Observer):
         a = self.get_move(moves[0])
         b = self.get_move(moves[1])
         print('   Moves made: Player 1: ' + a + ' Player 2: ' + b)
-
-    

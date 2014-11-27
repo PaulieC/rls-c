@@ -8,8 +8,8 @@
 
 import Observer
 
-class Game (Observer.Observer):
 
+class Game (Observer.Observer):
 
     def num_players_per_game(self):
         """

@@ -5,6 +5,7 @@ from RPSPlayerExample import *
 from RPSGame import *
 from Display import *
 
+
 # Create a tournament service that will set the tournament accordingly, register the players to the tournament
 # and run the instance of Tournament
 class RPSDriver(TournamentService):
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     driver = RPSDriver()
     player = RPSPlayerExample()
     opponent = RPSPlayerExample()
-    players = [player,opponent]
+    players = [player, opponent]
     rps = RPSGame()
     driver.register_players(players)
     driver.set_game(rps)

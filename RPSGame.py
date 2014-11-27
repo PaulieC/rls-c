@@ -33,4 +33,4 @@ class RPSGame(Game.Game):
         return result
 
     def is_legal(self, move):
-        return isinstance(move,int) and (move in (0, 1, 2))
+        return isinstance(move, int) and (move in (0, 1, 2))
