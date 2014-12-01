@@ -76,6 +76,20 @@ class Message(object):
         """
         return self.info
 
+    def is_tournament_start_message(self):
+        """
+        Whether the message is a start of tournament notification
+        :return: True if message is a start of tournament notification, False otherwise
+        """
+        return self.msg_type == Message.Tournament_Start
+
+    def is_tournament_end_message(self):
+        """
+        Whether the message is an end of tournament notification
+        :return: True if message is an end of tournament notification, False otherwise
+        """
+        return self.msg_type == Message.Tournament_End
+
     def is_match_start_message(self):
         """
         Whether the message is a start of match notification

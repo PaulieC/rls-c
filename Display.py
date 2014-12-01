@@ -10,22 +10,22 @@ class Display(Observer.Observer):
 
     #Determine which method to display
     def notify(self, msg):
-        if msg.msgtype == 1:
+        if msg.is_tournament_start_message():
             #start of a tournament
             self.display_start_tournament(msg)
-        elif msg.msgtype == 2:
+        elif msg.is_tournament_end_message():
             #end of a tournament
             self.display_end_tournament(msg)
-        elif msg.msgtype == 3:
+        elif msg.is_match_start_message():
             #start of a match
             self.display_start_match(msg)
-        elif msg.msgtype == 4:
+        elif msg.is_match_end_message():
             #end of a match
             self.display_end_match(msg)
-        elif msg.msgtype == 5:
+        elif msg.is_round_start_message():
             #start of a round
             self.display_start_round(msg)
-        elif msg.msgtype == 6:
+        elif msg.is_round_end_message():
             #end of a round
             self.display_end_round(msg)
         else:
@@ -40,7 +40,7 @@ class Display(Observer.Observer):
     #Returns the char representation of the move
     def get_move(self, made_move):
         """
-        :param mademove: move that was made in int form
+        :param made_move: move that was made in int form
         :return: move that was made in char form
 
         """
@@ -84,7 +84,7 @@ class Display(Observer.Observer):
         self.indent_cushion()
         self.indent_cushion()
 
-    #Display the start of a match        
+    #Display the start of a match
     def display_start_match(self, msg):
         """
         :param msg: message to be displayed
@@ -98,7 +98,7 @@ class Display(Observer.Observer):
         for player in players:
             print(player.get_name())
 
-    #Display the end of a match       
+    #Display the end of a match
     def display_end_match(self, msg):
         """
         :param msg: message to be displayed
@@ -127,15 +127,15 @@ class Display(Observer.Observer):
         #
         """
 
-    #Display the start of a round       
+    #Display the start of a round
     def display_start_round(self, msg):
         """
         :param msg: message to be displayed
 
         """
         pass
-    
-    #Display the end of a round    
+
+    #Display the end of a round
     def display_end_round(self, msg):
         """
         :param msg: message to be displayed

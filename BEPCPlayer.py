@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 __author__ = "William Ezekiel & Paul Council"
-__date__ = "21 November 2014"
-__version__ = "1.0.2"
-#Note: I did not include the name functionality that is currently online.
+__date__ = "30 November 2014"
+__version__ = "1.0.3"
 
 #imports
 import Player
@@ -30,6 +29,7 @@ class BEPCPlayer(Player.Player):
         self.win_record = []  # A 1 represents a win for that position's round, a 0 is a loss
         self.player_number = -1  # BEPCPlayer's number for current round
         self.opp_number = -1  # opponent's number for current round
+        self.name = "Bill and Paul"  # This player's name
 
     # Play a game of Rock Paper Scissors
     def play(self):
@@ -78,7 +78,6 @@ class BEPCPlayer(Player.Player):
                 temp_moves, winner = message.get_info()
                 # now update information for both player's moves
                 self.game_move_updates(temp_moves, winner)
-
     def game_move_updates(self, round_moves, winning_player):
         """Called in the notify function. This function
         discovers if the past round was a win/loss for

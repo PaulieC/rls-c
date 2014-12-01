@@ -1,5 +1,5 @@
 __author__ = "Paul Council & William Ezekiel"
-__date__ = "November 24 2014"
+__date__ = "November 30 2014"
 __version__ = "1.0.1"
 
 #imports
@@ -8,7 +8,7 @@ import Tournament
 
 class AllPlayAll(Tournament.Tournament):
     """ AllPlayAll Tournament Type, every player is in a match with every other player"""
-    
+
     def __init__(self, rounds=5):
         """ Initialize AllPlayAll
         :param rounds the number of rounds per match, 100 by default

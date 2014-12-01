@@ -96,19 +96,3 @@ if __name__ == "__main__":
     move = player.play()
     print("Move played: ", move)
     player.notify(Message.Message.get_round_end_message(players, fake_moves, fake_result))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

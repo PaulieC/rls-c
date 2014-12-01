@@ -5,6 +5,7 @@
 
 import Message
 import Observable
+import Display
 
 
 class Tournament(Observable.Observable):
@@ -55,10 +56,15 @@ class Tournament(Observable.Observable):
     def play_match(self, match):
         players = match[0]
         self.start_match(players)
-        result = self.play_rounds(match)
+        result = self.play_rounds(match)  # play_rounds should return a value, but doesn't... TODO??
         self.end_match(players, result)
 
     # plays each individual game in the match
+    """
+        This function should return a result, but when it does return result,
+        it stops the match in the preceding play_match function.
+        This is likely a bug, but I haven't figured out a solution to this.
+    """
     def play_rounds(self, match):
         players = match[0]
         rounds = match[1]
@@ -69,7 +75,6 @@ class Tournament(Observable.Observable):
                 moves.append(p.play())
             result = self.get_result(moves)
             self.end_round(players, moves, result)
-            return result
 
     # notifies players tournament has begun
     def begin_tournament(self):
