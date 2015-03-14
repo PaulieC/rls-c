@@ -1,31 +1,52 @@
-# Alex Ciaramella and Greg Suner
-# Abstract Tournament Class
+__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__version__ = "sprint1"
+__credits__ = ["Alex Ciaramella, Greg Suner"]
 
-# Tournament is observable while players are observers
-
+# imports
 import Message
 import Observable
-import Display
+import Display  # TODO the display needs to be implemented
+
+#
 
 
 class Tournament(Observable.Observable):
-    # set up a list of players when tournament is initialized
+    """
+    Abstract Tournament Class
+    Tournament is observable while players are observers
+
+    Attributes:
+        playerList: the array that holds the Player objects
+        game: the game that this tournament will use in play
+        display: TODO
+    """
+
     def __init__(self):
+        """ set up a list of players when tournament is initialized """
         Observable.Observable.__init__(self)
         self.playerList = []
         self.game = None
         self.display = None
 
     def attach_display(self, display):
+        """
+        Register the display to this Tournament
+        :param display: the display to sync with this Tournament
+        :type display: Display
+        """
         self.display = display
         self.add_observer(self.display)
 
-    # Returns the players in the tournament
     def get_players(self):
+        """
+        Returns the players in the tournament
+        :return playerList: The array that holds the players
+        :rtype: list
+        """
         return self.playerList
 
-    # run the tournament
     def run(self):
+        """ run the tournament """
         self.begin_tournament()
         while True:
             match = self.create_next_match()
@@ -34,38 +55,55 @@ class Tournament(Observable.Observable):
             self.play_match(match)
         self.end_tournament()
 
-    # get a reference to the next game to be played
     def create_next_match(self):
-        pass
+        """ get a reference to the next game to be played """
+        pass    # TODO
 
-    # register a player for the tournament by adding them to
-    #  the  list of current players
     def register_player(self, player):
+        """
+        register a player for the tournament by
+        adding them to the  list of current players
+        :param player: the Player object to register
+        :type player: Player
+        """
         self.playerList.append(player)
         self.add_observer(player)
 
-    # stores a reference to the type of game we will be playing
     def set_game(self, game):
+        """
+        stores a reference to the type of game we will be playing
+        :param game: the Game object to be registered to this Tournament
+        :type game: Game
+        """
         self.game = game
 
-    # Computes the result of a round based on the moves made by the players
     def get_result(self, moves):
+        """
+        Computes the result of a round based on the moves made by the players
+        :param moves: the moves list of the Player
+        :type moves: tuple
+        """
         return self.game.get_result(moves)
 
-    # play the next match and return the results
     def play_match(self, match):
+        """
+        play the next match and return the results
+        :param match: the information for the current match
+        :type match: tuple
+        """
         players = match[0]
         self.start_match(players)
-        result = self.play_rounds(match)  # play_rounds should return a value, but doesn't... TODO??
+        result = self.play_rounds(match)    # play_rounds should return a value, but doesn't... TODO??
         self.end_match(players, result)
 
-    # plays each individual game in the match
-    """
+    def play_rounds(self, match):
+        """
         This function should return a result, but when it does return result,
         it stops the match in the preceding play_match function.
         This is likely a bug, but I haven't figured out a solution to this.
-    """
-    def play_rounds(self, match):
+        :param match: the current match that the tournament should play rounds in
+        :type match: tuple
+        """
         players = match[0]
         rounds = match[1]
         for i in range(rounds):
@@ -76,30 +114,54 @@ class Tournament(Observable.Observable):
             result = self.get_result(moves)
             self.end_round(players, moves, result)
 
-    # notifies players tournament has begun
-    def begin_tournament(self):
+    @staticmethod
+    def begin_tournament():
+        """ notifies players tournament has begun """
         pass
 
-    # Announces results of tournament to all players
-    def end_tournament(self):
-        pass
+    @staticmethod
+    def end_tournament():
+        """ Announces results of tournament to all players """
+        pass    # TODO
 
-    # send a message containing a list of all the players in the current match
     def start_match(self, players):
+        """
+        send a message containing a list of all the players in the current match
+        :param players: the list of players registered to this tournament
+        :type players: list
+        """
         message = Message.Message.get_match_start_message(players)
         self.notify_all(message)
 
-    # send a message containing the result of the match
     def end_match(self, players, result):
+        """
+        send a message containing the result of the match
+        :param players: players that participated in the current match
+        :type players: list
+        :param result: the results of the match
+        :type result: Match
+        """
         message = Message.Message.get_match_end_message(players, result)
         self.notify_all(message)
 
-    # send a message containing the players in the next game
     def start_round(self, players):
+        """
+        send a message containing the players in the next game
+        :param players: the players to participate in the match
+        :type players: list
+        """
         message = Message.Message.get_round_start_message(players)
         self.notify_all(message)
 
-    # send a message containing the players, moves, and result of the last game
     def end_round(self, players, moves, result):
+        """
+        send a message containing the players, moves, and result of the last game
+        :param players: the list of players in the round
+        :type players: list
+        :param moves: the tuple of moves that were in this round
+        :type moves: tuple
+        :param result: the message concerning the round results
+        :type result: Message
+        """
         message = Message.Message.get_round_end_message(players, moves, result)
         self.notify_all(message)

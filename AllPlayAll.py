@@ -1,17 +1,19 @@
-__author__ = "Paul Council & William Ezekiel"
-__date__ = "November 30 2014"
-__version__ = "1.0.1"
+__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__version__ = "sprint1"
+__credits__ = ["William Ezekiel"]
 
-#imports
+# imports
 import Tournament
 
 
 class AllPlayAll(Tournament.Tournament):
-    """ AllPlayAll Tournament Type, every player is in a match with every other player"""
+    """ AllPlayAll Tournament Type, every player is in a match with every other player """
 
     def __init__(self, rounds=5):
-        """ Initialize AllPlayAll
-        :param rounds the number of rounds per match, 100 by default
+        """
+        Initialize AllPlayAll
+        :param rounds: the number of rounds per match, 100 by default
+        :type rounds: list
         """
         Tournament.Tournament.__init__(self)
         # variables to help us pick players 1 and 2.
@@ -20,9 +22,13 @@ class AllPlayAll(Tournament.Tournament):
         self.rounds = rounds
 
     def create_next_match(self):
-        """ Create the next match """
+        """
+        Create the next match
+        :return match: The new match
+        :rtype: tuple
+        """
         self.playerList = self.get_players()
-        if self.q >= len(self.playerList):   # Gone through all possible matchups.
+        if self.q >= len(self.playerList):   # Go through all possible matches.
             return None
         match = ((self.playerList[self.p], self.playerList[self.q]), self.rounds)
         self.q += 1
