@@ -1,15 +1,25 @@
-__author__ = 'Greg Richards'
+__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__version__ = "sprint1"
+__credits__ = ["Greg Richards"]
 
+# imports
 import Game
 
 
 class RPSGame(Game.Game):
-    # # this class simulates two players playing a game of rock, paper, scissors
+    """ this class simulates two players playing a game of rock, paper, scissors """
+
     def __init__(self):
         super(RPSGame, self).__init__()
 
     def get_result(self, moves):
-        # unpack the tuple that was passed as a parameter
+        """
+        unpack the tuple that was passed as a parameter
+        :param moves: the tuple of moves that were played between the two players
+        :type moves: tuple
+        :return result: the tuple of moves that were played if they were legal
+        :rtype: tuple
+        """
         move1, move2 = moves
         x = self.is_legal(move1)
         y = self.is_legal(move2)
@@ -33,4 +43,11 @@ class RPSGame(Game.Game):
         return result
 
     def is_legal(self, move):
+        """
+        Checks if the move provided is within the legal list
+        :param move: the tuple of moves that were played
+        :type move: tuple
+        :return: the result of checking if the moves are legal
+        :rtype: bool
+        """
         return isinstance(move, int) and (move in (0, 1, 2))
