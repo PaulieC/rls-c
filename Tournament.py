@@ -32,7 +32,7 @@ class Tournament(Observable.Observable):
         """
         Register the display to this Tournament
         :param display: the display to sync with this Tournament
-        :type display: Display
+        :type display: Display.Display
         """
         self.display = display
         self.add_observer(self.display)
@@ -64,7 +64,7 @@ class Tournament(Observable.Observable):
         register a player for the tournament by
         adding them to the  list of current players
         :param player: the Player object to register
-        :type player: Player
+        :type player: Player.Player
         """
         self.playerList.append(player)
         self.add_observer(player)

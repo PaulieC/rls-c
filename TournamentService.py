@@ -31,6 +31,15 @@ class TournamentService:
         else:
             self.tournament.register_player(player)
 
+    def register_players(self, player_list):
+        """
+        Registers the Player objects that exist in the player_list
+        :param player_list: the collected list of players to register
+        :type player_list: list
+        """
+        for plr in player_list:
+            self.register_player(plr)
+
     def set_game(self, game):
         """
         set the game of the current tournament
