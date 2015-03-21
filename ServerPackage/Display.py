@@ -3,8 +3,8 @@ __version__ = "sprint1"
 __credits__ = ["Tara Crittenden"]
 
 # imports
-import Observer
-from Message import *
+from ServerPackage import Observer
+from ServerPackage.Message import *
 
 
 class Display(Observer.Observer):

@@ -3,8 +3,8 @@ __version__ = "sprint1"
 __credits__ = ["geebzter"]
 
 # imports
-import Player
-import Message
+from ServerPackage import Message
+from ClientPackage import Player
 
 
 class RPSPlayerExample(Player.Player):

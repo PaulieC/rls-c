@@ -3,7 +3,7 @@ __version__ = "sprint1"
 __credits__ = ["Samantha Holloway, Joe Pannizzo"]
 
 # imports
-import Observer
+from ServerPackage import Observer
 
 
 class Player(Observer.Observer):
@@ -46,6 +46,8 @@ class Player(Observer.Observer):
         """
         self.name = player_name
 
-
-
-
+    def get_method(self):
+        """
+        :return:
+        """
+        return self

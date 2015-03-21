@@ -3,11 +3,11 @@ __version__ = "sprint1"
 __credits__ = ["Tony"]
 
 # imports
-from TournamentService import *
-from RPSPlayerExample import *
-from RPSGame import *
-from Display import *
-from BEPCPlayer import *
+from ServerPackage.TournamentService import *
+from ClientPackage.RPSPlayerExample import *
+from ServerPackage.RPSGame import *
+from ServerPackage.Display import *
+from ClientPackage.BEPCPlayer import *
 
 
 class RPSDriver(TournamentService):
@@ -39,13 +39,3 @@ if __name__ == "__main__":
     driver.set_game(rps)
     driver.set_display(Display())
     driver.run()
-
-
-
-
-
-
-
-
-
-

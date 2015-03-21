@@ -3,22 +3,33 @@ __version__ = "sprint1"
 __credits__ = ["Joe Kvedaras, Collin Day"]
 
 # imports
-from AllPlayAll import *
+from bjsonrpc.handlers import BaseHandler
+from ServerPackage.AllPlayAll import *
+from ServerPackage.RPSGame import *
 
-
-class TournamentService:
+class TournamentService(BaseHandler):
     """
-    Set up a tournament with a game and register players
+    Supports the connection of players to the tournament.
+    This class holds the functions required for the tournament
+    to start, run, and end successfully.
 
-        Attributes:
-            game: the game corresponding to this tournament
-            tournament: the tournament associated with this class
+    Attributes:
+        game: the game corresponding to this tournament
+        tournament: the tournament associated with this class
     """
+    tournament = AllPlayAll
+    game = RPSGame
 
-    def __init__(self):
-        # Is tournament service the one to create a new tournament?
-        self.tournament = AllPlayAll()
-        self.game = None
+    def welcome_player(self, txt):
+        """
+        :param txt:
+        :return:
+        """
+        response = "Hello %s! " \
+                   "\nYou have connected to the registration queue." \
+                   "\nPlease standby for confirmation..." % txt
+        print "SERVER_SIDE::>", response     # prints information server side
+        return response     # sends information to the client to handle
 
     def register_player(self, player):
         """
@@ -27,7 +38,8 @@ class TournamentService:
         :type player: Player.Player
         """
         if self.tournament is None:
-            print "Can not add player. Tournament is null"
+            msg = "Can not add player. Tournament is null"
+            return msg
         else:
             self.tournament.register_player(player)
 
@@ -39,6 +51,16 @@ class TournamentService:
         """
         for plr in player_list:
             self.register_player(plr)
+
+    def verify_registration(self, player):
+        """
+        :param player:
+        :return:
+        """
+        if player in self.tournament.get_players():
+            return "Player has been registered"
+        else:
+            return "Player isn't in the registered list"
 
     def set_game(self, game):
         """

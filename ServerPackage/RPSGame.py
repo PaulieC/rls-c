@@ -3,7 +3,7 @@ __version__ = "sprint1"
 __credits__ = ["Greg Richards"]
 
 # imports
-import Game
+from ServerPackage import Game
 
 
 class RPSGame(Game.Game):

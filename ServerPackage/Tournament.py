@@ -3,9 +3,7 @@ __version__ = "sprint1"
 __credits__ = ["Alex Ciaramella, Greg Suner"]
 
 # imports
-import Message
-import Observable
-import Display  # TODO the display needs to be implemented
+from ServerPackage import Display, Message, Observable
 
 #
 
@@ -165,3 +163,9 @@ class Tournament(Observable.Observable):
         """
         message = Message.Message.get_round_end_message(players, moves, result)
         self.notify_all(message)
+
+    def get_method(self):
+        """
+        :return:
+        """
+        return self

@@ -3,7 +3,7 @@ __version__ = "sprint1"
 __credits__ = ["William Ezekiel"]
 
 # imports
-import Tournament
+from ServerPackage import Tournament
 
 
 class AllPlayAll(Tournament.Tournament):

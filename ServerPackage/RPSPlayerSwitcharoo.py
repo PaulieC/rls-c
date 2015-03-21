@@ -4,8 +4,8 @@ __credits__ = ["Victor M"]
 
 # imports
 import random
-import Player
-import Message
+
+from ClientPackage import Player
 
 
 class RPSPlayerSwitcharoo(Player.Player):

@@ -3,7 +3,7 @@ __version__ = "sprint1"
 __credits__ = ["Matt Martorana, Justin Read"]
 
 # imports
-import Observer
+from ServerPackage import Observer
 
 
 class Game(Observer.Observer):

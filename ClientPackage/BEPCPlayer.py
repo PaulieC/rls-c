@@ -4,7 +4,7 @@ __credits__ = ["William Ezekiel"]
 
 
 # imports
-import Player
+from ClientPackage import Player
 
 
 class BEPCPlayer(Player.Player):
