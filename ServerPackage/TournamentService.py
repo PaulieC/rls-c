@@ -7,6 +7,7 @@ from bjsonrpc.handlers import BaseHandler
 from ServerPackage.AllPlayAll import *
 from ServerPackage.RPSGame import *
 
+
 class TournamentService(BaseHandler):
     """
     Supports the connection of players to the tournament.
@@ -17,7 +18,7 @@ class TournamentService(BaseHandler):
         game: the game corresponding to this tournament
         tournament: the tournament associated with this class
     """
-    tournament = AllPlayAll
+    tournament = AllPlayAll()
     game = RPSGame
 
     def welcome_player(self, txt):
@@ -27,7 +28,7 @@ class TournamentService(BaseHandler):
         """
         response = "Hello %s! " \
                    "\nYou have connected to the registration queue." \
-                   "\nPlease standby for confirmation..." % txt
+                   "\nPlease standby for registration confirmation..." % txt
         print "SERVER_SIDE::>", response     # prints information server side
         return response     # sends information to the client to handle
 
@@ -39,9 +40,13 @@ class TournamentService(BaseHandler):
         """
         if self.tournament is None:
             msg = "Can not add player. Tournament is null"
+            print "SERVER_SIDE::>", msg
             return msg
         else:
             self.tournament.register_player(player)
+            result = self.tournament.get_players()
+            print "SERVER_SIDE::>", result
+            return result
 
     def register_players(self, player_list):
         """
@@ -58,9 +63,14 @@ class TournamentService(BaseHandler):
         :return:
         """
         if player in self.tournament.get_players():
-            return "Player has been registered"
+            result = player.get_name(), " has been registered"
+            self._conn.load_object(player)
+            print "SERVER_SIDE::>", result
+            return result
         else:
-            return "Player isn't in the registered list"
+            result = player, " isn't in the registered list. Current registered players: ", self.tournament.get_players()
+            print "SERVER_SIDE::>", result
+            return result
 
     def set_game(self, game):
         """

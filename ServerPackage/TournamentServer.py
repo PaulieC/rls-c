@@ -10,6 +10,7 @@ class TournamentServer():
     """
     TODO
     """
+    # TODO needs details
     tournament_server = object
 
     def __init__(self):

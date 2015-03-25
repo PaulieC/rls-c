@@ -11,9 +11,6 @@ and registered in the TournamentService.
 
 # imports
 from ServerPackage.TournamentServer import *
-from ServerPackage.TournamentService import *
-from ServerPackage.AllPlayAll import *
-from ServerPackage.RPSGame import *
 
 # sets up a basic game with networking
 new_server = TournamentServer()

@@ -3,7 +3,6 @@ __version__ = "sprint2"
 
 # imports
 import bjsonrpc
-
 from ClientPackage import Player
 from ServerPackage.TournamentService import *
 
@@ -30,13 +29,13 @@ class PlayerClient():
         """
         :return:
         """
-        self.player_connect = bjsonrpc.connect(handler_factory=TournamentService)
+        self.player_connect = bjsonrpc.connect()
 
     def verify_connection(self):
         """
         :return:
         """
-        print "::>", self.player_connect.call.welcome_player(self.player_name)
+        print "verify_connection::>", self.player_connect.call.welcome_player(self.player_name), "\n"
 
     def close_connection(self):
         """
@@ -44,18 +43,18 @@ class PlayerClient():
         """
         # TODO
         # self.player_connect.stop()
-        pass
+        self.player_connect.close()
 
     def register_player(self, player):
         """
         :param player:
         :return:
         """
-        print "::>", self.player_connect.method.register_player(player)
+        print "register_player::>", self.player_connect.call.register_player(player), "\n"
 
-    def check_registration(self, player):
+    def verify_registration(self, player):
         """
         :param player:
         :return:
         """
-        print "::>", self.player_connect.call.verify_registration(player)
+        print "verify_registration::>", self.player_connect.call.verify_registration(player), "\n"
