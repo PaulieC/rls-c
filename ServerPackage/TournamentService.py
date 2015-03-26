@@ -46,6 +46,7 @@ class TournamentService(BaseHandler):
             self.tournament.register_player(player)
             result = self.tournament.get_players()
             print "SERVER_SIDE::>", result
+            print player.get_name()
             return result
 
     def register_players(self, player_list):

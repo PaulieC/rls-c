@@ -29,12 +29,13 @@ class PlayerClient():
         """
         :return:
         """
-        self.player_connect = bjsonrpc.connect()
+        self.player_connect = bjsonrpc.connect(host="hello.com", port=00001, handler_factory=ClientService)
 
     def verify_connection(self):
         """
         :return:
         """
+        self.client_connect()
         print "verify_connection::>", self.player_connect.call.welcome_player(self.player_name), "\n"
 
     def close_connection(self):
@@ -50,7 +51,10 @@ class PlayerClient():
         :param player:
         :return:
         """
-        print "register_player::>", self.player_connect.call.register_player(player), "\n"
+        # print "register_player::>",
+        self.client_connect()
+        x = self.player_connect.call.register_player(player)
+        print "hello"
 
     def verify_registration(self, player):
         """
