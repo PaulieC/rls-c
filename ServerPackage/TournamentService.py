@@ -29,7 +29,7 @@ class TournamentService(BaseHandler):
         response = "Hello %s! " \
                    "\nYou have connected to the registration queue." \
                    "\nPlease standby for registration confirmation..." % txt
-        print "SERVER_SIDE::>", response     # prints information server side
+        print "SERVER_SIDE::>" + response     # prints information server side
         return response     # sends information to the client to handle
 
     def register_player(self, player):
@@ -40,13 +40,12 @@ class TournamentService(BaseHandler):
         """
         if self.tournament is None:
             msg = "Can not add player. Tournament is null"
-            print "SERVER_SIDE::>", msg
+            print "SERVER_SIDE::>" + msg
             return msg
         else:
-            self.tournament.register_player(player)
-            result = self.tournament.get_players()
+            self.tournament.register_player(player.connection.get_id())
+            result = "Attempted to register " + player.connection.call.get_name() + "..."
             print "SERVER_SIDE::>", result
-            print player.get_name()
             return result
 
     def register_players(self, player_list):
@@ -61,10 +60,11 @@ class TournamentService(BaseHandler):
     def verify_registration(self, player):
         """
         :param player:
+        :type player: Player.Player
         :return:
         """
         if player in self.tournament.get_players():
-            result = player.get_name(), " has been registered"
+            result = player.get_name() + " has been registered"
             self._conn.load_object(player)
             print "SERVER_SIDE::>", result
             return result
