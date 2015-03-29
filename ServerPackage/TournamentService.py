@@ -6,6 +6,7 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 from bjsonrpc.handlers import BaseHandler
 from ServerPackage.AllPlayAll import *
 from ServerPackage.RPSGame import *
+import time
 
 
 class TournamentService(BaseHandler):
@@ -20,6 +21,7 @@ class TournamentService(BaseHandler):
     """
     tournament = AllPlayAll()
     game = RPSGame
+    id_counter = -1
 
     def welcome_player(self, txt):
         """
@@ -38,14 +40,20 @@ class TournamentService(BaseHandler):
         :param player: the player object to register to this tournament
         :type player: Player.Player
         """
+        # convert from unicode to string
+        player_name = str(player.connection.call.get_name())
         if self.tournament is None:
             msg = "Can not add player. Tournament is null"
-            print "SERVER_SIDE::>" + msg
+            print "SERVER_SIDE::> " + msg
             return msg
         else:
-            self.tournament.register_player(player.connection.get_id())
-            result = "Attempted to register " + player.connection.call.get_name() + "..."
-            print "SERVER_SIDE::>", result
+            player.connection.call.set_player_id(self.new_id())
+            # convert from unicode to string
+            player_id = str(player.connection.call.get_player_id())
+            print "SERVER_SIDE::> " + player_id
+            self.tournament.register_player(player_id)
+            result = "Attempted to register " + player_name + "..."
+            print "SERVER_SIDE::> " + result
             return result
 
     def register_players(self, player_list):
@@ -63,15 +71,27 @@ class TournamentService(BaseHandler):
         :type player: Player.Player
         :return:
         """
-        if player in self.tournament.get_players():
-            result = player.get_name() + " has been registered"
-            self._conn.load_object(player)
-            print "SERVER_SIDE::>", result
+        # convert from unicode to string
+        player_id = str(player.connection.call.get_player_id())
+        # convert from unicode to string
+        player_name = str(player.connection.call.get_name())
+        registered_players = self.tournament.get_players()
+        if player_id in registered_players:
+            result = "Player \'" + player_name + "\' has been registered"
+            print "SERVER_SIDE::>" + result
             return result
         else:
-            result = player, " isn't in the registered list. Current registered players: ", self.tournament.get_players()
-            print "SERVER_SIDE::>", result
+            result = player_name + " isn't in the registered list. Current registered player ids: "
+            result += "[" + ", ".join(self.tournament.get_players()) + "]"
+            print "SERVER_SIDE::>" + result
             return result
+
+    def new_id(self):
+        """
+        :return:
+        """
+        self.id_counter += 1
+        return self.id_counter
 
     def set_game(self, game):
         """

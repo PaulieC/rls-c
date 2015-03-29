@@ -16,5 +16,8 @@ class PlayerService(BaseHandler):
     def get_name(self):
         return self.player.get_name()
 
-    def get_player(self, remote_object):
-        return remote_object.get_id()
+    def set_player_id(self, id_num):
+        self.player.set_id(id_num)
+
+    def get_player_id(self):
+        return self.player.get_player_id()

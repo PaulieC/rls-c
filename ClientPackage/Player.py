@@ -26,6 +26,8 @@ class Player(Observer.Observer):
 
     def __init__(self):
         self.name = None
+        self.id_num = None
+        self.player_id = None
 
     def play(self):
         """
@@ -51,3 +53,23 @@ class Player(Observer.Observer):
         :return:
         """
         return self
+
+    def set_id(self, num):
+        """
+        :param num:
+        :return:
+        """
+        self.id_num = num
+        self.player_id = self.name + "_" + str(self.id_num)
+
+    def get_id_num(self):
+        """
+        :return:
+        """
+        return self.id_num
+
+    def get_player_id(self):
+        """
+        :return:
+        """
+        return self.player_id

@@ -3,7 +3,7 @@ __version__ = "sprint2"
 
 # imports
 import bjsonrpc
-from ClientPackage import Player
+from ClientPackage.Player import *
 from ClientPackage.PlayerService import *
 from ServerPackage.TournamentService import *
 
