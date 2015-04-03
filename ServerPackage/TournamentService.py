@@ -11,7 +11,7 @@ import time
 
 class TournamentService(BaseHandler):
     """
-    Supports the connection of players to the tournament.
+    Supports the connection of players to the tournament.get_tournament().
     This class holds the functions required for the tournament
     to start, run, and end successfully.
 
@@ -20,10 +20,10 @@ class TournamentService(BaseHandler):
         tournament: the tournament associated with this class
     """
     tournament = AllPlayAll()
-    game = RPSGame
-    id_counter = -1
+    game = RPSGame()
+    id_counter = 0
 
-    def welcome_player(self, txt):
+    def verify_connection(self, txt):
         """
         :param txt:
         :return:
@@ -34,27 +34,23 @@ class TournamentService(BaseHandler):
         print "SERVER_SIDE::>" + response     # prints information server side
         return response     # sends information to the client to handle
 
-    def register_player(self, player):
+    def register_player(self, player_id):
         """
-        register a player in the current tournament
-        :param player: the player object to register to this tournament
-        :type player: Player.Player
+        TODO
         """
-        # convert from unicode to string
-        player_name = str(player.connection.call.get_name())
         if self.tournament is None:
             msg = "Can not add player. Tournament is null"
             print "SERVER_SIDE::> " + msg
             return msg
         else:
-            player.connection.call.set_player_id(self.new_id())
-            # convert from unicode to string
-            player_id = str(player.connection.call.get_player_id())
-            print "SERVER_SIDE::> " + player_id
             self.tournament.register_player(player_id)
-            result = "Attempted to register " + player_name + "..."
+            result = "Attempted to register " + player_id
             print "SERVER_SIDE::> " + result
             return result
+
+    def request_id(self):
+        # TODO
+        return self.new_id()
 
     def register_players(self, player_list):
         """
@@ -65,25 +61,21 @@ class TournamentService(BaseHandler):
         for plr in player_list:
             self.register_player(plr)
 
-    def verify_registration(self, player):
+    def verify_registration(self, player_id):
         """
         :param player:
         :type player: Player.Player
         :return:
         """
-        # convert from unicode to string
-        player_id = str(player.connection.call.get_player_id())
-        # convert from unicode to string
-        player_name = str(player.connection.call.get_name())
         registered_players = self.tournament.get_players()
         if player_id in registered_players:
-            result = "Player \'" + player_name + "\' has been registered"
-            print "SERVER_SIDE::>" + result
+            result = "Player \'" + player_id + "\' has been registered"
+            print "SERVER_SIDE::> " + result
             return result
         else:
-            result = player_name + " isn't in the registered list. Current registered player ids: "
-            result += "[" + ", ".join(self.tournament.get_players()) + "]"
-            print "SERVER_SIDE::>" + result
+            result = player_id + " isn't in the registered list. Current registered player ids: "
+            result += "[" + ", ".join(registered_players) + "]"
+            print "SERVER_SIDE::> " + result
             return result
 
     def new_id(self):
@@ -101,16 +93,17 @@ class TournamentService(BaseHandler):
         """
         # Tournament initializes with a game and you can not change
         # game type afterwards
-        self.game = game
+        game = game
 
     def set_tournament(self, tournament):
         """
         Allow client to set the tournament type. Defaults to
         AllPlayAll tournament type
         :param tournament: the tournament to assign to this service
-        :type tournament: Tournament.Tournament
+        :type tournament: tournament.get_tournament().Tournament
         """
-        self.tournament = tournament
+        # TODO
+        tournament = tournament
 
     def set_display(self, display):
         """
@@ -126,7 +119,7 @@ class TournamentService(BaseHandler):
     def run(self):
         """Set the game and run the tournament"""
         if self.tournament is None:
-            print "Can not run tournament. Tournament is null"
+            print "Can not run tournament.get_tournament(). Tournament is null"
         else:
             self.tournament.set_game(self.game)
             self.tournament.run()

@@ -14,9 +14,14 @@ from ServerPackage.TournamentServer import *
 
 # sets up a basic game with networking
 new_server = TournamentServer()
-# set the tournament style
-# set the game to play
-# tournament_server.service.set_game(RPSGame)
+# get ip for connection
+new_server.generate_ip()
+# set the port for the tournament: 12345
+new_server.set_port(12345)
+# create the server
+new_server.create_server()
+# TODO set the tournament style
+# TODO set the game to play
 # open connections
 new_server.open_connection()
 # run the tournament

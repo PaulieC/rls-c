@@ -4,6 +4,7 @@ __version__ = "sprint2"
 # imports
 import bjsonrpc
 from ServerPackage.TournamentService import *
+from ServerPackage.server_ipsearch import *
 
 
 class TournamentServer():
@@ -12,15 +13,45 @@ class TournamentServer():
     """
     # TODO needs details
 
-    tournament_server = object
-
     def __init__(self):
         """
         :return:
         """
-        self.tournament_server = bjsonrpc.createserver(host="192.168.1.25",
-                                                       port=12345,
-                                                       handler_factory=TournamentService)
+        self.host = None
+        self.port = None
+        self.tournament_server = None
+        self.toolbox = NetworkToolbox()
+
+    def create_server(self):
+        if self.host is None or self.port is None:
+            print "HOST AND/OR PORT HASN'T BEEN SET YET!"
+        else:
+            self.tournament_server = bjsonrpc.createserver(host=self.host,
+                                                           port=self.port,
+                                                           handler_factory=TournamentService)
+
+    def generate_ip(self):
+        self.host = self.toolbox.get_host()
+
+    def get_ip(self):
+        if self.host is None:
+            result = "No ip set at this time"
+            return result
+        else:
+            return self.host
+
+    def set_ip(self, new_ip):
+        self.host = new_ip
+
+    def set_port(self, new_port):
+        self.port = new_port
+
+    def get_port(self):
+        if self.port is None:
+            result = "No port set at this time"
+            return result
+        else:
+            return self.port
 
     def open_connection(self):
         """

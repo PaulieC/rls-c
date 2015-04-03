@@ -28,7 +28,7 @@ class PlayerClient():
         """
         :return:
         """
-        self.player_connect = bjsonrpc.connect(host="192.168.1.25",
+        self.player_connect = bjsonrpc.connect(host="192.168.1.26",
                                                port=12345,
                                                handler_factory=PlayerService)
 
@@ -36,7 +36,8 @@ class PlayerClient():
         """
         :return:
         """
-        print "verify_connection::>", self.player_connect.call.welcome_player(self.player_name), "\n"
+        req_welcome_player = self.player_connect.method.verify_connection(self.player_name)
+        print "verify_connection::> " + req_welcome_player()
 
     def close_connection(self):
         """
@@ -44,16 +45,20 @@ class PlayerClient():
         """
         self.player_connect.close()
 
-    def register_player(self, player):
+    def register_player(self):
         """
         :param player:
         :return:
         """
-        print "register_player::>", self.player_connect.call.register_player(player)
+        req_request_id = self.player_connect.method.request_id()
+        self.player.set_id(req_request_id())
+        req_register_player_id = self.player_connect.method.register_player(self.player.get_player_id())
+        print "register_player::> " + req_register_player_id()
 
-    def verify_registration(self, player):
+    def verify_registration(self):
         """
         :param player:
         :return:
         """
-        print "verify_registration::>", self.player_connect.call.verify_registration(player), "\n"
+        req_verify_reg = self.player_connect.method.verify_registration(self.player.get_player_id())
+        print "verify_registration::> " + req_verify_reg()

@@ -3,7 +3,6 @@ __version__ = "sprint2"
 
 # imports
 from bjsonrpc.handlers import BaseHandler
-from ClientPackage.BEPCPlayer import *
 
 
 class PlayerService(BaseHandler):
@@ -11,13 +10,16 @@ class PlayerService(BaseHandler):
     TODO
     """
     # TODO fill information
-    player = BEPCPlayer()
 
-    def get_name(self):
-        return self.player.get_name()
+    def get_name(self, current_player):
+        result = current_player.get_name()
+        return result
 
-    def set_player_id(self, id_num):
-        self.player.set_id(id_num)
+    def set_player_id(self, current_player, id_num):
+        current_player.set_id(id_num)
 
-    def get_player_id(self):
-        return self.player.get_player_id()
+    def get_player_id(self, current_player):
+        # result = current_player.get_player_id()
+        # return result
+        result = current_player.get_name()
+        return result
