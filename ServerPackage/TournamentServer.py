@@ -18,7 +18,9 @@ class TournamentServer():
         """
         :return:
         """
-        self.tournament_server = bjsonrpc.createserver(handler_factory=TournamentService)
+        self.tournament_server = bjsonrpc.createserver(host="192.168.1.25",
+                                                       port=12345,
+                                                       handler_factory=TournamentService)
 
     def open_connection(self):
         """

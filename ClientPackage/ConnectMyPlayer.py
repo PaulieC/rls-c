@@ -4,6 +4,7 @@ __version__ = "sprint2"
 # imports
 from ClientPackage.PlayerClient import *
 from ClientPackage.BEPCPlayer import *
+import time
 
 my_player = BEPCPlayer()
 client = PlayerClient(my_player)
@@ -15,5 +16,7 @@ client.verify_connection()
 client.register_player(my_player)
 # request a verification that this player has been registered to the tournament
 client.verify_registration(my_player)
+# TODO keep connection open for 15 seconds
+time.sleep(15)
 # close the connection
 client.close_connection()

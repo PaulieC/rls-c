@@ -28,7 +28,9 @@ class PlayerClient():
         """
         :return:
         """
-        self.player_connect = bjsonrpc.connect(handler_factory=PlayerService)
+        self.player_connect = bjsonrpc.connect(host="192.168.1.25",
+                                               port=12345,
+                                               handler_factory=PlayerService)
 
     def verify_connection(self):
         """
