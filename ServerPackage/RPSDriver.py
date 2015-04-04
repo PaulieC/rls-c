@@ -5,7 +5,7 @@ __credits__ = ["Tony"]
 # imports
 from ServerPackage.TournamentService import *
 from ClientPackage.RPSPlayerExample import *
-from ServerPackage.RPSGame import *
+from AvailableGames.RPSGame import *
 from ServerPackage.Display import *
 from ClientPackage.BEPCPlayer import *
 

@@ -4,9 +4,9 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 
 # imports
 from bjsonrpc.handlers import BaseHandler
-from ServerPackage.AllPlayAll import *
-from ServerPackage.RPSGame import *
-import time
+
+from AvailableTournaments.AllPlayAll import *
+from AvailableGames.RPSGame import *
 
 
 class TournamentService(BaseHandler):
@@ -40,6 +40,10 @@ class TournamentService(BaseHandler):
         """
         if self.tournament is None:
             msg = "Can not add player. Tournament is null"
+            print "SERVER_SIDE::> " + msg
+            return msg
+        elif self.tournament.get_num_players() == self.tournament.get_max_num_players():
+            msg = "Can not add player. Tournament is full"
             print "SERVER_SIDE::> " + msg
             return msg
         else:
@@ -104,6 +108,13 @@ class TournamentService(BaseHandler):
         """
         # TODO
         tournament = tournament
+
+    def set_num_players(self, max_players):
+        if max > 0:
+            self.tournament.set_number_of_players(max_players)
+            result = "Number of players set to " + max_players
+            print "SERVER_SIDE::> " + result
+            return result
 
     def set_display(self, display):
         """

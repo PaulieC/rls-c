@@ -25,6 +25,8 @@ class Tournament(Observable.Observable):
         self.playerList = []
         self.game = None
         self.display = None
+        self.num_players = 0
+        self.max_players = 30
 
     def attach_display(self, display):
         """
@@ -66,6 +68,7 @@ class Tournament(Observable.Observable):
         """
         self.playerList.append(player)
         self.add_observer(player)
+        self.num_players += 1
 
     def set_game(self, game):
         """
@@ -169,3 +172,12 @@ class Tournament(Observable.Observable):
         :return:
         """
         return self
+
+    def set_number_of_players(self, max_players):
+        self.max_players = max_players
+
+    def get_num_players(self):
+        return self.num_players
+
+    def get_max_num_players(self):
+        return self.max_players
