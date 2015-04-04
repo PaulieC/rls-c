@@ -12,7 +12,7 @@ class AllPlayAll(Tournament.Tournament):
     def __init__(self, rounds=5):
         """
         Initialize AllPlayAll
-        :param rounds: the number of rounds per match, 100 by default
+        :param rounds: the number of rounds per match, 5 by default
         :type rounds: list
         """
         Tournament.Tournament.__init__(self)
