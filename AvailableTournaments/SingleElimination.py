@@ -12,10 +12,10 @@ class SingleElimination(Tournament.Tournament):
     SingleElimination Tournament Type:
     Every player plays an initial match, but only winners move on.
     In this game mode the number of rounds per match is defaulted to 3
-
-    TODO: Implement a losers bracket.
-    TODO: Update to work with more than just 2^n players.
     """
+
+    #TODO: Implement a losers bracket.
+    #TODO: Update to work with more than just 2^n players.
 
     def __init__(self):
         """
@@ -37,7 +37,8 @@ class SingleElimination(Tournament.Tournament):
         :return match: The new match
         :rtype: tuple
         """
-        if self.player_two >= len(self.playerList):     # begins the next
+        if self.player_two >= len(self.playerList):     # adds odd player to the nextset and begins
+            self.nextSet.append(self, self.player_one)  # might need to be self.playerList[len(self.playerList)-1]
             self.start_next_set()
         match = ((self.playerList[self.player_one], self.playerList[self.player_two]), self.rounds)
         self.player_two += 2
