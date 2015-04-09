@@ -59,3 +59,7 @@ class TournamentServer():
         """
         self.tournament_server.debug_socket(True)
         self.tournament_server.serve()
+
+obj = TournamentServer()
+obj.generate_ip()
+print obj.get_ip()
