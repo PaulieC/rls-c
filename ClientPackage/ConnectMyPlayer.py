@@ -5,6 +5,7 @@ __version__ = "sprint2"
 from ClientPackage.PlayerClient import *
 from ClientPackage.BEPCPlayer import *
 from ClientPackage.TestPlayer1 import *
+import time
 
 my_player = TestPlayer1()
 client = PlayerClient(my_player)

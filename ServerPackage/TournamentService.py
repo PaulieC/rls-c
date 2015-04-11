@@ -7,6 +7,7 @@ from bjsonrpc.handlers import BaseHandler
 
 from AvailableTournaments.AllPlayAll import *
 from AvailableGames.RPSGame import *
+import importlib
 
 
 class TournamentService(BaseHandler):
@@ -22,6 +23,7 @@ class TournamentService(BaseHandler):
     tournament = AllPlayAll()
     game = RPSGame()
     id_counter = 0
+    connected_players = []
 
     def verify_connection(self, txt):
         """
@@ -43,7 +45,7 @@ class TournamentService(BaseHandler):
             print "SERVER_SIDE::> " + msg
             return msg
         elif self.tournament.get_num_players() == self.tournament.get_max_num_players():
-            msg = "Can not add player. Tournament is full"
+            msg = "Can not add player. Tournament room is full"
             print "SERVER_SIDE::> " + msg
             return msg
         else:
@@ -82,6 +84,10 @@ class TournamentService(BaseHandler):
             print "SERVER_SIDE::> " + result
             return result
 
+    def get_registered_players(self):
+        result = self.tournament.get_players()
+        return result
+
     def new_id(self):
         """
         :return:
@@ -99,15 +105,27 @@ class TournamentService(BaseHandler):
         # game type afterwards
         game = game
 
-    def set_tournament(self, tournament):
+    def set_tournament(self, new_tournament_package, new_tournament_module):
         """
         Allow client to set the tournament type. Defaults to
         AllPlayAll tournament type
         :param tournament: the tournament to assign to this service
         :type tournament: tournament.get_tournament().Tournament
         """
-        # TODO
-        tournament = tournament
+        # TODO finish this import issue
+        if new_tournament_package is not None:
+            print "The current tournament is " + str(self.tournament)
+            tour = importlib.import_module("AvailableTournaments.AllPlayAll.AllPlayAll")
+            self.tournament = tour()
+            return "The current tournament is " + str(self.tournament)
+
+    def set_game(self, new_game):
+        # TODO finish this import issue
+        if new_game is not None:
+            print "The current tournament is " + str(self.game)
+            tour = importlib.import_module(new_game, "*")
+            self.game = tour.AllPlayAll()
+            return "The current tournament is " + str(self.game)
 
     def set_num_players(self, max_players):
         if max > 0:

@@ -20,8 +20,6 @@ new_server.generate_ip()
 new_server.set_port(12345)
 # create the server
 new_server.create_server()
-# TODO set the tournament style
-# TODO set the game to play
 # open connections
 new_server.open_connection()
 # run the tournament

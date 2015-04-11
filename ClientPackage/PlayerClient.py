@@ -28,7 +28,7 @@ class PlayerClient():
         """
         :return:
         """
-        self.player_connect = bjsonrpc.connect(host="192.168.1.26",
+        self.player_connect = bjsonrpc.connect(host="150.250.191.238",
                                                port=12345,
                                                handler_factory=PlayerService)
 
