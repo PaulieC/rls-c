@@ -65,10 +65,6 @@ class GMPlayer(Player.Player):
         If the round is over, this player should take
         the information available from the passed message
         and add wins/losses to its fields.
-
-        TODO
-        TODO
-        TODO
         :param message: A message Object
         :type message: Message
         """
@@ -189,11 +185,11 @@ class GMPlayer(Player.Player):
         2 - scissors
         """
         if opp_move == 0:  # opponent plays rock
-            return 1		# play paper
+            return 1    # play paper
         elif opp_move == 1:  # opponent plays paper
-            return 2		# play scissors
+            return 2    # play scissors
         else:
-            return 0		# opponent plays scissors, play rock.
+            return 0    # opponent plays scissors, play rock.
 
     """
     Getters and Setters follow

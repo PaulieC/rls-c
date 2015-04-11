@@ -3,7 +3,6 @@ __version__ = "sprint2"
 
 # imports
 from ClientPackage.PlayerClient import *
-from ClientPackage.BEPCPlayer import *
 from ClientPackage.TestPlayer1 import *
 import time
 

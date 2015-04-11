@@ -4,7 +4,6 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 
 # imports
 from bjsonrpc.handlers import BaseHandler
-
 from AvailableTournaments.AllPlayAll import *
 from AvailableGames.RPSGame import *
 import importlib
@@ -20,15 +19,26 @@ class TournamentService(BaseHandler):
         game: the game corresponding to this tournament
         tournament: the tournament associated with this class
     """
-    tournament = AllPlayAll()
-    game = RPSGame()
-    id_counter = 0
-    connected_players = []
+
+    def _setup(self):
+        """
+        This method is called immediately after the super's __init__() method. This is
+        the place to initialize values as this class can't be constructed as a handler type any
+        other way.
+        :return:
+        """
+        self.tournament = AllPlayAll()
+        self.game = RPSGame()
+        self.id_counter = 0
+        self.connected_players = []
+        self.registration_open = False
 
     def verify_connection(self, txt):
         """
-        :param txt:
-        :return:
+        Returns a message to the player to confirm that they have established a solid connection
+        with the server.
+        :param txt: The player's name
+        :return str: the message including the player's name to confirm a connection
         """
         response = "Hello %s! " \
                    "\nYou have connected to the registration queue." \
@@ -38,24 +48,37 @@ class TournamentService(BaseHandler):
 
     def register_player(self, player_id):
         """
-        TODO
+        Allows a player to register their name with the tournament's list of registered players.
+        For any issues registering, a message will be returned explaining the reason
+        :param player_id: The calling player's id
+        :type: str
+        :return str: A message corresponding to the result of this function
         """
-        if self.tournament is None:
-            msg = "Can not add player. Tournament is null"
-            print "SERVER_SIDE::> " + msg
-            return msg
-        elif self.tournament.get_num_players() == self.tournament.get_max_num_players():
-            msg = "Can not add player. Tournament room is full"
-            print "SERVER_SIDE::> " + msg
-            return msg
+        if self.registration_open:
+            if self.tournament is None:
+                msg = "Can not add player. Tournament is null"
+                print "SERVER_SIDE::> " + msg
+                return msg
+            elif self.tournament.get_num_players() == self.tournament.get_max_num_players():
+                msg = "Can not add player. Tournament room is full"
+                print "SERVER_SIDE::> " + msg
+                return msg
+            else:
+                self.tournament.register_player(player_id)
+                result = "Attempted to register " + player_id
+                print "SERVER_SIDE::> " + result
+                return result
         else:
-            self.tournament.register_player(player_id)
-            result = "Attempted to register " + player_id
-            print "SERVER_SIDE::> " + result
-            return result
+            print "SERVER_SIDE::> " + player_id + " tried to connect while registration is closed"
+            msg = "The tournament registration hasn't been opened yet. Please wait for the game controller to request" \
+                  " your registration. Thanks!"
+            return msg
 
     def request_id(self):
-        # TODO
+        """
+        The player calls this to get a unique number for player_id creation client side
+        :return int: A new integer
+        """
         return self.new_id()
 
     def register_players(self, player_list):
@@ -64,6 +87,7 @@ class TournamentService(BaseHandler):
         :param player_list: the collected list of players to register
         :type player_list: list
         """
+        # TODO remove?
         for plr in player_list:
             self.register_player(plr)
 
@@ -85,8 +109,31 @@ class TournamentService(BaseHandler):
             return result
 
     def get_registered_players(self):
+        """
+        Gets the players registered to the tournament in the form of a list
+        :return result: The list of players registered
+        """
         result = self.tournament.get_players()
         return result
+
+    def open_tournament_registration(self):
+        """
+        Sets the registration status of the tournament from False to True
+        """
+        self.registration_open = True
+
+    def close_tournament_registration(self):
+        """
+        Sets the registration status of the tournament from True to False
+        """
+        self.registration_open = False
+
+    def get_registration_status(self):
+        """
+        Returns the current registration status
+        :return Boolean: The current state of the registration status
+        """
+        return self.registration_open
 
     def new_id(self):
         """
@@ -95,22 +142,10 @@ class TournamentService(BaseHandler):
         self.id_counter += 1
         return self.id_counter
 
-    def set_game(self, game):
-        """
-        set the game of the current tournament
-        :param game: the game to set to this tournament
-        :type game: Game.Game
-        """
-        # Tournament initializes with a game and you can not change
-        # game type afterwards
-        game = game
-
     def set_tournament(self, new_tournament_package, new_tournament_module):
         """
         Allow client to set the tournament type. Defaults to
         AllPlayAll tournament type
-        :param tournament: the tournament to assign to this service
-        :type tournament: tournament.get_tournament().Tournament
         """
         # TODO finish this import issue
         if new_tournament_package is not None:
@@ -128,7 +163,13 @@ class TournamentService(BaseHandler):
             return "The current tournament is " + str(self.game)
 
     def set_num_players(self, max_players):
-        if max > 0:
+        """
+        Allows the game controller to set the maximum number of players for this tournament
+        :param max_players: The highest amount of players allowed to register to the tournament
+        :type: int
+        :return str: The message that the value has been changed if the parameter was greater than 0
+        """
+        if max_players > 0:
             self.tournament.set_number_of_players(max_players)
             result = "Number of players set to " + max_players
             print "SERVER_SIDE::> " + result
@@ -148,7 +189,7 @@ class TournamentService(BaseHandler):
     def run(self):
         """Set the game and run the tournament"""
         if self.tournament is None:
-            print "Can not run tournament.get_tournament(). Tournament is null"
+            print "Can not run tournament. Tournament is null"
         else:
             self.tournament.set_game(self.game)
             self.tournament.run()
