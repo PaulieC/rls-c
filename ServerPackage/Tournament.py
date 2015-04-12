@@ -23,6 +23,7 @@ class Tournament(Observable.Observable):
     def __init__(self):
         """ set up a list of players when tournament is initialized """
         Observable.Observable.__init__(self)
+        self.name = None
         self.playerList = []
         self.game = None
         self.display = None
@@ -115,9 +116,11 @@ class Tournament(Observable.Observable):
             self.start_round(players)
             moves = []
             for p in players:
-                moves.append(p.play())
+                moves.append(p[1])
             result = self.get_result(moves)
+            round_result = ((players[0], result[0]), (players[1], result[1]))
             self.end_round(players, moves, result)
+            return round_result
 
     @staticmethod
     def begin_tournament():
@@ -187,3 +190,6 @@ class Tournament(Observable.Observable):
 
     def get_max_num_players(self):
         return self.max_players
+
+    def get_name(self):
+        return self.name

@@ -7,6 +7,7 @@ from ServerPackage import Observer
 
 
 class Game(Observer.Observer):
+    name = None
 
     @staticmethod
     def num_players_per_game():
@@ -39,3 +40,5 @@ class Game(Observer.Observer):
         """
         pass
 
+    def get_name(self):
+        return self.name

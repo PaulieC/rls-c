@@ -2,6 +2,7 @@ from Tkinter import *
 import os
 import GameMasterClient
 
+
 def list_files(path):
         """
         Web: http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
@@ -76,9 +77,12 @@ gameTypeLabel = Label(main, text= "").pack()
 
 bottomFrame = Frame(main).pack(side=BOTTOM, anchor=CENTER)
 #START
+# TODO implement this
 start = Button(bottomFrame, text="Start!", command='').pack(side=TOP, fill=X)
 #ADVANCE
+# TODO implement this
 adv = Button(bottomFrame, text="Advance!", command='').pack(side=TOP, fill=X)
 #END
+# TODO implement this
 end= Button(bottomFrame, text="End!", command='').pack(side=TOP, fill=X)
 main.mainloop()

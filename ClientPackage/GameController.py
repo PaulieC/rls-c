@@ -3,9 +3,11 @@ This class will act like the game administrator. It should be connected by the p
 tournament. This 'player' will manage the current tournament, game, number of players, etc...
 """
 __author__ = 'Paul Council'
-from ClientPackage.GameMasterClient import *
-from ClientPackage.GMPlayer import *
 import time
+
+from ClientPackage.GameMasterClient import *
+from AvailablePlayers.GMPlayer import *
+
 
 my_player = GMPlayer()
 client = GameMasterClient(my_player)

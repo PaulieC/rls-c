@@ -107,8 +107,8 @@ if __name__ == "__main__":
     player = RPSPlayerExample()
     opponent = RPSPlayerExample()
     players = [opponent, player]
-    fake_moves = (1, 2)
-    fake_result = (0, 1)
+    fake_moves = [1, 2]
+    fake_result = [0, 1]
 
     player.notify(Message.Message.get_match_start_message(players))
     player.notify(Message.Message.get_round_start_message(players))

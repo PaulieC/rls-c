@@ -17,7 +17,7 @@ class NetworkToolbox:
         )[20:24])
 
     def get_host(self):
-    # check for unique ip in eth0
+        # check for unique ip in eth0
         try:
             possible_ip = str(self.get_ip_address("eth0"))
             if possible_ip == "127.0.0.1":

@@ -5,7 +5,6 @@ regular client cannot.
 __author__ = 'paulie'
 
 from ClientPackage.PlayerClient import *
-import os
 
 
 class GameMasterClient(PlayerClient):
@@ -22,19 +21,6 @@ class GameMasterClient(PlayerClient):
         req_set_num_players = self.player_connect.method.set_num_players(max_players)
         print "set_number_of_players::> " + req_set_num_players()
 
-    def get_dir(self, final_dir):
-        """
-        Used to find the directory of the games or the tournament. This could be used to find
-        any directory in the same directory as the ClientPackage...
-        :param final_dir: the name of the folder to search for
-        :type: str
-        :return str: The full path of the directory
-        """
-        os.chdir("..")
-        os.chdir(os.curdir + "/" + final_dir)
-        result = os.path.abspath(os.curdir) + "/"
-        return result
-
     def list_available_tournaments(self):
         """
         Lists the tournaments that are available in the AvailableTournaments directory.
@@ -42,8 +28,7 @@ class GameMasterClient(PlayerClient):
         """
         tournament_dir = self.get_dir("AvailableTournaments")
         tournament_list = self.list_files(tournament_dir)
-        self.print_list(tournament_list)
-
+        return tournament_list
 
     def list_available_games(self):
         """
@@ -53,7 +38,7 @@ class GameMasterClient(PlayerClient):
         """
         game_dir = self.get_dir("AvailableGames")
         game_list = self.list_files(game_dir)
-        self.print_list(game_list)
+        return game_list
 
     def open_tournament_registration(self):
         """
@@ -108,29 +93,6 @@ class GameMasterClient(PlayerClient):
 
     def end_game(self):
         pass
-
-    def list_files(self, path):
-        """
-        Web: http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
-        Username: Apogentus
-        :param path:
-        :return:
-        """
-        # returns a list of names (with extension, without full path) of all files
-        # in folder path
-        files = []
-        for name in os.listdir(path):
-            if os.path.isfile(os.path.join(path, name)):
-                if name != "__init__.py" and name.endswith(".py"):
-                    files.append(name)
-        return files
-
-    def print_list(self, printable_list):
-        num = 0
-        for name in printable_list:
-            print str(num) + ".   " + name
-            num += 1
-
 
 # obj = GameMasterClient(BEPCPlayer())
 # obj.set_tournament()
