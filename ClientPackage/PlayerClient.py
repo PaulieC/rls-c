@@ -3,9 +3,7 @@ __version__ = "sprint2"
 
 # imports
 import bjsonrpc
-from ClientPackage.Player import *
 from ClientPackage.PlayerService import *
-from ServerPackage.TournamentService import *
 
 
 class PlayerClient():
@@ -44,6 +42,16 @@ class PlayerClient():
         :return:
         """
         self.player_connect.close()
+
+    def check_if_registration_is_open(self):
+        """
+        Prints to this player the current status of the tournament's registration
+        """
+        req_registration_status = self.player_connect.method.get_registration_status()
+        if req_registration_status():
+            print "check_if_registration_is_open::> " + "registration is open!"
+        else:
+            print "check_if_registration_is_open::> " + "registration is closed."
 
     def register_player(self):
         """

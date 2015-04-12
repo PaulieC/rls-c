@@ -198,14 +198,6 @@ class BEPCPlayer(Player.Player):
     """
     Getters and Setters follow
     """
-    def set_name(self, player_name):
-        """
-        Sets this player's name
-        :param player_name: The name to assign this player
-        :type player_name: str
-        """
-        self.name = player_name
-
     def set_opp_number(self, num):
         """
         Sets the player number of the current opponent

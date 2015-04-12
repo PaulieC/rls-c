@@ -4,6 +4,7 @@ __credits__ = ["Alex Ciaramella, Greg Suner"]
 
 # imports
 from ServerPackage import Display, Message, Observable
+import time
 
 #
 
@@ -56,8 +57,11 @@ class Tournament(Observable.Observable):
         self.end_tournament()
 
     def create_next_match(self):
-        """ get a reference to the next game to be played """
-        pass    # TODO
+        """
+        Get a reference to the next game to be played .
+        This should be implemented
+        """
+        pass
 
     def register_player(self, player):
         """
@@ -82,7 +86,7 @@ class Tournament(Observable.Observable):
         """
         Computes the result of a round based on the moves made by the players
         :param moves: the moves list of the Player
-        :type moves: tuple
+        :type moves: list
         """
         return self.game.get_result(moves)
 
@@ -95,7 +99,6 @@ class Tournament(Observable.Observable):
         players = match[0]
         self.start_match(players)
         result = self.play_rounds(match)    # play_rounds should return a value, but doesn't... TODO??
-
         self.end_match(players, result)
 
     def play_rounds(self, match):
@@ -134,6 +137,7 @@ class Tournament(Observable.Observable):
         """
         message = Message.Message.get_match_start_message(players)
         self.notify_all(message)
+        time.sleep(3)
 
     def end_match(self, players, result):
         """
@@ -160,13 +164,14 @@ class Tournament(Observable.Observable):
         send a message containing the players, moves, and result of the last game
         :param players: the list of players in the round
         :type players: list
-        :param moves: the tuple of moves that were in this round
-        :type moves: tuple
+        :param moves: the list of moves that were in this round
+        :type moves: list
         :param result: the message concerning the round results
-        :type result: Message
+        :type result: str
         """
         message = Message.Message.get_round_end_message(players, moves, result)
         self.notify_all(message)
+        time.sleep(3)
 
     def get_method(self):
         """
