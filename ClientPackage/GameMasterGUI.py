@@ -1,5 +1,7 @@
 from Tkinter import *
 import os
+import tkMessageBox
+import subprocess as sub
 import GameMasterClient
 
 def list_files(path):
@@ -24,14 +26,19 @@ def print_list(list):
             print str(num) + ".   " + name
             num += 1
 
-def print_this(v):
-    print v
+def print_this(choice):
+    print choice
+
+def print_player_max():
+    console.insert(END, "The current player count is: " + maxPlayerCount.get() + "\n")
+
+def end_confirmation():
+    if tkMessageBox.askyesno("End Tournament", "Are you sure you want to end this tournament?"):
+        print "Execute end tournament here"
 
 main = Tk()
 main.wm_title("Game Master Client")
 
-gameTypeLabel = Label(main, text= "Set your preferences:").pack()
-gameTypeLabel = Label(main, text= "").pack()
 
 #
 #THIS BLOCK JUST FOR POPULATING THE LISTS, NEEDS TO CHANGE
@@ -50,35 +57,60 @@ tourney = list_files(result)
 ##########################################################
 
 #GAME TYPE
-gameTypeLabel = Label(main, text= "Choose a game type:").pack()
+gameTypeLabel = Label(main, text= "Choose a game type:").grid(row=0,column=0)
 selectedGameType = StringVar()
-selectedGameType.set(listy[0])
-gameTypeMenu = OptionMenu(main, selectedGameType, *listy, command=print_this).pack()
+selectedGameType.set("...")
+gameTypeMenu = OptionMenu(main, selectedGameType, *listy, command=print_this).grid(row=0,column=1)
+gameTypeButton = Button(main, text="Select", command='').grid(row=0,column=2,columnspan=2)
 
 #TOURNAMENT TYPE
-tourneyTypeLabel = Label(main, text= "Choose a tournament type:").pack()
+tourneyTypeLabel = Label(main, text= "Choose a tournament type:").grid(row=1,column=0)
 selectedTournamentType = StringVar()
-selectedTournamentType.set(tourney[0])
-tournamentTypeMenu = OptionMenu(main, selectedTournamentType, *tourney, command=print_this).pack()
+selectedTournamentType.set("...")
+tournamentTypeMenu = OptionMenu(main, selectedTournamentType, *tourney, command=print_this).grid(row=1,column=1)
+tournamentTypeButton = Button(main, text="Select", command='').grid(row=1,column=2,columnspan=2)
 
-#LIST CONNECTED PLAYERS
-connectedPlayersLabel = Label(main, text= "View connected players:").pack()
-connectedPlayersButton = Button(main, text="View").pack()
+#Open/Close Registration
+registrationLabel = Label(main, text="Registration Status:").grid(row=2,column=0)
+registrationStatus = Label(main, text="OPEN").grid(row=2,column=1)
+openRegistrationButton = Button(main, text="Open", command='').grid(row=2,column=2)
+closeRegistrationButton = Button(main, text="Close", command='').grid(row=2,column=3)
 
 #SET MAX PLAYERS
-setMaxPlayersLabel = Label(main, text="Set the maximum number of players:").pack()
+setMaxPlayersLabel = Label(main, text="Set the maximum number of players:").grid(row=3,column=0)
+maxPlayerCount = StringVar()
+maxPlayerCount.set("0")
+setMaxPlayerField = Entry(main, width=10, textvariable=maxPlayerCount).grid(row=3,column=1)
+setMaxPlayerButton = Button(main, text="Select", command=print_player_max).grid(row=3,column=2,columnspan=2)
 
-#SEE NUMBER OF CONNECTIONS, CLICKING THIS SHOULD REFRESH
-numConnectionsLabel = Label(main, text="Number of connections (Click to Refresh):").pack()
-numConnectionsButton = Button(main, text="4 Connections", command='').pack()
+#GameStatus
+gameStatusLabel = Label(main, text="Tournament Status:").grid(row=4,column=0)
+gameStatusButton = Button(main, text="STATUS", command='').grid(row=4,column=1)
+start = Button(main, text="Start",command='').grid(row=4,column=2)
+#adv = Button(main, text="Advance!",command='').grid(row=4,column=3)
+end = Button(main, text="End", command=end_confirmation).grid(row=4,column=3)
 
-gameTypeLabel = Label(main, text= "").pack()
+#SetIP
+setIPLabel = Label(main, text="Set the IP Address:").grid(row=5,column=0)
+ip = StringVar()
+ip.set("0.0.0.0")
+setIPField = Entry(main, width=10, textvariable=ip).grid(row=5,column=1)
+setIPButton = Button(main, text="Select", command='').grid(row=5,column=2,columnspan=2)
 
-bottomFrame = Frame(main).pack(side=BOTTOM, anchor=CENTER)
-#START
-start = Button(bottomFrame, text="Start!", command='').pack(side=TOP, fill=X)
-#ADVANCE
-adv = Button(bottomFrame, text="Advance!", command='').pack(side=TOP, fill=X)
-#END
-end= Button(bottomFrame, text="End!", command='').pack(side=TOP, fill=X)
+#SetPort
+setPortLabel = Label(main, text="Set the Port:").grid(row=6,column=0)
+port = StringVar()
+port.set("12345")
+setPortField = Entry(main, width=10, textvariable=port).grid(row=6,column=1)
+setPortButton = Button(main, text="Select", command='').grid(row=6,column=2,columnspan=2)
+
+#LIST CONNECTED PLAYERS
+connectionsLabel = Label(main, text= "Number of players connected:").grid(row=7,column=0)
+connectionsButton = Button(main, text="4 Connections", command='').grid(row=7,column=1)
+viewConnectionsButton = Button(main, text="View").grid(row=7,column=2,columnspan=2)
+
+#console
+console = Text(main, bg="black", fg="white")
+console.grid(row=8,columnspan=4)
+
 main.mainloop()
