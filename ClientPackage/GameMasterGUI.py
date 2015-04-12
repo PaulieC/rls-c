@@ -1,8 +1,7 @@
 from Tkinter import *
 import os
 import tkMessageBox
-import subprocess as sub
-import GameMasterClient
+
 
 def list_files(path):
         """
@@ -32,9 +31,36 @@ def print_this(choice):
 def print_player_max():
     console.insert(END, "The current player count is: " + maxPlayerCount.get() + "\n")
 
-def end_confirmation():
+def select_game_type():
+    console.insert(END, "The selected game type is now: " + selectedGameType.get() + "\n")
+
+def select_tournament_type():
+    console.insert(END, "The selected tournament type is now: " +selectedTournamentType.get() + "\n")
+
+def open_registration():
+    console.insert(END, "Registration Open\n")
+
+def close_registration():
+    console.insert(END, "Registration Closed\n")
+
+def get_tournament_status():
+    console.insert(END, "The tournament is currently: ...\n")
+
+def start_tournament():
+    console.insert(END, "The tournament has been started.\n")
+
+def end_tournament():
     if tkMessageBox.askyesno("End Tournament", "Are you sure you want to end this tournament?"):
-        print "Execute end tournament here"
+        console.insert(END, "The tournament has been stopped\n")
+
+def set_ip():
+    console.insert(END, "The IP Address is now: " + ip.get()+ "\n")
+
+def set_port():
+    console.insert(END, "The Port is now set to: " + port.get() + "\n")
+
+def print_connections():
+    console.insert(END, "Here's your list of connections...:\n")
 
 main = Tk()
 main.wm_title("Game Master Client")
@@ -60,21 +86,21 @@ tourney = list_files(result)
 gameTypeLabel = Label(main, text= "Choose a game type:").grid(row=0,column=0)
 selectedGameType = StringVar()
 selectedGameType.set("...")
-gameTypeMenu = OptionMenu(main, selectedGameType, *listy, command=print_this).grid(row=0,column=1)
-gameTypeButton = Button(main, text="Select", command='').grid(row=0,column=2,columnspan=2)
+gameTypeMenu = OptionMenu(main, selectedGameType, *listy, command='').grid(row=0,column=1)
+gameTypeButton = Button(main, text="Select", command=select_game_type).grid(row=0,column=2,columnspan=2)
 
 #TOURNAMENT TYPE
 tourneyTypeLabel = Label(main, text= "Choose a tournament type:").grid(row=1,column=0)
 selectedTournamentType = StringVar()
 selectedTournamentType.set("...")
-tournamentTypeMenu = OptionMenu(main, selectedTournamentType, *tourney, command=print_this).grid(row=1,column=1)
-tournamentTypeButton = Button(main, text="Select", command='').grid(row=1,column=2,columnspan=2)
+tournamentTypeMenu = OptionMenu(main, selectedTournamentType, *tourney, command='').grid(row=1,column=1)
+tournamentTypeButton = Button(main, text="Select", command=select_tournament_type).grid(row=1,column=2,columnspan=2)
 
 #Open/Close Registration
 registrationLabel = Label(main, text="Registration Status:").grid(row=2,column=0)
-registrationStatus = Label(main, text="OPEN").grid(row=2,column=1)
-openRegistrationButton = Button(main, text="Open", command='').grid(row=2,column=2)
-closeRegistrationButton = Button(main, text="Close", command='').grid(row=2,column=3)
+registrationStatus = Label(main, text="(Current)").grid(row=2,column=1)
+openRegistrationButton = Button(main, text="Open", command=open_registration).grid(row=2,column=2)
+closeRegistrationButton = Button(main, text="Close", command=close_registration).grid(row=2,column=3)
 
 #SET MAX PLAYERS
 setMaxPlayersLabel = Label(main, text="Set the maximum number of players:").grid(row=3,column=0)
@@ -85,32 +111,31 @@ setMaxPlayerButton = Button(main, text="Select", command=print_player_max).grid(
 
 #GameStatus
 gameStatusLabel = Label(main, text="Tournament Status:").grid(row=4,column=0)
-gameStatusButton = Button(main, text="STATUS", command='').grid(row=4,column=1)
-start = Button(main, text="Start",command='').grid(row=4,column=2)
-#adv = Button(main, text="Advance!",command='').grid(row=4,column=3)
-end = Button(main, text="End", command=end_confirmation).grid(row=4,column=3)
+gameStatusButton = Button(main, text="STATUS", command=get_tournament_status).grid(row=4,column=1)
+start = Button(main, text="Start",command=start_tournament).grid(row=4,column=2)
+end = Button(main, text="End", command=end_tournament).grid(row=4,column=3)
 
 #SetIP
 setIPLabel = Label(main, text="Set the IP Address:").grid(row=5,column=0)
 ip = StringVar()
 ip.set("0.0.0.0")
 setIPField = Entry(main, width=10, textvariable=ip).grid(row=5,column=1)
-setIPButton = Button(main, text="Select", command='').grid(row=5,column=2,columnspan=2)
+setIPButton = Button(main, text="Select", command=set_ip).grid(row=5,column=2,columnspan=2)
 
 #SetPort
 setPortLabel = Label(main, text="Set the Port:").grid(row=6,column=0)
 port = StringVar()
 port.set("12345")
 setPortField = Entry(main, width=10, textvariable=port).grid(row=6,column=1)
-setPortButton = Button(main, text="Select", command='').grid(row=6,column=2,columnspan=2)
+setPortButton = Button(main, text="Select", command=set_port).grid(row=6,column=2,columnspan=2)
 
 #LIST CONNECTED PLAYERS
 connectionsLabel = Label(main, text= "Number of players connected:").grid(row=7,column=0)
 connectionsButton = Button(main, text="4 Connections", command='').grid(row=7,column=1)
-viewConnectionsButton = Button(main, text="View").grid(row=7,column=2,columnspan=2)
+viewConnectionsButton = Button(main, text="View", command=print_connections).grid(row=7,column=2,columnspan=2)
 
 #console
-console = Text(main, bg="black", fg="white")
+console = Text(main, bg="#434A54", fg="white")
 console.grid(row=8,columnspan=4)
 
 main.mainloop()
