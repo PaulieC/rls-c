@@ -28,6 +28,7 @@ class Player(Observer.Observer):
         self.name = None
         self.id_num = None
         self.player_id = None
+        self.player_status = 0  # 1 = ready, 0 = not ready
 
     def play(self):
         """
@@ -73,3 +74,9 @@ class Player(Observer.Observer):
         :return:
         """
         return self.player_id
+
+    def set_ready(self):
+        self.player_status = 1
+
+    def set_not_ready(self):
+        self.player_status = 0

@@ -5,7 +5,7 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 # imports
 from bjsonrpc.handlers import BaseHandler
 from AvailableTournaments.AllPlayAll import *
-from AvailableGames.RPSGame import *
+from AvailableGames.RockPaperScissors import *
 import importlib
 
 
@@ -28,9 +28,12 @@ class TournamentService(BaseHandler):
         :return:
         """
         self.tournament = AllPlayAll()
-        self.game = RPSGame()
+        self.game = RockPaperScissors()
         self.id_counter = 0
         self.connected_players = []
+        self.player_move_info = []
+        self.tournament_round_info = []
+        self.tournament_match_info = []
         self.registration_open = False
 
     def verify_connection(self, txt):
@@ -65,9 +68,8 @@ class TournamentService(BaseHandler):
                 return msg
             else:
                 self.tournament.register_player(player_id)
-                result = "Attempted to register " + player_id
-                print "SERVER_SIDE::> " + result
-                return result
+                print "SERVER_SIDE::> " + player_id
+                return player_id
         else:
             print "SERVER_SIDE::> " + player_id + " tried to connect while registration is closed"
             msg = "The tournament registration hasn't been opened yet. Please wait for the game controller to request" \
@@ -191,5 +193,69 @@ class TournamentService(BaseHandler):
         if self.tournament is None:
             print "Can not run tournament. Tournament is null"
         else:
-            self.tournament.set_game(self.game)
-            self.tournament.run()
+            # TODO hold move with player_id
+            # TODO submit moves to the tournament
+            # TODO determine the winner of the round
+            # TODO set a message tuple that has the winner of the previous round
+            # TODO allow players of the round to collect these tuples
+            self.find_next_match()
+            # self.tournament.run()
+
+    def find_next_match(self):
+        match = self.tournament.create_next_match()
+        self.tournament_match_info.append(match)
+
+    def set_player_move(self, player_id, move):
+        # TODO hold move with player_id
+        move_pack = (player_id, move)
+        self.player_move_info.append(move_pack)
+
+    def check_for_ready_pairs(self):
+        result = None
+        for matches in self.tournament_match_info:
+            if result is not None:
+                break
+            player1 = matches[0][0]
+            player2 = matches[0][1]
+            for players1 in self.player_move_info:
+                if result is not None:
+                    break
+                if player1 in players1[0]:
+                    for players2 in self.player_move_info:
+                        if player2 in players2[0]:
+                            result = (players1, players2)
+        return result
+
+    def run_ready_pair(self, player1_and_move, player2_and_move):
+        match = ((player1_and_move, player2_and_move), 5)
+        result = self.tournament.play_rounds(match)
+        return result   # ((player1, win/lose), (player2, win/lose))
+
+    def get_round_results(self, player_id):
+        result = None
+        for player in self.tournament_round_info:
+            if player_id in player[0]:
+                result = player[0][1]
+                self.tournament_round_info.remove(player)   # remove this item as it isn't useful anymore
+                break
+            elif player_id in player[1]:
+                result = player[1][1]
+                self.tournament_round_info.remove(player)   # remove this item as it isn't useful anymore
+                break
+        return result
+
+    def get_game(self):
+        result = ""
+        if self.tournament.game is not None:
+            result = self.tournament.game.get_name()
+        else:
+            pass
+        return result
+
+    def get_tournament(self):
+        result = ""
+        if self.tournament is not None:
+            result = self.tournament.get_name()
+        else:
+            pass
+        return result

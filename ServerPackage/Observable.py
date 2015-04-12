@@ -19,7 +19,7 @@ class Observable(object):
         """
         notify all observers
         :param msg: the message to be sent to the observers
-        :type msg: Message
+        :type msg: Message.Message
         """
         for obs in self.observer_list:
             obs.notify(msg)

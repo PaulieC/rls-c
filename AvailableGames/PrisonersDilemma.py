@@ -14,6 +14,7 @@ class PrisonersDilemma(Game.Game):
 
     def __init__(self):
         super(PrisonersDilemma, self).__init__()
+        self.name = "Prisoner's Dilemma"
 
     def get_result(self, moves):
         """

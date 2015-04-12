@@ -29,7 +29,8 @@ class SingleElimination(Tournament.Tournament):
         self.player_two = 1     # player 2 index
         self.rounds = 3
         self.playerList = random.shuffle(self.get_players())
-        self.nextSet = [None] * len(self.playerList)
+        self.nextSet = [] * len(self.playerList)
+        self.name = "Single Elimination"
 
     def create_next_match(self):
         """
@@ -38,7 +39,7 @@ class SingleElimination(Tournament.Tournament):
         :rtype: tuple
         """
         if self.player_two >= len(self.playerList):     # adds odd player to the nextset and begins
-            self.nextSet.append(self, self.player_one)  # might need to be self.playerList[len(self.playerList)-1]
+            self.nextSet.append(self.player_one)  # might need to be self.playerList[len(self.playerList)-1]
             self.start_next_set()
         match = ((self.playerList[self.player_one], self.playerList[self.player_two]), self.rounds)
         self.player_two += 2

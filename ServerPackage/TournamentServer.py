@@ -59,7 +59,10 @@ class TournamentServer():
         """
         self.tournament_server.debug_socket(True)
         self.tournament_server.serve()
+        msg = "The Server has started running..."
+        return msg
 
-obj = TournamentServer()
-obj.generate_ip()
-print obj.get_ip()
+    def close_connection(self):
+        self.tournament_server.stop()
+        msg = "The Server has stopped running..."
+        return msg

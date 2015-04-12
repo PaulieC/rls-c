@@ -2,9 +2,11 @@ __author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
 __version__ = "sprint2"
 
 # imports
-from ClientPackage.PlayerClient import *
-from ClientPackage.TestPlayer1 import *
 import time
+
+from ClientPackage.PlayerClient import *
+from AvailablePlayers.TestPlayer1 import *
+
 
 my_player = TestPlayer1()
 client = PlayerClient(my_player)

@@ -13,6 +13,7 @@ class RockPaperScissors(Game.Game):
 
     def __init__(self):
         super(RockPaperScissors, self).__init__()
+        self.name = "Rock-Paper-Scissors"
 
     def get_result(self, moves):
         """

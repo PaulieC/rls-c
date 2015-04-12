@@ -20,6 +20,7 @@ class AllPlayAll(Tournament.Tournament):
         self.p = 0     # player 1 index
         self.q = 1     # player 2 index
         self.rounds = rounds
+        self.name = "All-Play-All"
 
     def create_next_match(self):
         """

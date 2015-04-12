@@ -4,10 +4,10 @@ __credits__ = ["Tony"]
 
 # imports
 from ServerPackage.TournamentService import *
-from ClientPackage.RPSPlayerExample import *
-from AvailableGames.RPSGame import *
+from AvailablePlayers.RPSPlayerExample import *
+from AvailableGames.RockPaperScissors import *
 from ServerPackage.Display import *
-from ClientPackage.BEPCPlayer import *
+from AvailablePlayers.BEPCPlayer import *
 
 
 class RPSDriver(TournamentService):
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     player = RPSPlayerExample()
     opponent = BEPCPlayer()
     players = [player, opponent]
-    rps = RPSGame()
+    rps = RockPaperScissors()
     driver.register_players(players)
     driver.set_game(rps)
     driver.set_display(Display())

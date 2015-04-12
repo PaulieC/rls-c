@@ -13,6 +13,7 @@ class RockPaperScissorsLizardSpock(Game.Game):
 
     def __init__(self):
         super(RockPaperScissorsLizardSpock, self).__init__()
+        self.name = "Rock-Paper-Scissors-Lizard-Spock"
 
     def get_result(self, moves):
         """
