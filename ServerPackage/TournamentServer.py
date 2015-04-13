@@ -32,6 +32,7 @@ class TournamentServer():
 
     def generate_ip(self):
         self.host = self.toolbox.get_host()
+        print self.host
 
     def get_ip(self):
         if self.host is None:

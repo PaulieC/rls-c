@@ -4,6 +4,7 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 
 # imports
 from bjsonrpc.handlers import BaseHandler
+from ServerPackage.TournamentData import *
 from AvailableTournaments.AllPlayAll import *
 from AvailableGames.RockPaperScissors import *
 import importlib
@@ -14,27 +15,10 @@ class TournamentService(BaseHandler):
     Supports the connection of players to the tournament.get_tournament().
     This class holds the functions required for the tournament
     to start, run, and end successfully.
-
-    Attributes:
-        game: the game corresponding to this tournament
-        tournament: the tournament associated with this class
     """
 
-    def _setup(self):
-        """
-        This method is called immediately after the super's __init__() method. This is
-        the place to initialize values as this class can't be constructed as a handler type any
-        other way.
-        :return:
-        """
-        self.tournament = AllPlayAll()
-        self.game = RockPaperScissors()
-        self.id_counter = 0
-        self.connected_players = []
-        self.player_move_info = []
-        self.tournament_round_info = []
-        self.tournament_match_info = []
-        self.registration_open = False
+    # Initializes the tournament data file that is used for persistent data
+    tournament_data = TournamentData()
 
     def verify_connection(self, txt):
         """
@@ -43,11 +27,16 @@ class TournamentService(BaseHandler):
         :param txt: The player's name
         :return str: the message including the player's name to confirm a connection
         """
+        txt = str(txt)
         response = "Hello %s! " \
                    "\nYou have connected to the registration queue." \
                    "\nPlease standby for registration confirmation..." % txt
-        print "SERVER_SIDE::>" + response     # prints information server side
-        return response     # sends information to the client to handle
+        try:
+            self.tournament_data.add_connected_players(txt)
+            print "SERVER_SIDE::> " + response     # prints information server side
+            return response     # sends information to the client to handle
+        except Exception:
+            print "SERVER_SIDE::> " + txt + " couldn't connect..."
 
     def register_player(self, player_id):
         """
@@ -57,19 +46,24 @@ class TournamentService(BaseHandler):
         :type: str
         :return str: A message corresponding to the result of this function
         """
-        if self.registration_open:
-            if self.tournament is None:
+        player_id = str(player_id)
+        if self.tournament_data.get_registration_status():
+            if self.tournament_data.get_tournament() is None:
                 msg = "Can not add player. Tournament is null"
                 print "SERVER_SIDE::> " + msg
                 return msg
-            elif self.tournament.get_num_players() == self.tournament.get_max_num_players():
+            elif self.tournament_data.get_tournament().get_num_players() == \
+                    self.tournament_data.get_tournament().get_max_num_players():
                 msg = "Can not add player. Tournament room is full"
                 print "SERVER_SIDE::> " + msg
                 return msg
             else:
-                self.tournament.register_player(player_id)
-                print "SERVER_SIDE::> " + player_id
-                return player_id
+                if self.tournament_data.register_player(player_id):
+                    print "SERVER_SIDE::> " + player_id
+                    return player_id
+                else:
+                    print "SERVER_SIDE::> " + player_id + " has already been registered"
+                    return player_id + " has already been registered."
         else:
             print "SERVER_SIDE::> " + player_id + " tried to connect while registration is closed"
             msg = "The tournament registration hasn't been opened yet. Please wait for the game controller to request" \
@@ -81,7 +75,7 @@ class TournamentService(BaseHandler):
         The player calls this to get a unique number for player_id creation client side
         :return int: A new integer
         """
-        return self.new_id()
+        return self.tournament_data.generate_id_counter()
 
     def register_players(self, player_list):
         """
@@ -99,16 +93,17 @@ class TournamentService(BaseHandler):
         :type player: Player.Player
         :return:
         """
-        registered_players = self.tournament.get_players()
-        if player_id in registered_players:
-            result = "Player \'" + player_id + "\' has been registered"
-            print "SERVER_SIDE::> " + result
-            return result
-        else:
-            result = player_id + " isn't in the registered list. Current registered player ids: "
-            result += "[" + ", ".join(registered_players) + "]"
-            print "SERVER_SIDE::> " + result
-            return result
+        player_id = str(player_id)
+        player_list = self.tournament_data.get_registered_players()
+        for player_pack in player_list:
+            if player_id in player_pack:
+                result = "Player \'" + player_id + "\' has been registered"
+                print "SERVER_SIDE::> " + result
+                return result
+        result = player_id + " isn't in the registered list. Current registered player ids: "
+        result += "[" + ", ".join(player_list) + "]"
+        print "SERVER_SIDE::> " + result
+        return result
 
     def get_registered_players(self):
         """
@@ -122,20 +117,28 @@ class TournamentService(BaseHandler):
         """
         Sets the registration status of the tournament from False to True
         """
-        self.registration_open = True
+        try:
+            self.tournament_data.set_registration_status(True)
+            return True
+        except Exception:
+            return False
 
     def close_tournament_registration(self):
         """
         Sets the registration status of the tournament from True to False
         """
-        self.registration_open = False
+        try:
+            self.tournament_data.set_registration_status(False)
+            return True
+        except Exception:
+            return False
 
     def get_registration_status(self):
         """
         Returns the current registration status
         :return Boolean: The current state of the registration status
         """
-        return self.registration_open
+        return self.tournament_data.get_registration_status()
 
     def new_id(self):
         """
