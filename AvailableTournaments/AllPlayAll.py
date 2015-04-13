@@ -3,10 +3,10 @@ __version__ = "sprint1"
 __credits__ = ["William Ezekiel"]
 
 # imports
-from ServerPackage import Tournament
+from ServerPackage.Tournament import *
 
 
-class AllPlayAll(Tournament.Tournament):
+class AllPlayAll(Tournament):
     """ AllPlayAll Tournament Type, every player is in a match with every other player """
 
     def __init__(self, rounds=5):
@@ -15,7 +15,7 @@ class AllPlayAll(Tournament.Tournament):
         :param rounds: the number of rounds per match, 5 by default
         :type rounds: list
         """
-        Tournament.Tournament.__init__(self)
+        Tournament.__init__(self)
         # variables to help us pick players 1 and 2.
         self.p = 0     # player 1 index
         self.q = 1     # player 2 index

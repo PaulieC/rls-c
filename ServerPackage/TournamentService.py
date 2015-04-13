@@ -4,6 +4,7 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 
 # imports
 from bjsonrpc.handlers import BaseHandler
+from ServerPackage.TournamentData import *
 from AvailableTournaments.AllPlayAll import *
 from AvailableGames.RockPaperScissors import *
 import importlib
@@ -14,27 +15,12 @@ class TournamentService(BaseHandler):
     Supports the connection of players to the tournament.get_tournament().
     This class holds the functions required for the tournament
     to start, run, and end successfully.
-
-    Attributes:
-        game: the game corresponding to this tournament
-        tournament: the tournament associated with this class
     """
 
-    def _setup(self):
-        """
-        This method is called immediately after the super's __init__() method. This is
-        the place to initialize values as this class can't be constructed as a handler type any
-        other way.
-        :return:
-        """
-        self.tournament = AllPlayAll()
-        self.game = RockPaperScissors()
-        self.id_counter = 0
-        self.connected_players = []
-        self.player_move_info = []
-        self.tournament_round_info = []
-        self.tournament_match_info = []
-        self.registration_open = False
+    tournament_data = None
+
+    def intialize_tournament_data(self):
+        self.tournament_data = TournamentData()
 
     def verify_connection(self, txt):
         """
@@ -46,6 +32,7 @@ class TournamentService(BaseHandler):
         response = "Hello %s! " \
                    "\nYou have connected to the registration queue." \
                    "\nPlease standby for registration confirmation..." % txt
+
         print "SERVER_SIDE::>" + response     # prints information server side
         return response     # sends information to the client to handle
 
