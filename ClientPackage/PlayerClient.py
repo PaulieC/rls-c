@@ -42,11 +42,12 @@ class PlayerClient():
         """
         :return:
         """
-        result = 0
+        msg = "Couldn't verify connection"
         req_welcome_player = self.player_connect.method.verify_connection(self.player_name)
         if "Hello" in req_welcome_player():
-            result = 1
-        return result
+            msg = "Connection verified"
+        print "verify_connection::> " + msg
+        return msg
 
     def get_dir(self, final_dir):
         """
@@ -97,7 +98,10 @@ class PlayerClient():
         """
         :return:
         """
-        self.player_connect.close()
+        try:
+            self.player_connect.close()
+        except Exception:
+            print "close_connection::> Couldn't close connection..."
 
     def check_if_registration_is_open(self):
         """
@@ -130,9 +134,9 @@ class PlayerClient():
                     print "register_player::> " + my_id
                     result = 1
                 except Exception:
-                    pass
+                    print "register_player::> Couldn't successfully register the player..."
         except Exception:
-            pass
+            print "register_player::> Couldn't successfully obtain a player number..."
         return result
 
     def verify_registration(self):

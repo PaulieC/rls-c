@@ -11,6 +11,15 @@ class GameMasterClient(PlayerClient):
     def __init__(self, player):
         PlayerClient.__init__(self, player)
 
+    def init_tour_data(self):
+        result = "unable to init"
+        req_init_tour_data = self.player_connect.method.init_tour_data()
+        tour_status = req_init_tour_data()
+        if tour_status:
+            result = "tournament has been initialized"
+        print "init_tour_data::> " + result
+        return result
+
     def set_number_of_players(self, max_players):
         """
         Calls the function server side with the parameter to set as the maximum number of players that
@@ -45,7 +54,12 @@ class GameMasterClient(PlayerClient):
         Opens the player's ability to register to the tournament
         """
         req_open_registration = self.player_connect.method.open_tournament_registration()
-        req_open_registration()
+        tour_open = req_open_registration()
+        msg = "Tournament registration couldn't open"
+        if tour_open:
+            msg = "Tournament registration is open"
+        print "open_tournament_registration::> " + msg
+        return msg
 
     def close_tournament_registration(self):
         """
