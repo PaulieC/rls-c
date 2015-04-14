@@ -102,6 +102,10 @@ class Tournament(Observable.Observable):
         result = self.play_rounds(match)    # play_rounds should return a value, but doesn't... TODO??
         self.end_match(players, result)
 
+    def play_round(self, match):
+        # TODO implement to play one round of the tournament
+        pass
+
     def play_rounds(self, match):
         """
         This function should return a result, but when it does return result,

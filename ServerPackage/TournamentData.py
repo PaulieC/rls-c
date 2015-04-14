@@ -1,24 +1,28 @@
 """
 This file will be used to hold instances of the current tournament and player information.
-This is a companion to the TournamnetService as data doesn't stay persistent without an instance
+This is a companion to the TournamentService as data doesn't stay persistent without an instance
 for the variable
 """
 __author__ = 'system1'
 # imports
 from AvailableTournaments.AllPlayAll import *
 from AvailableGames.RockPaperScissors import *
+from ServerPackage.MatchData import *
 
 
 class TournamentData:
+    """
+    Class used to maintain data for the server
+    """
     def __init__(self):
         self.tournament = AllPlayAll()
         self.game = RockPaperScissors()
         self.id_counter = 0
         self.connected_players = []
-        self.player_move_info = ()
-        self.tournament_round_info = []
         self.registration_open = False
         self.registered_players = []
+        self.ready_pairs = []
+        self.matches = []
 
 # General Functions
     def check_reg_stat(self):
@@ -50,6 +54,35 @@ class TournamentData:
         self.add_registered_players(player_id)
         return True
 
+    def add_match(self, player1, player2, num_rounds):
+        """
+        Adds another match to the list of matches. This match will be used as a reference
+        for the player to observe the results.
+        :param player1: str
+        :param player2: str
+        :param num_rounds: int
+        :return: Boolean
+        """
+        try:
+            new_match = MatchData(player1, player2, num_rounds)
+            self.matches.append(new_match)
+            return True
+        except Exception:
+            return False
+
+    def set_player_move(self, player_id, move):
+        """
+        Function used to allow the player to submit their move for the current round
+        :param player_id: str
+        :param move: itn
+        :return: Boolean
+        """
+        result = False
+        for match in self.matches:
+            if match.submit_move(player_id=player_id, player_move=move):
+                result = True
+        return result
+
     def generate_id_counter(self):
         """
         Holds the current id value. Increases the id value by 1. Returns the held id value
@@ -63,30 +96,40 @@ class TournamentData:
         """ Increments the id counter by 1. """
         self.id_counter += 1
 
+    def run_match(self):
+        # TODO implement
+        pass
+
 # Adders
     def add_connected_players(self, player_name):
+        """
+        Add the player id to the connected_players list
+        :param player_name: str
+        """
         if player_name not in self.connected_players:
             self.connected_players.append(player_name)
 
-    def add_tournament_round_info(self, player1_move_info, player2_move_info):
-        info = (player1_move_info, player2_move_info)
-        self.tournament_round_info.append(info)
-
     def add_registered_players(self, player_id):
+        """
+        Add the player id to the list of registered players
+        :param player_id: str
+        """
         reg_info = (player_id, self.tournament.get_name())
         self.registered_players.append(reg_info)
 
 # Removers
     def rem_connected_players(self, player):
+        """
+        Removes the player id from the list of connected players
+        :param player: str
+        """
         self.connected_players.remove(player)
 
-    def rem_tournament_round_info(self, player1_id, player2_id):
-        for index, item in enumerate(self.tournament_round_info):
-            if player1_id in item and player2_id in item:
-                self.tournament_round_info.remove(item)
-                break
-
     def rem_registered_players(self, player_id):
+        """
+        Removes the player id from the list of registered players
+        :param player_id: str
+        """
         for item in self.registered_players:
             if player_id in item:
                 self.registered_players.remove(item)
@@ -118,32 +161,65 @@ class TournamentData:
         pass
 
     def set_registration_status(self, status):
+        """
+        Allows the caller to change the status of registration in the tournament
+        :param status: Boolean
+        """
         self.registration_open = status
 
     def set_registered_players(self, player_list):
+        """
+        Allows a list of players to be set to this local player list
+        :param player_list: list
+        """
         self.registered_players = player_list
 
 # Getters
     def get_tournament(self):
+        """
+        Returns the current tournament object
+        :return: Tournament
+        """
         return self.tournament
 
     def get_game(self):
+        """
+        Returns the current game object
+        :return: Game
+        """
         return self.game
 
     def get_id_counter(self):
+        """
+        Returns the current id_counter
+        :return: int
+        """
         return self.id_counter
 
     def get_connected_players(self):
+        """
+        Returns the current list of connected players
+        :return: list
+        """
         return self.connected_players
 
-    def get_player_move_info(self):
-        return self.player_move_info
-
-    def get_tournament_rount_info(self):
-        return self.tournament_round_info
-
     def get_registration_status(self):
+        """
+        Returns the current registration status
+        :return: Boolean
+        """
         return self.registration_open
 
     def get_registered_players(self):
+        """
+        Returns the list of registered players
+        :return: list
+        """
         return self.registered_players
+
+    def get_matches(self):
+        """
+        Returns the list of matches
+        :return: list
+        """
+        return self.matches

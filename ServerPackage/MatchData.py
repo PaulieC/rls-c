@@ -18,6 +18,8 @@ class MatchData:
         :param num_rounds: int
         """
         self.player1_id = player1
+        self.plr1_client_ready = False
+        self.plr2_client_ready = False
         self.player2_id = player2
         self.match_head = player1 + player2
         self.max_rounds = num_rounds
@@ -98,6 +100,55 @@ class MatchData:
             result = True
         return result
 
+    def check_for_ready(self):
+        """
+        Returns true if both players are set to ready
+        :return: Boolean
+        """
+        result = False
+        if self.plr1_client_ready and self.plr2_client_ready:
+            result = True
+        return result
+
+    def is_my_match(self, player_id):
+        """
+        Returns true if this match belongs to the requesting player
+        :param player_id: str
+        :return: Boolean
+        """
+        result = -1
+        if player_id is self.player1_id:
+            result = 1
+        elif player_id is self.player2_id:
+            result = 2
+        return result
+
+    def get_result(self, player_num):
+        """
+        Returns the result of the most recent round for the respective player (1 or 2)
+        :param player_num: int
+        :return: int
+        """
+        if player_num == 1:
+            return self.player1_round
+        elif player_num == 2:
+            return self.player2_round
+        else:
+            return None
+
 # Setters
+    def set_ready(self, player_id):
+        """
+        Allows the caller to set themselves to ready
+        :param player_id: str
+        :return: Boolean
+        """
+        result = False
+        if self.player1_id is player_id:
+            result, self.plr1_client_ready = True
+        elif self.player2_id is player_id:
+            result, self.plr2_client_ready = True
+        else:
+            return result
 
 # Getters
