@@ -2,6 +2,21 @@ from Tkinter import *
 import os
 import tkMessageBox
 
+def list_files(path):
+    """
+    Web: http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
+    Username: Apogentus
+    :param path:
+    :return:
+    """
+    # returns a list of names (with extension, without full path) of all files
+    # in folder path
+    files = []
+    for name in os.listdir(path):
+        if os.path.isfile(os.path.join(path, name)):
+            if name != "__init__.py" and name.endswith(".py"):
+                files.append(name)
+    return files
 
 def quit_game():
     if tkMessageBox.askyesno("Quit Game", "Are you sure you want to quit?"):
@@ -58,11 +73,15 @@ port.set("12345")
 setPortField = Entry(main, width=15, textvariable=port).grid(row=3,column=1)
 setPortButton = Button(main, text="Select", command=set_port).grid(row=3, column=2,columnspan=2)
 
+#ChangePlayerAI
+os.chdir("..")
+os.chdir(os.curdir + "/AvailablePlayers")
+result = os.path.abspath(os.curdir) + "/"
+players = list_files(result)
 changePlayerLabel = Label(main, text="Change Player:").grid(row=4, column=0)
 player = StringVar()
 player.set("...")
-listy = "some choices."
-changePlayerMenu = OptionMenu(main, player, *listy, command='').grid(row=4, column=1)
+changePlayerMenu = OptionMenu(main, player, *players, command='').grid(row=4, column=1)
 changePlayerButton = Button(main, text="Select", command=change_player).grid(row=4, column=2, columnspan=2)
 
 attemptConnectionLabel = Label(main, text="Attempt Connection:").grid(row=5, column=0)

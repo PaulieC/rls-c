@@ -1,6 +1,15 @@
 from Tkinter import *
 import os
 import tkMessageBox
+import importlib
+from ClientPackage.GameMasterClient import *
+from AvailablePlayers.GMPlayer import *
+
+my_player = GMPlayer()
+gmc = GameMasterClient(my_player)
+gmc.client_connect('150.250.142.57')
+# verify connection
+#client.verify_connection()
 
 
 def list_files(path):
@@ -39,8 +48,10 @@ def select_game_type():
     console.insert(END, "The selected game type is now: " + selectedGameType.get() + "\n")
 
 
+
 def select_tournament_type():
     console.insert(END, "The selected tournament type is now: " + selectedTournamentType.get() + "\n")
+    gmc.set_tournament(selectedTournamentType.get().replace(".py",""))
 
 
 def open_registration():

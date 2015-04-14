@@ -3,11 +3,11 @@ __version__ = "sprint1"
 __credits__ = ["William Ezekiel"]
 
 # imports
-from ServerPackage import Tournament
+from ServerPackage.Tournament import *
 import random
 
 
-class SingleElimination(Tournament.Tournament):
+class SingleElimination(Tournament):
     """
     SingleElimination Tournament Type:
     Every player plays an initial match, but only winners move on.
@@ -23,13 +23,13 @@ class SingleElimination(Tournament.Tournament):
         :param rounds: the number of rounds per match, 3 by default
         :type rounds: list
         """
-        Tournament.Tournament.__init__(self)
+        Tournament.__init__(self)
         # variables to help us pick players 1 and 2.
         self.player_one = 0     # player 1 index
         self.player_two = 1     # player 2 index
         self.rounds = 3
-        self.playerList = random.shuffle(self.get_players())
-        self.nextSet = [] * len(self.playerList)
+        #self.playerList = random.shuffle(self.get_players())
+        #self.nextSet = [] * len(self.playerList)
         self.name = "Single Elimination"
 
     def create_next_match(self):
