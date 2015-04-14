@@ -127,6 +127,18 @@ class TournamentService(BaseHandler):
         """
         return self.tournament_data.get_registration_status()
 
+    def set_tournament(self, game_type):
+        game_type = str(game_type)
+        self.tournament_data.set_tournament(game_type)
+
+    def set_game(self, new_game):
+        # TODO finish this import issue
+        if new_game is not None:
+            print "The current tournament is " + str(self.game)
+            tour = importlib.import_module(new_game, "*")
+            self.game = tour.AllPlayAll()
+            return "The current tournament is " + str(self.game)
+
     def set_num_players(self, max_players):
         """
         Allows the game controller to set the maximum number of players for this tournament

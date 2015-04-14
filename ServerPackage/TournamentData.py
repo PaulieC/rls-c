@@ -3,6 +3,8 @@ This file will be used to hold instances of the current tournament and player in
 This is a companion to the TournamentService as data doesn't stay persistent without an instance
 for the variable
 """
+import importlib
+
 __author__ = 'system1'
 # imports
 from AvailableTournaments.AllPlayAll import *
@@ -137,9 +139,10 @@ class TournamentData:
                 break
 
 # Setters
-    def set_tournament(self, tour_name):
-        # TODO initialize this function
-        pass
+    def set_tournament(self, game_type):
+        tour = importlib.import_module("AvailableTournaments." + game_type)
+        self.tournament = getattr(tour, game_type)()
+        print "Tournament type is now: ", self.tournament.get_name()
 
     def set_game(self, game_name):
         # TODO initialize this function

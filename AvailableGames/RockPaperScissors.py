@@ -1,4 +1,3 @@
-#TODO replace RPSGame with this class(for clarity)
 
 __author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
 __version__ = "sprint1"
