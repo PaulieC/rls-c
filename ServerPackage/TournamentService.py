@@ -147,17 +147,9 @@ class TournamentService(BaseHandler):
         self.id_counter += 1
         return self.id_counter
 
-    def set_tournament(self, new_tournament_package, new_tournament_module):
-        """
-        Allow client to set the tournament type. Defaults to
-        AllPlayAll tournament type
-        """
-        # TODO finish this import issue
-        if new_tournament_package is not None:
-            print "The current tournament is " + str(self.tournament)
-            tour = importlib.import_module("AvailableTournaments.AllPlayAll.AllPlayAll")
-            self.tournament = tour()
-            return "The current tournament is " + str(self.tournament)
+    def set_tournament(self, game_type):
+        game_type = str(game_type)
+        self.tournament_data.set_tournament(game_type)
 
     def set_game(self, new_game):
         # TODO finish this import issue

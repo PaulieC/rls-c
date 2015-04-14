@@ -5,11 +5,11 @@ __version__ = "sprint1"
 __credits__ = ["William Ezekiel"]
 
 # imports
-from ServerPackage import Tournament
+from ServerPackage.Tournament import *
 import random
 
 
-class RoundRobin(Tournament.Tournament):
+class RoundRobin(Tournament):
     """
     RoundRobin Tournament Type:
     For Large player counts. Divides players into groups and runs AllPlayAll on those groups

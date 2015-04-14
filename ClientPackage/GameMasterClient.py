@@ -76,27 +76,9 @@ class GameMasterClient(PlayerClient):
         players = req_registered_players()
         self.print_list(players)
 
-    def set_tournament(self):
-        # TODO finish implementation
-        # first, list all available tournaments
-        self.list_available_tournaments()
-        # now select the tournament to import
-        tournament_list = self.list_files(self.get_dir("AvailableTournaments"))
-        print tournament_list
-        print len(tournament_list)
-        while True:
-            index = raw_input("tournament to select (-1 to cancel) --> ")
-            if index == "-1":
-                print "...nevermind then >_>"
-                break
-            elif index >= str(len(tournament_list)) or index < str(len(tournament_list) - 1):
-                print "This value doesn't reference a possible tournament"
-            else:
-                tournament_package = "AvailableTournaments." + str(tournament_list[int(index)]).replace(".py", "")
-                tournament_module = str(tournament_list[int(index)]).replace(".py", "")
-                req_change_tournament = self.player_connect.method.set_tournament(tournament_package, tournament_module)
-                print "set_tournament::>" + req_change_tournament()
-                break
+    def set_tournament(self, game_type):
+        req_set_tournament = self.player_connect.method.set_tournament(game_type)
+        req_set_tournament()
 
     def set_game(self):
         # TODO implement similarly to set_tournament
