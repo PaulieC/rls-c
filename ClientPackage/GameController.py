@@ -23,9 +23,11 @@ client.verify_connection()
 # client.set_game()
 # open the room for registration
 client.open_tournament_registration()
-time.sleep(5)  # allow 1 minute for registration
+# time.sleep(10)  # allow 1 minute for registration
+# get list of ready players
+client.list_registered_players()
 # close the room for registration
-client.close_tournament_registration()
+# client.close_tournament_registration()
 
 # close the connection
 client.close_connection()

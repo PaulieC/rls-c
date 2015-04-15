@@ -11,7 +11,7 @@ from AvailablePlayers.TestPlayer1 import *
 my_player = TestPlayer1()
 client = PlayerClient(my_player)
 # attempt to connect player to server
-client.client_connect()
+client.client_connect(host="192.168.1.25")
 # verify connection
 client.verify_connection()
 # attempt to register this player in the tournament

@@ -77,7 +77,12 @@ class GameMasterClient(PlayerClient):
         """
         req_registered_players = self.player_connect.method.get_registered_players()
         players = req_registered_players()
-        self.print_list(players)
+        result = "There aren't any registered players at this time..."
+        if players:
+            print "list_registered_players::> "
+            self.print_list(players)
+            return
+        print result
 
     def set_tournament(self, game_type):
         req_set_tournament = self.player_connect.method.set_tournament(game_type)
@@ -88,6 +93,7 @@ class GameMasterClient(PlayerClient):
         pass
 
     def start_game(self):
+        # TODO impelment this method to run at least one round
         pass
 
     def end_game(self):
