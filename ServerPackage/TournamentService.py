@@ -106,6 +106,7 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(True)
+            print "SERVER_SIDE::> Registration is open!"
             return True
         except Exception:
             return False
@@ -116,6 +117,7 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(False)
+            print "SERVER_SIDE::> Registration is closed!"
             return True
         except Exception:
             return False
