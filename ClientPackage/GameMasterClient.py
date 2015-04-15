@@ -91,8 +91,9 @@ class GameMasterClient(PlayerClient):
         req_ready_pairs = self.player_connect.method.check_for_ready_pairs()
         pairs = req_ready_pairs()
         if pairs:
-            print "check_for_ready_pairs::> "
-            self.print_list(pairs)
+            for pair in pairs:
+                print "check_for_ready_pairs::> "
+                self.print_list(pair)
             return
         print "check_for_ready_pairs::> There aren't any ready pairs at this time..."
 
@@ -113,6 +114,19 @@ class GameMasterClient(PlayerClient):
                      play1 + " and " + play2 + " for " + \
                      rounds + " rounds."
         print "find_next_match::> " + result
+
+    def run_ready_pairs(self):
+        """
+        Requests that the server runs all the matches that have players
+        set to the ready status. This will then print the round number
+        that just completed.
+        """
+        result = "No pairs are ready at this time..."
+        req_run_ready = self.player_connect.method.run_ready_pairs()
+        run_ready = req_run_ready()
+        if run_ready > 0:
+            result = "Completed round number " + str(run_ready)
+        print "run_ready_pairs::> " + result
 
     def set_tournament(self, game_type):
         req_set_tournament = self.player_connect.method.set_tournament(game_type)

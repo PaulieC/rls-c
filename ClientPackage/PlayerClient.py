@@ -191,13 +191,5 @@ class PlayerClient():
         result = "Move wasn't set..."
         if set_move:
             result = "Move has been set!"
-        print "submit_move::> " + result
-
-    def set_player_ready(self):
-        result = "Not registered in a tournament!"
-        if self.player.get_player_id() is not None:
             self.player.set_ready()
-            result = "Ready!"
-        else:
-            pass
-        return result
+        print "submit_move::> " + result

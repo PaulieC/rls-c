@@ -39,5 +39,8 @@ client.check_for_ready_pairs()
 # generate ready pairs for a match
 client.find_next_match()
 
+# run all ready matches
+client.run_ready_pairs()
+
 # close the connection
 client.close_connection()
