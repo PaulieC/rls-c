@@ -42,10 +42,12 @@ class MatchData:
         if player_id == self.player1_id:
             if not self.player1_round:
                 self.player1_round = (player_id, player_move, self.round_num)
+                self.plr1_client_ready = True
                 result = True
         elif player_id == self.player2_id:
             if not self.player2_round:
                 self.player2_round = (player_id, player_move, self.round_num)
+                self.plr2_client_ready = True
                 result = True
         return result
 
