@@ -175,7 +175,8 @@ class TournamentService(BaseHandler):
         result = False
         if match:
             if self.tournament_data.add_match(match[0][0], match[0][1], match[1]):
-                result = True
+                result = match
+        print "SERVER_SIDE::> " + str(result)
         return result
 
     def set_player_move(self, player_id, move):
@@ -198,9 +199,16 @@ class TournamentService(BaseHandler):
         Looks through the list and tries to find ready pairs. These
         pairs are added to a list in TournamentData
         """
-        for index, match in enumerate(self.tournament_data.matches):
-            if match.check_for_ready():
-                self.tournament_data.ready_pairs.append(self.tournament_data.matches[index])
+        if self.tournament_data.matches:
+            for index, match in enumerate(self.tournament_data.matches):
+                if match.check_for_ready():
+                    self.tournament_data.ready_pairs.append(self.tournament_data.matches[index])
+        if self.tournament_data.ready_pairs:
+            print "SERVER_SIDE::> " + self.tournament_data.ready_pairs
+            return self.tournament_data.ready_pairs
+        else:
+            print "SERVER_SIDE::> No ready pairs could be found at this time"
+            return False
 
     def run_ready_pair(self):
         """
