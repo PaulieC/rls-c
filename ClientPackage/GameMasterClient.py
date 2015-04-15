@@ -96,6 +96,24 @@ class GameMasterClient(PlayerClient):
             return
         print "check_for_ready_pairs::> There aren't any ready pairs at this time..."
 
+    def find_next_match(self):
+        """
+        Submits a request to generate a new match for registered players that aren't currently in
+        a match. If this isn't possible, a message will be printed stating this, otherwise, info
+        on the newly created match will be printed.
+        """
+        req_next_match = self.player_connect.method.find_next_match()
+        next_match = req_next_match()
+        result = "Couldn't create a new match"
+        if next_match:
+            play1 = str(next_match[0][0])
+            play2 = str(next_match[0][1])
+            rounds = str(next_match[1])
+            result = "A new match has been created between " + \
+                     play1 + " and " + play2 + " for " + \
+                     rounds + " rounds."
+        print "find_next_match::> " + result
+
     def set_tournament(self, game_type):
         req_set_tournament = self.player_connect.method.set_tournament(game_type)
         req_set_tournament()

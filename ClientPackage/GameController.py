@@ -36,5 +36,8 @@ client.list_registered_players()
 # create pairs of matches server side. Should be empty at this stage
 client.check_for_ready_pairs()
 
+# generate ready pairs for a match
+client.find_next_match()
+
 # close the connection
 client.close_connection()
