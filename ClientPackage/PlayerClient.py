@@ -180,6 +180,19 @@ class PlayerClient():
             self.player.set_name(new_name)
         return self.player.get_name()
 
+    def submit_move(self):
+        """
+        Allows the player object to generate the next move and send this server side for
+        the current round.
+        """
+        move = self.player.play()
+        req_set_move = self.player_connect.method.set_player_move(self.player.get_player_id(), move)
+        set_move = req_set_move()
+        result = "Move wasn't set..."
+        if set_move:
+            result = "Move has been set!"
+        print "submit_move::> " + result
+
     def set_player_ready(self):
         result = "Not registered in a tournament!"
         if self.player.get_player_id() is not None:
