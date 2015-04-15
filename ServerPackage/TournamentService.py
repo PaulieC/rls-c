@@ -188,6 +188,7 @@ class TournamentService(BaseHandler):
         :return: Boolean
         """
         result = False
+        player_id = str(player_id)
         for match in self.tournament_data.matches:
             if match.submit_move(player_id, move):
                 result = True

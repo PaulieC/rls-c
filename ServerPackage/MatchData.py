@@ -39,12 +39,12 @@ class MatchData:
         :return: Boolean
         """
         result = False
-        if player_id is self.player1_id:
-            if self.player1_round:
+        if player_id == self.player1_id:
+            if not self.player1_round:
                 self.player1_round = (player_id, player_move, self.round_num)
                 result = True
-        elif player_id is self.player2_id:
-            if self.player2_round:
+        elif player_id == self.player2_id:
+            if not self.player2_round:
                 self.player2_round = (player_id, player_move, self.round_num)
                 result = True
         return result
@@ -61,11 +61,11 @@ class MatchData:
         # 0 = failed to find player ids
         # 1 = found ids and set the proper information
         success = 0
-        if winner is self.player1_id:
+        if winner == self.player1_id:
             plr1_round = (winner, self.player1_round[1], 1, loser)
             plr2_round = (loser, self.player2_round[1], 0, winner)
             success = 1
-        elif loser is self.player1_id:
+        elif loser == self.player1_id:
             plr2_round = (winner, self.player1_round[1], 1, loser)
             plr1_round = (loser, self.player1_round[1], 0, winner)
             success = 1
