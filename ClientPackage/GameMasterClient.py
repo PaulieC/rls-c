@@ -77,12 +77,24 @@ class GameMasterClient(PlayerClient):
         """
         req_registered_players = self.player_connect.method.get_registered_players()
         players = req_registered_players()
-        result = "There aren't any registered players at this time..."
+        result = "list_registered_players::> There aren't any registered players at this time..."
         if players:
             print "list_registered_players::> "
             self.print_list(players)
             return
         print result
+
+    def check_for_ready_pairs(self):
+        """
+        Generates  ready pairs on the server side for a match if any are set to ready.
+        """
+        req_ready_pairs = self.player_connect.method.check_for_ready_pairs()
+        pairs = req_ready_pairs()
+        if pairs:
+            print "check_for_ready_pairs::> "
+            self.print_list(pairs)
+            return
+        print "check_for_ready_pairs::> There aren't any ready pairs at this time..."
 
     def set_tournament(self, game_type):
         req_set_tournament = self.player_connect.method.set_tournament(game_type)
