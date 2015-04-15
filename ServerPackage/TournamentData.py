@@ -25,6 +25,8 @@ class TournamentData:
         self.registered_players = []
         self.ready_pairs = []
         self.matches = []
+        # TODO The following line should be in a function in the future
+        self.tournament.game = self.game
 
 # General Functions
     def check_reg_stat(self):

@@ -200,27 +200,30 @@ class TournamentService(BaseHandler):
         Looks through the list and tries to find ready pairs. These
         pairs are added to a list in TournamentData
         """
+        temp_list = []
         if self.tournament_data.matches:
             for index, match in enumerate(self.tournament_data.matches):
                 if match.check_for_ready():
                     self.tournament_data.ready_pairs.append(self.tournament_data.matches[index])
+                    temp_list.append((match.player1_id, match.player2_id))
         if self.tournament_data.ready_pairs:
-            print "SERVER_SIDE::> " + self.tournament_data.ready_pairs
-            return self.tournament_data.ready_pairs
+            print "SERVER_SIDE::> " + str(temp_list)
+            return temp_list
         else:
             print "SERVER_SIDE::> No ready pairs could be found at this time"
             return False
 
-    def run_ready_pair(self):
+    def run_ready_pairs(self):
         """
         Runs the matches that have ready players. Returns the number of matches completed.
         :return: int
         """
-        rounds = 0
+        rounds = -1
         for match in self.tournament_data.ready_pairs:
             if match.check_for_ready:
-                self.tournament_data.tournament.play_round(match)
-                rounds += 1
+                round_result = self.tournament_data.tournament.play_round(match)
+                print "SERVER_SIDE::> Round " + str(match.get_curr_round()) + " " + str(round_result)
+                rounds = match.get_curr_round()
         return rounds
 
     def get_round_results(self, player_id):

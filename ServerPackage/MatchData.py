@@ -154,3 +154,8 @@ class MatchData:
             return result
 
 # Getters
+    def get_curr_round(self):
+        return self.round_num
+
+    def get_max_round(self):
+        return self.max_rounds
