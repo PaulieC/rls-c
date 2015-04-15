@@ -59,14 +59,17 @@ class GameMasterClient(PlayerClient):
         if tour_open:
             msg = "Tournament registration is open"
         print "open_tournament_registration::> " + msg
-        return msg
 
     def close_tournament_registration(self):
         """
         Closes the player's ability to register to the tournament
         """
         req_close_registration = self.player_connect.method.close_tournament_registration()
-        req_close_registration()
+        tour_closed = req_close_registration()
+        msg = "Tournament registration could not be closed"
+        if tour_closed:
+            msg = "Tournament registration is closed"
+        print "close_tournament_registration::> " + msg
 
     def list_registered_players(self):
         """
