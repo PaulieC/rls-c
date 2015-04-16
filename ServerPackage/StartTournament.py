@@ -15,9 +15,9 @@ from ServerPackage.TournamentServer import *
 # sets up a basic game with networking
 new_server = TournamentServer()
 # get ip for connection
-#new_server.generate_ip()
+new_server.generate_ip()
 # set the port for the tournament: 12345
-new_server.set_ip('150.250.142.57')
+# new_server.set_ip('150.250.142.57')
 new_server.set_port(12345)
 # create the server
 new_server.create_server()

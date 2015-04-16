@@ -5,6 +5,7 @@ __credits__ = ["Alex Ciaramella, Greg Suner"]
 # imports
 from ServerPackage import Display, Message, Observable
 import time
+from ServerPackage.MatchData import *
 
 #
 
@@ -101,6 +102,17 @@ class Tournament(Observable.Observable):
         self.start_match(players)
         result = self.play_rounds(match)
         self.end_match(players, result)
+
+    def play_round(self, match):
+        players = [match.player1_round, match.player2_round]
+        # self.start_round(players)
+        moves = []
+        for p in players:
+            moves.append(p[1])
+        result = self.get_result(moves)
+        round_result = ((players[0], result[0]), (players[1], result[1]))
+        # self.end_round(players, moves, result)
+        return round_result
 
     def play_rounds(self, match):
         """

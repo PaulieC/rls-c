@@ -5,9 +5,6 @@ __credits__ = ["Joe Kvedaras, Collin Day"]
 # imports
 from bjsonrpc.handlers import BaseHandler
 from ServerPackage.TournamentData import *
-from AvailableTournaments.AllPlayAll import *
-from AvailableGames.RockPaperScissors import *
-import importlib
 
 
 class TournamentService(BaseHandler):
@@ -48,12 +45,12 @@ class TournamentService(BaseHandler):
         """
         player_id = str(player_id)
         if self.tournament_data.get_registration_status():
-            if self.tournament_data.get_tournament() is None:
+            if self.tournament_data.tournament is None:
                 msg = "Can not add player. Tournament is null"
                 print "SERVER_SIDE::> " + msg
                 return msg
-            elif self.tournament_data.get_tournament().get_num_players() == \
-                    self.tournament_data.get_tournament().get_max_num_players():
+            elif self.tournament_data.tournament.get_num_players() == \
+                    self.tournament_data.tournament.get_max_num_players():
                 msg = "Can not add player. Tournament room is full"
                 print "SERVER_SIDE::> " + msg
                 return msg
@@ -77,21 +74,11 @@ class TournamentService(BaseHandler):
         """
         return self.tournament_data.generate_id_counter()
 
-    def register_players(self, player_list):
-        """
-        Registers the Player objects that exist in the player_list
-        :param player_list: the collected list of players to register
-        :type player_list: list
-        """
-        # TODO remove?
-        for plr in player_list:
-            self.register_player(plr)
-
     def verify_registration(self, player_id):
         """
-        :param player:
-        :type player: Player.Player
-        :return:
+        Allows the client to confirm that their unique id is registered to the tournament.
+        :param player_id: str
+        :return: str
         """
         player_id = str(player_id)
         player_list = self.tournament_data.get_registered_players()
@@ -110,7 +97,7 @@ class TournamentService(BaseHandler):
         Gets the players registered to the tournament in the form of a list
         :return result: The list of players registered
         """
-        result = self.tournament.get_players()
+        result = self.tournament_data.tournament.get_players()
         return result
 
     def open_tournament_registration(self):
@@ -119,6 +106,7 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(True)
+            print "SERVER_SIDE::> Registration is open!"
             return True
         except Exception:
             return False
@@ -129,6 +117,7 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(False)
+            print "SERVER_SIDE::> Registration is closed!"
             return True
         except Exception:
             return False
@@ -139,13 +128,6 @@ class TournamentService(BaseHandler):
         :return Boolean: The current state of the registration status
         """
         return self.tournament_data.get_registration_status()
-
-    def new_id(self):
-        """
-        :return:
-        """
-        self.id_counter += 1
-        return self.id_counter
 
     def set_tournament(self, game_type):
         game_type = str(game_type)
@@ -167,25 +149,14 @@ class TournamentService(BaseHandler):
         :return str: The message that the value has been changed if the parameter was greater than 0
         """
         if max_players > 0:
-            self.tournament.set_number_of_players(max_players)
+            self.tournament_data.tournament.set_number_of_players(max_players)
             result = "Number of players set to " + max_players
             print "SERVER_SIDE::> " + result
             return result
 
-    def set_display(self, display):
-        """
-        Assigns the display solution for this service
-        :param display: display to project information
-        :type display: Display.Display
-        """
-        if self.tournament is None:
-            print "Tournament is null"
-        else:
-            self.tournament.attach_display(display)
-
     def run(self):
         """Set the game and run the tournament"""
-        if self.tournament is None:
+        if self.tournament_data.tournament is None:
             print "Can not run tournament. Tournament is null"
         else:
             # TODO hold move with player_id
@@ -194,63 +165,103 @@ class TournamentService(BaseHandler):
             # TODO set a message tuple that has the winner of the previous round
             # TODO allow players of the round to collect these tuples
             self.find_next_match()
-            # self.tournament.run()
 
     def find_next_match(self):
-        match = self.tournament.create_next_match()
-        self.tournament_match_info.append(match)
-
-    def set_player_move(self, player_id, move):
-        # TODO hold move with player_id
-        move_pack = (player_id, move)
-        self.player_move_info.append(move_pack)
-
-    def check_for_ready_pairs(self):
-        result = None
-        for matches in self.tournament_match_info:
-            if result is not None:
-                break
-            player1 = matches[0][0]
-            player2 = matches[0][1]
-            for players1 in self.player_move_info:
-                if result is not None:
-                    break
-                if player1 in players1[0]:
-                    for players2 in self.player_move_info:
-                        if player2 in players2[0]:
-                            result = (players1, players2)
+        """
+        Finds the next match and adds this information in the form of a MatchData
+        object to the list of matches in TournamentData.
+        """
+        match = self.tournament_data.tournament.create_next_match()
+        result = False
+        if match:
+            if self.tournament_data.add_match(match[0][0], match[0][1], match[1]):
+                result = match
+        print "SERVER_SIDE::> " + str(result)
         return result
 
-    def run_ready_pair(self, player1_and_move, player2_and_move):
-        match = ((player1_and_move, player2_and_move), 5)
-        result = self.tournament.play_rounds(match)
-        return result   # ((player1, win/lose), (player2, win/lose))
+    def set_player_move(self, player_id, move):
+        """
+        Attempts to set the player move to the correct match item in
+        the matches list.
+        :param player_id: str
+        :param move: int
+        :return: Boolean
+        """
+        result = False
+        player_id = str(player_id)
+        for match in self.tournament_data.matches:
+            if match.submit_move(player_id, move):
+                result = True
+                break
+        return result
+
+    def check_for_ready_pairs(self):
+        """
+        Looks through the list and tries to find ready pairs. These
+        pairs are added to a list in TournamentData
+        """
+        temp_list = []
+        if self.tournament_data.matches:
+            for index, match in enumerate(self.tournament_data.matches):
+                if match.check_for_ready():
+                    self.tournament_data.ready_pairs.append(self.tournament_data.matches[index])
+                    temp_list.append((match.player1_id, match.player2_id))
+        if self.tournament_data.ready_pairs:
+            print "SERVER_SIDE::> " + str(temp_list)
+            return temp_list
+        else:
+            print "SERVER_SIDE::> No ready pairs could be found at this time"
+            return False
+
+    def run_ready_pairs(self):
+        """
+        Runs the matches that have ready players. Returns the number of matches completed.
+        :return: int
+        """
+        rounds = -1
+        for match in self.tournament_data.ready_pairs:
+            if match.check_for_ready:
+                round_result = self.tournament_data.tournament.play_round(match)
+                print "SERVER_SIDE::> Round " + str(match.get_curr_round()) + " " + str(round_result)
+                rounds = match.get_curr_round()
+        return rounds
 
     def get_round_results(self, player_id):
+        """
+        Allows the client to find out if they won/lost the last round. Returns 1 for win, 0 for lose, and
+        None if they didn't have a round
+        :param player_id: str
+        :return:
+        """
         result = None
-        for player in self.tournament_round_info:
-            if player_id in player[0]:
-                result = player[0][1]
-                self.tournament_round_info.remove(player)   # remove this item as it isn't useful anymore
-                break
-            elif player_id in player[1]:
-                result = player[1][1]
-                self.tournament_round_info.remove(player)   # remove this item as it isn't useful anymore
-                break
+        for match in self.tournament_data.matches:
+            my_player_num = match.is_my_match(player_id)
+            if my_player_num > 0:
+                round_result = match.get_result(my_player_num)
+                if round_result:
+                    result = round_result[2]
         return result
 
     def get_game(self):
+        """
+        Gets the name of the current game
+        :return: str
+        """
         result = ""
-        if self.tournament.game is not None:
-            result = self.tournament.game.get_name()
+        if self.tournament_data.tournament.game is not None:
+            result = self.tournament_data.tournament.game.get_name()
         else:
             pass
         return result
 
     def get_tournament(self):
+        """
+        Gets the name of the current tournament
+        :return: str
+        """
         result = ""
-        if self.tournament is not None:
-            result = self.tournament.get_name()
+        if self.tournament_data.tournament is not None:
+            result = self.tournament_data.tournament.get_name()
         else:
             pass
         return result
