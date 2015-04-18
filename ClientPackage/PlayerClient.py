@@ -193,3 +193,18 @@ class PlayerClient():
             result = "Move has been set!"
             self.player.set_ready()
         print "submit_move::> " + result
+
+    def get_round_results(self):
+        """
+        Gets a tuple of: (((Player1_id, move, roundnumber) win/loss),((Player2_id,move,roundnumber) win/loss)))
+        Can be useful in predicting future moves
+        :return:
+        """
+        req_get_round_results = self.player_connect.method.get_round_results(self.player.get_player_id())
+        print req_get_round_results
+        round_results = req_get_round_results()
+        if round_results:
+            print "round_results::> " + str(round_results)
+            return round_results
+        else:
+            print "round_results::> none"
