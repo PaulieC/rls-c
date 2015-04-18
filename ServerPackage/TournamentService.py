@@ -174,13 +174,22 @@ class TournamentService(BaseHandler):
         Finds the next match and adds this information in the form of a MatchData
         object to the list of matches in TournamentData.
         """
-        match = self.tournament_data.tournament.create_next_match()
-        result = False
+        match = self.tournament_data.create_next_match()
+        result = None
         if match:
-            if self.tournament_data.add_match(match[0][0], match[0][1], match[1]):
-                result = match
+            result = match
         print "SERVER_SIDE::> " + str(result)
         return result
+
+    def find_all_available_matches(self):
+        """ Creates matches until there aren't any to generate """
+        temp_list = []
+        while True:
+            match = self.find_next_match()
+            if match is None:
+                break
+            temp_list.append(match)
+        return temp_list
 
     def set_player_move(self, player_id, move):
         """

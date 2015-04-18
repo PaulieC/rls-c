@@ -107,6 +107,16 @@ class TournamentData:
             if matches.submit_round_results(result):
                 return result
 
+    def create_next_match(self):
+        """
+        Calls the current tournament type to attempt to generate the next match grouping
+        :return: tuple
+        """
+        match = self.tournament.create_next_match()
+        if match:
+            self.add_match(match[0][0], match[0][1], match[1])
+        return match
+
     def run_match(self):
         # TODO implement
         pass
