@@ -165,11 +165,11 @@ class TournamentService(BaseHandler):
                 # TODO determine the winner of the round
                 # TODO set a message tuple that has the winner of the previous round
                 # TODO allow players of the round to collect these tuples
-                self.find_next_match()
+                self.create_next_match()
         else:
             pass
 
-    def find_next_match(self):
+    def create_next_match(self):
         """
         Finds the next match and adds this information in the form of a MatchData
         object to the list of matches in TournamentData.
@@ -181,11 +181,11 @@ class TournamentService(BaseHandler):
         print "SERVER_SIDE::> " + str(result)
         return result
 
-    def find_all_available_matches(self):
+    def create_all_available_matches(self):
         """ Creates matches until there aren't any to generate """
         temp_list = []
         while True:
-            match = self.find_next_match()
+            match = self.create_next_match()
             if match is None:
                 break
             temp_list.append(match)
@@ -211,7 +211,7 @@ class TournamentService(BaseHandler):
         print "SERVER_SIDE::> " + player_id + msg
         return result
 
-    def check_for_ready_pairs(self):
+    def create_match_pairs(self):
         """
         Looks through the list and tries to find ready pairs. These
         pairs are added to a list in TournamentData
@@ -229,7 +229,7 @@ class TournamentService(BaseHandler):
             print "SERVER_SIDE::> No ready pairs could be found at this time"
             return False
 
-    def run_ready_pairs(self):
+    def run_available_matches(self):
         """
         Runs the matches that have ready players. Returns the number of matches completed.
         :return: int
