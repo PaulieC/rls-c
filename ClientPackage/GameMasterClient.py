@@ -84,26 +84,26 @@ class GameMasterClient(PlayerClient):
             return
         print result
 
-    def check_for_ready_pairs(self):
+    def create_match_pairs(self):
         """
         Generates  ready pairs on the server side for a match if any are set to ready.
         """
-        req_ready_pairs = self.player_connect.method.check_for_ready_pairs()
+        req_ready_pairs = self.player_connect.method.create_match_pairs()
         pairs = req_ready_pairs()
         if pairs:
             for pair in pairs:
-                print "check_for_ready_pairs::> "
+                print "create_match_pairs::> "
                 self.print_list(pair)
             return
-        print "check_for_ready_pairs::> There aren't any ready pairs at this time..."
+        print "create_match_pairs::> There aren't any ready pairs at this time..."
 
-    def find_next_match(self):
+    def create_next_match(self):
         """
         Submits a request to generate a new match for registered players that aren't currently in
         a match. If this isn't possible, a message will be printed stating this, otherwise, info
         on the newly created match will be printed.
         """
-        req_next_match = self.player_connect.method.find_next_match()
+        req_next_match = self.player_connect.method.create_next_match()
         next_match = req_next_match()
         result = "Couldn't create a new match"
         if next_match:
@@ -113,20 +113,26 @@ class GameMasterClient(PlayerClient):
             result = "A new match has been created between " + \
                      play1 + " and " + play2 + " for " + \
                      rounds + " rounds."
-        print "find_next_match::> " + result
+        print "create_next_match::> " + result
 
-    def run_ready_pairs(self):
+    def run_available_matches(self):
         """
         Requests that the server runs all the matches that have players
         set to the ready status. This will then print the round number
         that just completed.
         """
-        result = "No pairs are ready at this time..."
-        req_run_ready = self.player_connect.method.run_ready_pairs()
-        run_ready = req_run_ready()
-        if run_ready > 0:
-            result = "Completed round number " + str(run_ready)
-        print "run_ready_pairs::> " + result
+        while True:
+            created_matches = self.create_all_available_matches()
+            if created_matches != []:
+                result = "No pairs are ready at this time..."
+                req_run_ready = self.player_connect.method.run_available_matches()
+                run_ready = req_run_ready()
+                if run_ready > 0:
+                    result = "Completed round number " + str(run_ready)
+                print "run_available_matches::> " + result
+            else:
+                break
+
 
     def set_tournament(self, game_type):
         req_set_tournament = self.player_connect.method.set_tournament(game_type)
@@ -154,9 +160,12 @@ class GameMasterClient(PlayerClient):
         req_set_game_status = self.player_connect.method.set_game_status(status)
         req_set_game_status()
 
-    def find_all_available_matches(self):
-        req_find_all_available_matches = self.player_connect.method.find_all_available_matches()
-        print "find_all_available_matches" + str(req_find_all_available_matches())
+    def create_all_available_matches(self):
+        req_find_all_available_matches = self.player_connect.method.create_all_available_matches()
+        available_matches = req_find_all_available_matches()
+        print "create_all_available_matches" + str(available_matches)
+        return available_matches
+
 
 
 
