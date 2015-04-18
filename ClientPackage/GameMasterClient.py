@@ -154,6 +154,11 @@ class GameMasterClient(PlayerClient):
         req_set_game_status = self.player_connect.method.set_game_status(status)
         req_set_game_status()
 
+    def find_all_available_matches(self):
+        req_find_all_available_matches = self.player_connect.method.find_all_available_matches()
+        print "find_all_available_matches" + str(req_find_all_available_matches())
+
+
 
 # obj = GameMasterClient(BEPCPlayer())
 # obj.set_tournament()

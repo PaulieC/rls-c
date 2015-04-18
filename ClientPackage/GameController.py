@@ -40,7 +40,7 @@ client.list_registered_players()
 client.check_for_ready_pairs()
 
 # generate ready pairs for a match
-client.find_next_match()
+client.find_all_available_matches()
 
 # run all ready matches
 client.run_ready_pairs()
