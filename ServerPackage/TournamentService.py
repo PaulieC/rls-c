@@ -156,15 +156,18 @@ class TournamentService(BaseHandler):
 
     def run(self):
         """Set the game and run the tournament"""
-        if self.tournament_data.tournament is None:
-            print "Can not run tournament. Tournament is null"
+        if self.tournament_data.get_game_open():
+            if self.tournament_data.tournament is None:
+                print "Can not run tournament. Tournament is null"
+            else:
+                # TODO hold move with player_id
+                # TODO submit moves to the tournament
+                # TODO determine the winner of the round
+                # TODO set a message tuple that has the winner of the previous round
+                # TODO allow players of the round to collect these tuples
+                self.find_next_match()
         else:
-            # TODO hold move with player_id
-            # TODO submit moves to the tournament
-            # TODO determine the winner of the round
-            # TODO set a message tuple that has the winner of the previous round
-            # TODO allow players of the round to collect these tuples
-            self.find_next_match()
+            pass
 
     def find_next_match(self):
         """
@@ -189,14 +192,14 @@ class TournamentService(BaseHandler):
         """
         result = False
         player_id = str(player_id)
-        msg = "There wasn't a match for this move"
+        msg = " There wasn't a match for this move"
         for match in self.tournament_data.matches:
             if match.submit_move(player_id, move):
                 result = True
                 break
         if result:
             msg = str(result)
-        print "SERVER_SIDE::> " + msg
+        print "SERVER_SIDE::> " + player_id + msg
         return result
 
     def check_for_ready_pairs(self):
@@ -223,11 +226,12 @@ class TournamentService(BaseHandler):
         :return: int
         """
         rounds = -1
-        for match in self.tournament_data.ready_pairs:
-            if match.check_for_ready:
-                round_result = self.tournament_data.play_round(match)
-                print "SERVER_SIDE::> Round " + str(match.get_curr_round()) + " " + str(round_result)
-                rounds = match.get_curr_round()
+        if self.tournament_data.get_game_open():
+            for match in self.tournament_data.ready_pairs:
+                if match.check_for_ready:
+                    round_result = self.tournament_data.play_round(match)
+                    print "SERVER_SIDE::> Round " + str(match.get_curr_round()) + " " + str(round_result)
+                    rounds = match.get_curr_round()
         return rounds
 
     def get_round_results(self, player_id):
@@ -243,9 +247,9 @@ class TournamentService(BaseHandler):
                 round_result = match.get_result()
                 break
         if round_result is not False:
-            print "SERVER_SIDE::> " + str(round_result)
+            print "SERVER_SIDE::> " + player_id + str(round_result)
         else:
-            print "SERVER_SIDE::> There weren't any results to gather"
+            print "SERVER_SIDE::> " + player_id + "There weren't any results to gather"
         return round_result
 
     def get_game(self):
@@ -270,4 +274,23 @@ class TournamentService(BaseHandler):
             result = self.tournament_data.tournament.get_name()
         else:
             pass
+        return result
+
+    def set_game_status(self, status):
+        """
+        Allows the game controller to dictate when the game can run.
+        Tournament commands can't execute unless the game status is
+        set to True.
+        :param status: Boolean
+        """
+        result = self.tournament_data.set_game_open(status)
+        print "SERVER_SIDE::> " + str(result)
+
+    def get_game_status(self):
+        """
+        Retrieves the current status of the game for the game controller
+        :return: Boolean
+        """
+        result = self.tournament_data.get_game_open()
+        print "SERVER_SIDE::> " + str(result)
         return result

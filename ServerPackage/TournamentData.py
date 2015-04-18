@@ -22,6 +22,7 @@ class TournamentData:
         self.id_counter = 0
         self.connected_players = []
         self.registration_open = False
+        self.game_open = False
         self.registered_players = []
         self.ready_pairs = []
         self.matches = []
@@ -185,6 +186,9 @@ class TournamentData:
         """
         self.registered_players = player_list
 
+    def set_game_open(self, status):
+        self.game_open = status
+
 # Getters
     def get_tournament(self):
         """
@@ -234,3 +238,6 @@ class TournamentData:
         :return: list
         """
         return self.matches
+
+    def get_game_open(self):
+        return self.game_open
