@@ -24,10 +24,10 @@ class MatchData:
         self.match_head = player1 + player2
         self.max_rounds = num_rounds
         self.round_num = 1
-        self.player1_round = ()     # (player_id, move, round_num)
-        self.player1_rounds = []    # [(player_id, move, win/loss, opponent_id), etc]
-        self.player2_round = ()     # (player_id, move)
-        self.player2_rounds = []    # [(player_id, move, win/loss, opponent_id), etc]
+        self.player1_round = ()     # (player_id, move, round_num, win/loss)
+        self.player1_rounds = []    # [(player_id, move, round_num, win/loss), etc]
+        self.player2_round = ()     # (player_id, move, round_num, win/loss)
+        self.player2_rounds = []    # [(player_id, move, round_num, win/loss), etc]
 
 # General Functions
     def submit_move(self, player_id, player_move):
@@ -51,34 +51,29 @@ class MatchData:
                 result = True
         return result
 
-    def submit_round_results(self, winner, loser):
+    def submit_round_results(self, match_results):
         """
         Holds the winner of the round's information as well as the loser's.
         Also checks if this object should allow another
-        :param winner: str
-        :param loser: str
-        :return: int
         """
         # -1 = this is the end of the match for these two players
         # 0 = failed to find player ids
         # 1 = found ids and set the proper information
-        success = 0
-        if winner == self.player1_id:
-            plr1_round = (winner, self.player1_round[1], 1, loser)
-            plr2_round = (loser, self.player2_round[1], 0, winner)
-            success = 1
-        elif loser == self.player1_id:
-            plr2_round = (winner, self.player1_round[1], 1, loser)
-            plr1_round = (loser, self.player1_round[1], 0, winner)
-            success = 1
-        else:
-            return success
-        self.player1_rounds.append(plr1_round)
-        self.player2_rounds.append(plr2_round)
-        if self.prep_next_round():
-            return success
-        else:
-            return -1
+        success = False
+        if self.player1_id == match_results[0][0][0] and self.player2_id == match_results[1][0][0]:
+            self.player1_round = (match_results[0][0][0],
+                                  match_results[0][0][1],
+                                  match_results[0][0][2],
+                                  match_results[0][1])
+            self.player2_round = (match_results[1][0][0],
+                                  match_results[1][0][1],
+                                  match_results[1][0][2],
+                                  match_results[1][1])
+            self.player1_rounds.append(self.player1_round)
+            self.player2_rounds.append(self.player2_round)
+            success = True
+        print "submit_round_results::> " + str(success)
+        return success
 
     def clear_round(self):
         """
@@ -119,25 +114,29 @@ class MatchData:
         :return: Boolean
         """
         result = -1
-        if player_id is self.player1_id:
+        if player_id == self.player1_id:
             result = 1
-        elif player_id is self.player2_id:
+        elif player_id == self.player2_id:
             result = 2
         return result
 
-    def get_result(self, player_num):
+    def get_result(self):
         """
-        Returns the result of the most recent round for the respective player (1 or 2)
-        :param player_num: int
+        Returns the result of the most recent round for the respective player
         :return: int
         """
-        if player_num == 1:
-            return self.player1_round
-        elif player_num == 2:
-            return self.player2_round
-        else:
-            return None
+        return self.player1_round, self.player2_round
 
+    def match_verify(self, match_item):
+        """
+        Method used to check if a match item is the same as this instance
+        :param match_item: MatchData
+        :return: Boolean
+        """
+        result = False
+        if match_item.player1_id == self.player1_id and match_item.player2_id == self.player2_id:
+            result = True
+        return result
 # Setters
     def set_ready(self, player_id):
         """
@@ -146,9 +145,9 @@ class MatchData:
         :return: Boolean
         """
         result = False
-        if self.player1_id is player_id:
+        if self.player1_id == player_id:
             result, self.plr1_client_ready = True
-        elif self.player2_id is player_id:
+        elif self.player2_id == player_id:
             result, self.plr2_client_ready = True
         else:
             return result

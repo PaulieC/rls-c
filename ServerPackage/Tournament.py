@@ -5,7 +5,6 @@ __credits__ = ["Alex Ciaramella, Greg Suner"]
 # imports
 from ServerPackage import Display, Message, Observable
 import time
-from ServerPackage.MatchData import *
 
 #
 

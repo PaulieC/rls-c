@@ -189,10 +189,14 @@ class TournamentService(BaseHandler):
         """
         result = False
         player_id = str(player_id)
+        msg = "There wasn't a match for this move"
         for match in self.tournament_data.matches:
             if match.submit_move(player_id, move):
                 result = True
                 break
+        if result:
+            msg = str(result)
+        print "SERVER_SIDE::> " + msg
         return result
 
     def check_for_ready_pairs(self):
@@ -221,26 +225,28 @@ class TournamentService(BaseHandler):
         rounds = -1
         for match in self.tournament_data.ready_pairs:
             if match.check_for_ready:
-                round_result = self.tournament_data.tournament.play_round(match)
+                round_result = self.tournament_data.play_round(match)
                 print "SERVER_SIDE::> Round " + str(match.get_curr_round()) + " " + str(round_result)
                 rounds = match.get_curr_round()
         return rounds
 
     def get_round_results(self, player_id):
         """
-        Allows the client to find out if they won/lost the last round. Returns 1 for win, 0 for lose, and
-        None if they didn't have a round
+        Allows the client to find the most recent round information
         :param player_id: str
         :return:
         """
-        result = None
+        round_result = False
         for match in self.tournament_data.matches:
             my_player_num = match.is_my_match(player_id)
             if my_player_num > 0:
-                round_result = match.get_result(my_player_num)
-                if round_result:
-                    result = round_result[2]
-        return result
+                round_result = match.get_result()
+                break
+        if round_result is not False:
+            print "SERVER_SIDE::> " + str(round_result)
+        else:
+            print "SERVER_SIDE::> There weren't any results to gather"
+        return round_result
 
     def get_game(self):
         """

@@ -100,6 +100,12 @@ class TournamentData:
         """ Increments the id counter by 1. """
         self.id_counter += 1
 
+    def play_round(self, match_item):
+        result = self.tournament.play_round(match_item)
+        for matches in self.matches:
+            if matches.submit_round_results(result):
+                return result
+
     def run_match(self):
         # TODO implement
         pass
