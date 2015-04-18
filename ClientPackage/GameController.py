@@ -30,6 +30,9 @@ client.open_tournament_registration()
 # close the room for registration
 # client.close_tournament_registration()
 
+client.set_game_status(True)
+
+client.get_game_status()
 # get list of ready players
 client.list_registered_players()
 
