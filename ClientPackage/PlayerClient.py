@@ -2,7 +2,7 @@ __author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
 __version__ = "sprint2"
 
 # imports
-import bjsonrpc
+import bjsonrpc, time
 from ClientPackage.PlayerService import *
 import os
 
@@ -193,6 +193,7 @@ class PlayerClient():
             result = "Move has been set!"
             self.player.set_ready()
         print "submit_move::> " + result
+        #self.get_round_results() #----------------------------------------------------
 
     def get_round_results(self):
         """
@@ -205,6 +206,9 @@ class PlayerClient():
         round_results = req_get_round_results()
         if round_results:
             print "round_results::> " + str(round_results)
+            # if round_results[2]:
+            #     time.sleep(5)
+            #     self.submit_move() #----------------------------------------------------------
             return round_results
         else:
             print "round_results::> none"

@@ -124,7 +124,8 @@ class GameMasterClient(PlayerClient):
         while True:
             created_matches = self.player_connect.method.get_all_available_matches()
             matches = created_matches()
-            if matches != []:
+            #print "run_available_matches::>" + str(matches)
+            if not matches == []:
                 result = "No pairs are ready at this time..."
                 req_run_ready = self.player_connect.method.run_available_matches()
                 run_ready = req_run_ready()
