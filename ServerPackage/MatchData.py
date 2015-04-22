@@ -120,6 +120,11 @@ class MatchData:
             result = 2
         return result
 
+    def switch_ready(self):
+        """ Inverts the ready status of the player """
+        self.plr1_client_ready = not self.plr1_client_ready
+        self.plr2_client_ready = not self.plr2_client_ready
+
     def get_result(self):
         """
         Returns the result of the most recent round for the respective player
@@ -151,6 +156,13 @@ class MatchData:
             result, self.plr2_client_ready = True
         else:
             return result
+
+    def to_tuple(self):
+        """
+        Gets the current round info and returns it in the form of two tuples
+        :return: tuple
+        """
+        return self.player1_round, self.player2_round
 
 # Getters
     def get_curr_round(self):

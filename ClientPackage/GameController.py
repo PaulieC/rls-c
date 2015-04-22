@@ -12,7 +12,7 @@ from AvailablePlayers.GMPlayer import *
 my_player = GMPlayer()
 client = GameMasterClient(my_player)
 # attempt to connect game controller to the server room
-client.client_connect(host="150.250.190.168")
+client.client_connect(host="150.250.190.253")
 
 # verify connection
 client.verify_connection()
@@ -40,7 +40,7 @@ client.list_registered_players()
 client.create_match_pairs()
 
 # generate all matches we can using the player_id pairs from above
-client.create_all_available_matches()
+# client.create_all_available_matches()
 
 # run all ready matches
 client.run_available_matches()
