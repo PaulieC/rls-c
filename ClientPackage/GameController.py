@@ -12,7 +12,7 @@ from AvailablePlayers.GMPlayer import *
 my_player = GMPlayer()
 client = GameMasterClient(my_player)
 # attempt to connect game controller to the server room
-client.client_connect(host="150.250.190.168")
+client.client_connect(host="150.250.190.253")
 
 # verify connection
 client.verify_connection()
