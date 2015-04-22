@@ -175,7 +175,6 @@ class TournamentService(BaseHandler):
         object to the list of matches in TournamentData.
         """
         match = self.tournament_data.create_next_match()
-        self._conn.method.blah()
         result = None
         if match:
             result = match
@@ -206,6 +205,8 @@ class TournamentService(BaseHandler):
         for match in self.tournament_data.matches:
             if match.submit_move(player_id, move):
                 result = True
+                if match.check_for_ready():
+                    self.tournament_data.ready_pairs.append(match)
                 break
         if result:
             msg = str(result)
@@ -242,8 +243,9 @@ class TournamentService(BaseHandler):
                     round_result = self.tournament_data.play_round(match)
                     match.switch_ready()
                     self.tournament_data.ready_pairs.remove(match)
-                    print "run_available_matches::> Round " + str(match.get_curr_round()) + " " + str(round_result)
+                    print "run_available_matches::> Round " + str(match.get_curr_round()) + ": " + str(round_result)
                     rounds = match.get_curr_round()
+            print "run_available_matches::> There aren't any matches to run at this time. "
         return rounds
 
     def get_all_available_matches(self):
@@ -265,10 +267,11 @@ class TournamentService(BaseHandler):
         :return:
         """
         round_result = False
+        player_id = str(player_id)
         for match in self.tournament_data.matches:
             my_player_num = match.is_my_match(player_id)
             if my_player_num > 0:
-                round_result = match.get_result()
+                round_result = match.get_result(my_player_num)
                 break
         if round_result is not False:
             print "get_round_results::> " + player_id + str(round_result)

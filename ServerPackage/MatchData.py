@@ -18,9 +18,11 @@ class MatchData:
         :param num_rounds: int
         """
         self.player1_id = player1
+        self.player2_id = player2
         self.plr1_client_ready = False
         self.plr2_client_ready = False
-        self.player2_id = player2
+        self.plr1_retrieved_results = False
+        self.plr2_retrieved_results = False
         self.match_head = player1 + player2
         self.max_rounds = num_rounds
         self.round_num = 1
@@ -81,6 +83,10 @@ class MatchData:
         """
         self.player1_round = ()
         self.player2_round = ()
+        self.plr1_client_ready = False
+        self.plr2_client_ready = False
+        self.plr1_retrieved_results = False
+        self.plr2_retrieved_results = False
 
     def prep_next_round(self):
         """
@@ -125,12 +131,26 @@ class MatchData:
         self.plr1_client_ready = not self.plr1_client_ready
         self.plr2_client_ready = not self.plr2_client_ready
 
-    def get_result(self):
+    def get_result(self, player_num):
         """
-        Returns the result of the most recent round for the respective player
-        :return: int
+        Returns the result of the most recent round for the respective player along with a
+        boolean to determine if there should be another round for the player
+        :return: tuple
         """
-        return self.player1_round, self.player2_round
+        new_round = False
+        if self.round_num < self.max_rounds:
+            new_round = True
+
+        if player_num == 1:
+            self.plr1_retrieved_results = True
+        elif player_num == 2:
+            self.plr2_retrieved_results = True
+
+        round_result = self.player1_round, self.player2_round, new_round
+
+        if self.plr1_retrieved_results and self.plr2_retrieved_results:
+            self.prep_next_round()
+        return round_result
 
     def match_verify(self, match_item):
         """
@@ -143,6 +163,7 @@ class MatchData:
             result = True
         return result
 # Setters
+
     def set_ready(self, player_id):
         """
         Allows the caller to set themselves to ready
@@ -165,6 +186,7 @@ class MatchData:
         return self.player1_round, self.player2_round
 
 # Getters
+
     def get_curr_round(self):
         return self.round_num
 
