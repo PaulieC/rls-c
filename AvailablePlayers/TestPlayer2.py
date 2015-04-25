@@ -8,7 +8,7 @@ from ClientPackage import Player
 import random
 
 
-class TestPlayer1(Player.Player):
+class TestPlayer2(Player.Player):
     """
     This is Bill and Paul's implemented
     Player class
@@ -34,7 +34,7 @@ class TestPlayer1(Player.Player):
         self.win_record = []
         self.player_number = -1
         self.opp_number = -1
-        self.name = "TestPlayer1"
+        self.name = "TestPlayer2"
 
     def play(self):
         """
