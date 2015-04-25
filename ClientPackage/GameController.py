@@ -40,7 +40,7 @@ client.list_registered_players()
 client.create_match_pairs()
 
 # generate all matches we can using the player_id pairs from above
-client.create_all_available_matches()
+# client.create_all_available_matches()
 
 # run all ready matches
 client.run_available_matches()

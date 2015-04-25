@@ -135,7 +135,6 @@ class GameMasterClient(PlayerClient):
             else:
                 break
 
-
     def set_tournament(self, game_type):
         req_set_tournament = self.player_connect.method.set_tournament(game_type)
         req_set_tournament()

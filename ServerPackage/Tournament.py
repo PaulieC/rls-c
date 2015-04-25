@@ -5,7 +5,6 @@ __credits__ = ["Alex Ciaramella, Greg Suner"]
 # imports
 from ServerPackage import Display, Message, Observable
 import time
-from ServerPackage.MatchData import *
 
 #
 
@@ -21,13 +20,14 @@ class Tournament(Observable.Observable):
         display: TODO
     """
 
-    def __init__(self):
+    def __init__(self, rounds=1):
         """ set up a list of players when tournament is initialized """
         Observable.Observable.__init__(self)
         self.name = None
         self.playerList = []
         self.game = None
         self.display = None
+        self.rounds = rounds
         self.num_players = 0
         self.max_players = 30
 
@@ -187,6 +187,9 @@ class Tournament(Observable.Observable):
         message = Message.Message.get_round_end_message(players, moves, result)
         self.notify_all(message)
         time.sleep(3)
+
+    def set_max_rounds(self, max_num):
+        self.rounds = max_num
 
     def get_method(self):
         """

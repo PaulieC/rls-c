@@ -9,7 +9,7 @@ from ServerPackage.Tournament import *
 class AllPlayAll(Tournament):
     """ AllPlayAll Tournament Type, every player is in a match with every other player """
 
-    def __init__(self, rounds=5):
+    def __init__(self):
         """
         Initialize AllPlayAll
         :param rounds: the number of rounds per match, 5 by default
@@ -19,7 +19,6 @@ class AllPlayAll(Tournament):
         # variables to help us pick players 1 and 2.
         self.p = 0     # player 1 index
         self.q = 1     # player 2 index
-        self.rounds = rounds
         self.name = "All-Play-All"
 
     def create_next_match(self):

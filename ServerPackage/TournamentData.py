@@ -22,6 +22,7 @@ class TournamentData:
         self.id_counter = 0
         self.connected_players = []
         self.registration_open = False
+        self.game_open = False
         self.registered_players = []
         self.ready_pairs = []
         self.matches = []
@@ -99,6 +100,22 @@ class TournamentData:
     def increase_id_counter(self):
         """ Increments the id counter by 1. """
         self.id_counter += 1
+
+    def play_round(self, match_item):
+        result = self.tournament.play_round(match_item)
+        for matches in self.matches:
+            if matches.submit_round_results(result):
+                return result
+
+    def create_next_match(self):
+        """
+        Calls the current tournament type to attempt to generate the next match grouping
+        :return: tuple
+        """
+        match = self.tournament.create_next_match()
+        if match:
+            self.add_match(match[0][0], match[0][1], match[1])
+        return match
 
     def run_match(self):
         # TODO implement
@@ -179,6 +196,9 @@ class TournamentData:
         """
         self.registered_players = player_list
 
+    def set_game_open(self, status):
+        self.game_open = status
+
 # Getters
     def get_tournament(self):
         """
@@ -228,3 +248,6 @@ class TournamentData:
         :return: list
         """
         return self.matches
+
+    def get_game_open(self):
+        return self.game_open
