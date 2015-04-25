@@ -192,8 +192,10 @@ class PlayerClient():
         if set_move:
             result = "Move has been set!"
             self.player.set_ready()
-        print "submit_move::> " + result
-        #self.get_round_results() #----------------------------------------------------
+        print self.player.get_name() + " submit_move::> " + result
+        time.sleep(2)
+        if set_move:
+            self.get_round_results() #----------------------------------------------------
 
     def get_round_results(self):
         """
@@ -204,11 +206,17 @@ class PlayerClient():
         req_get_round_results = self.player_connect.method.get_round_results(self.player.get_player_id())
         print req_get_round_results
         round_results = req_get_round_results()
+        if round_results == 0:
+            print "There isn't a match for you to get results from."
+            pass
+        if round_results == 1:
+            time.sleep(3)
+            return self.get_round_results()
         if round_results:
             print "round_results::> " + str(round_results)
-            # if round_results[2]:
-            #     time.sleep(5)
-            #     self.submit_move() #----------------------------------------------------------
+            if round_results[2]:
+                time.sleep(2)
+                self.submit_move() #----------------------------------------------------------
             return round_results
         else:
             print "round_results::> none"
