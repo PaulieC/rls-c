@@ -195,7 +195,7 @@ class PlayerClient():
         print self.player.get_name() + " submit_move::> " + result
         time.sleep(2)
         if set_move:
-            self.get_round_results() #----------------------------------------------------
+            self.get_round_results()
 
     def get_round_results(self):
         """
@@ -209,14 +209,17 @@ class PlayerClient():
         if round_results == 0:
             print "There isn't a match for you to get results from."
             pass
-        if round_results == 1:
+        if round_results == 1:  # The opposite player hasn't submitted a move, wait a few second and try again
             time.sleep(3)
             return self.get_round_results()
-        if round_results:
+        if round_results:  # If we are handed back a tuple, print them
             print "round_results::> " + str(round_results)
-            if round_results[2]:
+            if round_results[2]:  # Checks last spot in the tuple for another round or not
                 time.sleep(5)
-                self.submit_move() #----------------------------------------------------------
+                self.submit_move()  # Submits a move
             return round_results
         else:
             print "round_results::> none"
+
+    def if_next_match(self):
+        pass

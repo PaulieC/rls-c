@@ -69,6 +69,7 @@ class GameMasterClient(PlayerClient):
         msg = "Tournament registration could not be closed"
         if tour_closed:
             msg = "Tournament registration is closed"
+            self.create_all_available_matches()
         print "close_tournament_registration::> " + msg
 
     def list_registered_players(self):
@@ -167,6 +168,9 @@ class GameMasterClient(PlayerClient):
         print "create_all_available_matches" + str(available_matches)
         return available_matches
 
+    def set_max_rounds(self, max_num):
+        req_set_max_rounds = self.player_connect.method.set_max_rounds(max_num)
+        req_set_max_rounds()
 
 
 

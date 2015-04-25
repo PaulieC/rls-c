@@ -47,17 +47,18 @@ game_controller.open_tournament_registration()
 # game_controller.close_tournament_registration()
 
 game_controller.set_game_status(True)
+game_controller.set_max_rounds(3)
 
 game_controller.get_game_status()
-time.sleep(5)
+time.sleep(10)
 # get list of ready players
 game_controller.list_registered_players()
 
 # create player pairs based on ID
 # game_controller.create_match_pairs()
 
-time.sleep(5)
-game_controller.create_all_available_matches()
+#game_controller.create_all_available_matches()
+game_controller.close_tournament_registration()
 time.sleep(2)
 
 
