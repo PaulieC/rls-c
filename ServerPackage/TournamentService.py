@@ -185,7 +185,7 @@ class TournamentService(BaseHandler):
         result = None
         if match:
             result = match
-        print "create_next_match::> " + str(result)
+        # print "create_next_match::> " + str(result)
         return result
 
     def create_all_available_matches(self):
@@ -196,7 +196,13 @@ class TournamentService(BaseHandler):
             if match is None:
                 break
             temp_list.append(match)
-        return temp_list
+        # temp_list = match_list
+        return_list = []
+        while temp_list:
+            return_list.append(temp_list.pop(0))
+            return_list.append(temp_list.pop(len(temp_list) - 1))
+        print "create_all_available_matches::> " + str(return_list)
+        return return_list
 
     def set_player_move(self, player_id, move):
         """

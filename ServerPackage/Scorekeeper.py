@@ -2,9 +2,6 @@ __author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
 __version__ = "sprint1"
 __credits__ = ["jeffrey creighton"]
 
-# imports
-from ServerPackage import ScorekeeperHistoryItem, ScoreKeeperListItem
-
 
 class Scorekeeper:
     """
