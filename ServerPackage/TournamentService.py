@@ -74,6 +74,13 @@ class TournamentService(BaseHandler):
         """
         return self.tournament_data.generate_id_counter()
 
+    def set_max_rounds(self, max_num):
+        """
+        Sets the tournament's maximum amount of rounds
+        :param max_num: int
+        """
+        self.tournament_data.tournament.set_max_rounds(max_num)
+
     def verify_registration(self, player_id):
         """
         Allows the client to confirm that their unique id is registered to the tournament.
@@ -289,6 +296,11 @@ class TournamentService(BaseHandler):
                 my_player_num = match.is_my_match(player_id)
                 if my_player_num > 0:
                     round_result = match.get_result(my_player_num)
+                    if match.did_players_retrieve() and (not round_result[2]):
+                        # Removes the match if both player's retrieve results AND
+                        # there isn't another round for this match
+                        self.tournament_data.matches.remove(match)
+                    self.create_next_match()    # server tries to generate a new match here
                     break
             else:
                 round_result = 1

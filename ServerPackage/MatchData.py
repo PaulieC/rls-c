@@ -167,6 +167,13 @@ class MatchData:
         if match_item.player1_id == self.player1_id and match_item.player2_id == self.player2_id:
             result = True
         return result
+
+    def did_players_retrieve(self):
+        """
+        :return: Boolean
+        """
+        return self.plr2_retrieved_results and self.plr2_retrieved_results
+
 # Setters
 
     def set_ready(self, player_id):

@@ -215,7 +215,7 @@ class PlayerClient():
         if round_results:
             print "round_results::> " + str(round_results)
             if round_results[2]:
-                time.sleep(2)
+                time.sleep(5)
                 self.submit_move() #----------------------------------------------------------
             return round_results
         else:
