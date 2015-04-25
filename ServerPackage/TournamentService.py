@@ -206,18 +206,29 @@ class TournamentService(BaseHandler):
             if match.submit_move(player_id, move):
                 result = True
                 if match.check_for_ready():
-                    self.tournament_data.ready_pairs.append(match)
+                    self.run_ready(match)
                 break
         if result:
             msg = str(result)
         print "set_player_move::> " + player_id + msg
         return result
 
+    def run_ready(self, ready_match):
+        """
+        Runs the current match that is set to ready. Switches
+        the match's status to not ready upon running
+        :param ready_match: MatchData
+        """
+        round_result = self.tournament_data.play_round(ready_match)
+        ready_match.switch_ready()
+        print "run_ready::> Round " + str(ready_match.get_curr_round()) + ": " + str(round_result)
+
     def create_match_pairs(self):
         """
         Looks through the list and tries to find ready pairs. These
         pairs are added to a list in TournamentData
         """
+        # TODO deprecated?
         temp_list = []
         if self.tournament_data.matches:
             for index, match in enumerate(self.tournament_data.matches):
@@ -263,20 +274,33 @@ class TournamentService(BaseHandler):
     def get_round_results(self, player_id):
         """
         Allows the client to find the most recent round information
+        round_result:
+            0 = A match couldn't be located for this player
+            1 = Waiting for round to complete
+            tuple = Round has completed with the following information:
+                ((player_id, move, round_num, win/lost), (player_id, move, round_num, win/lost), True/False next round)
         :param player_id: str
         :return:
         """
-        round_result = False
+        round_result = 0
         player_id = str(player_id)
         for match in self.tournament_data.matches:
-            my_player_num = match.is_my_match(player_id)
-            if my_player_num > 0:
-                round_result = match.get_result(my_player_num)
+            if match.is_round_complete():
+                my_player_num = match.is_my_match(player_id)
+                if my_player_num > 0:
+                    round_result = match.get_result(my_player_num)
+                    break
+            else:
+                round_result = 1
                 break
-        if round_result is not False:
-            print "get_round_results::> " + player_id + str(round_result)
+
+        if round_result == 0:
+            msg = player_id + " doesn't have a round waiting."
+        elif round_result == 1:
+            msg = player_id + " is waiting for the opponent to submit their move and/or the round to run."
         else:
-            print "get_round_results::> " + player_id + "There weren't any results to gather"
+            msg = player_id + " :: " + str(round_result)
+        print "get_round_results::> " + msg
         return round_result
 
     def get_game(self):

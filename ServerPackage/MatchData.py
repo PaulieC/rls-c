@@ -135,22 +135,27 @@ class MatchData:
         """
         Returns the result of the most recent round for the respective player along with a
         boolean to determine if there should be another round for the player
-        :return: tuple
+        :return: Object
         """
-        new_round = False
-        if self.round_num < self.max_rounds:
-            new_round = True
-
         if player_num == 1:
             self.plr1_retrieved_results = True
         elif player_num == 2:
             self.plr2_retrieved_results = True
 
-        round_result = self.player1_round, self.player2_round, new_round
+        round_result = [self.player1_round, self.player2_round]
 
         if self.plr1_retrieved_results and self.plr2_retrieved_results:
             self.prep_next_round()
+
+        round_result.append(self.round_num <= self.max_rounds)
         return round_result
+
+    def is_round_complete(self):
+        """
+        Returns true if both players have submitted their respective moves
+        :return: Boolean
+        """
+        return self.player1_round and self.player2_round
 
     def match_verify(self, match_item):
         """
