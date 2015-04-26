@@ -23,16 +23,27 @@ class TournamentServer():
         self.toolbox = NetworkToolbox()
 
     def create_server(self):
+        success = False
         if self.host is None or self.port is None:
-            print "HOST AND/OR PORT HASN'T BEEN SET YET!"
+            pass
         else:
-            self.tournament_server = bjsonrpc.createserver(host=self.host,
-                                                           port=self.port,
-                                                           handler_factory=TournamentService)
+            try:
+                self.tournament_server = bjsonrpc.createserver(host=self.host,
+                                                               port=self.port,
+                                                               handler_factory=TournamentService)
+                success = True
+            except Exception:
+                success = None
+        return success
 
     def generate_ip(self):
-        self.host = self.toolbox.get_host()
-        print self.host
+        success = False
+        try:
+            self.host = self.toolbox.get_host()
+            success = self.host
+        except Exception:
+            pass
+        return success
 
     def get_ip(self):
         if self.host is None:
@@ -43,9 +54,11 @@ class TournamentServer():
 
     def set_ip(self, new_ip):
         self.host = new_ip
+        return self.host
 
     def set_port(self, new_port):
         self.port = new_port
+        return self.port
 
     def get_port(self):
         if self.port is None:
@@ -58,12 +71,20 @@ class TournamentServer():
         """
         :return:
         """
-        self.tournament_server.debug_socket(True)
-        self.tournament_server.serve()
-        msg = "The Server has started running..."
-        return msg
+        success = False
+        try:
+            self.tournament_server.debug_socket(True)
+            self.tournament_server.serve()
+            success = True
+        except Exception:
+            pass
+        return success
 
     def close_connection(self):
-        self.tournament_server.stop()
-        msg = "The Server has stopped running..."
-        return msg
+        success = False
+        try:
+            self.tournament_server.stop()
+            success = True
+        except Exception:
+            pass
+        return success

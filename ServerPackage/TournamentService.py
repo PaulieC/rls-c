@@ -30,10 +30,9 @@ class TournamentService(BaseHandler):
                    "\nPlease standby for registration confirmation..." % txt
         try:
             self.tournament_data.add_connected_players(txt)
-            print "verify_connection::> " + response     # prints information server side
-            return response     # sends information to the client to handle
         except Exception:
-            print "verify_connection::> " + txt + " couldn't connect..."
+            response = "verify_connection::> " + txt + " couldn't connect..."
+        return response
 
     def register_player(self, player_id):
         """
@@ -378,7 +377,7 @@ class TournamentService(BaseHandler):
             pass
         return result
 
-    def set_game_status(self, status):
+    def set_tournament_status(self, status):
         """
         Allows the game controller to dictate when the game can run.
         Tournament commands can't execute unless the game status is
@@ -386,13 +385,13 @@ class TournamentService(BaseHandler):
         :param status: Boolean
         """
         result = self.tournament_data.set_game_open(status)
-        print "set_game_status::> " + str(result)
+        print "set_tournament_status::> " + str(result)
 
-    def get_game_status(self):
+    def get_tournament_status(self):
         """
         Retrieves the current status of the game for the game controller
         :return: Boolean
         """
         result = self.tournament_data.get_game_open()
-        print "get_game_status::> " + str(result)
+        print "get_tournament_status::> " + str(result)
         return result

@@ -153,13 +153,13 @@ class GameMasterClient(PlayerClient):
 
     def get_game_status(self):
         #TODO put this in the GUI
-        req_get_game_status = self.player_connect.method.get_game_status()
+        req_get_game_status = self.player_connect.method.get_tournament_status()
         status = req_get_game_status()
         print str(status)
         return status
 
     def set_game_status(self, status):
-        req_set_game_status = self.player_connect.method.set_game_status(status)
+        req_set_game_status = self.player_connect.method.set_tournament_status(status)
         req_set_game_status()
 
     def create_all_available_matches(self):
