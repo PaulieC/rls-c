@@ -41,18 +41,46 @@ def sort(sorted_list, match_list):
                 break
         return sort(sorted_list, match_list)
 
-list = [[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],
-        [2,3],[2,4],[2,5],[2,6],[2,7],[2,8],
-        [3,4],[3,5],[3,6],[3,7],[3,8],
-        [4,5],[4,6],[4,7],[4,8],
-        [5,6],[5,7],[5,8],
-        [6,7],[6,8],
-        [7,8]
+list8 = [[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],
+         [2,3],[2,4],[2,5],[2,6],[2,7],[2,8],
+         [3,4],[3,5],[3,6],[3,7],[3,8],
+         [4,5],[4,6],[4,7],[4,8],
+         [5,6],[5,7],[5,8],
+         [6,7],[6,8],
+         [7,8]
         ]
 
-list1 = [[1,2],[1,3],[1,4],
+list6 = [[1,2],[1,3],[1,4],[1,5],[1,6],
+         [2,3],[2,4],[2,5],[2,6],
+         [3,4],[3,5],[3,6],
+         [4,5],[4,6],
+         [5,6],
+        ]
+
+list4 = [[1,2],[1,3],[1,4],
          [2,3],[2,4],
          [3,4]
         ]
-print str(unique_match_sort(list1))
+
+"""
+    1. create a 2-dimensional array filled with 0's in range(num_players - 1)
+    2. find a unique match in row 1.
+    2a. find another unique match avoiding the row numbers of the previous player numbers
+    2b. find another unique match avoiding the row numbers of all of the previous numbers
+    3. continue step 2x until we have found (num_players/2) unique matches
+    4. replace these matches with 0's in the 2-d array
+    5. begin the search again
+    [[1,2],[1,3],[1,4],
+     [2,3],[2,4],  0
+     [3,4],  0  ,  0
+    ]
+    --> [1,2], [3,4]
+    [[1,3],[1,4],
+     [2,3],[2,4],  0
+       0  ,  0
+    ]
+    --> [1,3],
+"""
+
+# print str(unique_match_sort(list4))
 # print str(sort([], list1))

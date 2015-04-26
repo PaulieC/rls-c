@@ -71,7 +71,7 @@ class TournamentData:
         try:
             new_match = MatchData(player1, player2, num_rounds)
             self.matches.append(new_match)
-            return True
+            return new_match
         except Exception:
             return False
 
@@ -114,7 +114,7 @@ class TournamentData:
         """
         match = self.tournament.create_next_match()
         if match:
-            self.add_match(match[0][0], match[0][1], match[1])
+            match = self.add_match(match[0][0], match[0][1], match[1])
         return match
 
     def run_match(self):

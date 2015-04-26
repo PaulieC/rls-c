@@ -196,12 +196,19 @@ class TournamentService(BaseHandler):
             if match is None:
                 break
             temp_list.append(match)
-        # temp_list = match_list
+        return_list = self.unique_match_sort(temp_list)
+        print str(self.tournament_data.matches)
+        self.tournament_data.matches = return_list
+        print str(self.tournament_data.matches)
+        print "create_all_available_matches::> " + str(y.to_tuple for y in return_list)
+        return return_list
+
+    def unique_match_sort(self, match_list):
+        temp_list = match_list
         return_list = []
         while temp_list:
             return_list.append(temp_list.pop(0))
             return_list.append(temp_list.pop(len(temp_list) - 1))
-        print "create_all_available_matches::> " + str(return_list)
         return return_list
 
     def set_player_move(self, player_id, move):
@@ -306,6 +313,8 @@ class TournamentService(BaseHandler):
                         # Removes the match if both player's retrieve results AND
                         # there isn't another round for this match
                         self.tournament_data.matches.remove(match)
+                        # print "get_round_results :: removed match::> " + str(match.to_tuple)
+                        # print "get_round_results :: remaining matches::> " + str(self.tournament_data.matches)
                     self.create_next_match()    # server tries to generate a new match here
                     break
             else:
