@@ -46,22 +46,17 @@ class TournamentService(BaseHandler):
         if self.tournament_data.get_registration_status():
             if self.tournament_data.tournament is None:
                 msg = "Can not add player. Tournament is null"
-                print "register_player::> " + msg
                 return msg
             elif self.tournament_data.tournament.get_num_players() == \
                     self.tournament_data.tournament.get_max_num_players():
                 msg = "Can not add player. Tournament room is full"
-                print "register_player::> " + msg
                 return msg
             else:
                 if self.tournament_data.register_player(player_id):
-                    print "register_player::> " + player_id
                     return player_id
                 else:
-                    print "register_player::> " + player_id + " has already been registered"
                     return player_id + " has already been registered."
         else:
-            print "register_player::> " + player_id + " tried to connect while registration is closed"
             msg = "The tournament registration hasn't been opened yet. Please wait for the game controller to request" \
                   " your registration. Thanks!"
             return msg
@@ -91,11 +86,9 @@ class TournamentService(BaseHandler):
         for player_pack in player_list:
             if player_id in player_pack:
                 result = "Player \'" + player_id + "\' has been registered"
-                print "SERVER_SIDE::> " + result
                 return result
         result = player_id + " isn't in the registered list. Current registered player ids: "
         result += "[" + ", ".join(player_list) + "]"
-        print "verify_registration::> " + result
         return result
 
     def get_registered_players(self):
@@ -112,7 +105,6 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(True)
-            print "open_tournament_registration::> Registration is open!"
             return True
         except Exception:
             return False
@@ -123,7 +115,6 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(False)
-            print "close_tournament_registration::> Registration is closed!"
             return True
         except Exception:
             return False
@@ -135,17 +126,25 @@ class TournamentService(BaseHandler):
         """
         return self.tournament_data.get_registration_status()
 
-    def set_tournament(self, game_type):
-        game_type = str(game_type)
-        self.tournament_data.set_tournament(game_type)
+    def set_tournament(self, tournament_type):
+        """
+        Allows the game controller to set the current tournament type
+        :param tournament_type: str
+        :return: Boolean
+        """
+        # TODO finish this import issue
+        success = False
+        try:
+            tournament_type = str(tournament_type)
+            self.tournament_data.set_tournament(tournament_type)
+            success = True
+        except Exception:
+            pass
+        return success
 
     def set_game(self, new_game):
         # TODO finish this import issue
-        if new_game is not None:
-            print "The current tournament is " + str(self.game)
-            tour = importlib.import_module(new_game, "*")
-            self.game = tour.AllPlayAll()
-            return "The current tournament is " + str(self.game)
+        pass
 
     def set_num_players(self, max_players):
         """
@@ -157,23 +156,7 @@ class TournamentService(BaseHandler):
         if max_players > 0:
             self.tournament_data.tournament.set_number_of_players(max_players)
             result = "Number of players set to " + max_players
-            print "set_num_players::> " + result
             return result
-
-    def run(self):
-        """Set the game and run the tournament"""
-        if self.tournament_data.get_game_open():
-            if self.tournament_data.tournament is None:
-                print "Can not run tournament. Tournament is null"
-            else:
-                # TODO hold move with player_id
-                # TODO submit moves to the tournament
-                # TODO determine the winner of the round
-                # TODO set a message tuple that has the winner of the previous round
-                # TODO allow players of the round to collect these tuples
-                self.create_next_match()
-        else:
-            pass
 
     def create_next_match(self):
         """
@@ -184,7 +167,6 @@ class TournamentService(BaseHandler):
         result = None
         if match:
             result = match
-        # print "create_next_match::> " + str(result)
         return result
 
     def create_all_available_matches(self):
@@ -196,12 +178,8 @@ class TournamentService(BaseHandler):
                 break
             temp_list.append(match)
         return_list = self.unique_match_sort(temp_list)
-        # print str(y.to_tuple() for y in self.tournament_data.matches)
         self.tournament_data.matches = return_list
-        # print str(self.tournament_data.matches)
-        printable = [y.to_string() for y in return_list]
-        print "create_all_available_matches::> " + str(printable)
-        # return return_list
+        # printable = [y.to_string() for y in return_list]
 
     def unique_match_sort(self, match_list):
         temp_list = match_list
@@ -230,7 +208,6 @@ class TournamentService(BaseHandler):
                 break
         if result:
             msg = str(result)
-        print "set_player_move::> " + player_id + msg
         return result
 
     def run_ready(self, ready_match):
@@ -241,7 +218,6 @@ class TournamentService(BaseHandler):
         """
         round_result = self.tournament_data.play_round(ready_match)
         ready_match.switch_ready()
-        print "run_ready::> Round " + str(ready_match.get_curr_round()) + ": " + str(round_result)
 
     def create_match_pairs(self):
         """
@@ -256,10 +232,8 @@ class TournamentService(BaseHandler):
                     self.tournament_data.ready_pairs.append(self.tournament_data.matches[index])
                     temp_list.append((match.player1_id, match.player2_id))
         if self.tournament_data.ready_pairs:
-            print "create_match_pairs::> " + str(temp_list)
             return temp_list
         else:
-            print "create_match_pairs::> No ready pairs could be found at this time"
             return False
 
     def run_available_matches(self):
@@ -274,9 +248,7 @@ class TournamentService(BaseHandler):
                     round_result = self.tournament_data.play_round(match)
                     match.switch_ready()
                     self.tournament_data.ready_pairs.remove(match)
-                    print "run_available_matches::> Round " + str(match.get_curr_round()) + ": " + str(round_result)
                     rounds = match.get_curr_round()
-            print "run_available_matches::> There aren't any matches to run at this time. "
         return rounds
 
     def get_all_available_matches(self):
@@ -288,7 +260,6 @@ class TournamentService(BaseHandler):
         if self.tournament_data.get_game_open():
             for match in self.tournament_data.ready_pairs:
                 avail_match.append(match.to_tuple())
-        print "get_all_available_matches::> " + str(avail_match)
         return avail_match
 
     def get_round_results(self, player_id):
@@ -314,9 +285,6 @@ class TournamentService(BaseHandler):
                         # there isn't another round for this match
                         self.update_score_keeper(match)     # updates the scorekeeper for each player win/lose
                         self.tournament_data.matches.remove(match)
-                        # self.is_end_of_tournament()
-                        # print "get_round_results :: removed match::> " + str(match.to_tuple)
-                        # print "get_round_results :: remaining matches::> " + str(self.tournament_data.matches)
                     self.create_next_match()    # server tries to generate a new match here
                     break
             else:
@@ -329,23 +297,30 @@ class TournamentService(BaseHandler):
             msg = player_id + " is waiting for the opponent to submit their move and/or the round to run."
         else:
             msg = player_id + " :: " + str(round_result)
-        print "get_round_results::> " + msg
         return round_result
 
     def is_end_of_tournament(self):
+        """ Functions used for testing """
         if self.tournament_data.matches:
             pass
         else:
             print "is_end_of_tournament::> " + str(self.tournament_data.sort_scoreboard())
 
     def get_tournament_results(self):
+        """
+        Returns the scores of the tournament IF all matches have been run
+        :return: list
+        """
         if self.tournament_data.matches:
             return False
         else:
             return self.tournament_data.sort_scoreboard()
 
-
     def update_score_keeper(self, match_item):
+        """
+        Adds a win/loss the the correct player in the match parameter.
+        :param match_item: MatchData
+        """
         if match_item.get_plr1_score() > match_item.get_plr2_score():
             self.tournament_data.score_keeper[match_item.get_plr1()].win()
             self.tournament_data.score_keeper[match_item.get_plr2()].lose()
@@ -385,7 +360,7 @@ class TournamentService(BaseHandler):
         :param status: Boolean
         """
         result = self.tournament_data.set_game_open(status)
-        print "set_tournament_status::> " + str(result)
+        return result
 
     def get_tournament_status(self):
         """
@@ -393,5 +368,8 @@ class TournamentService(BaseHandler):
         :return: Boolean
         """
         result = self.tournament_data.get_game_open()
-        print "get_tournament_status::> " + str(result)
+        return result
+
+    def get_num_registered(self):
+        result = len(self.tournament_data.tournament.playerList)
         return result
