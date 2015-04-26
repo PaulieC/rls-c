@@ -197,6 +197,9 @@ class MatchData:
         """
         return self.player1_round, self.player2_round
 
+    def to_string(self):
+        return self.player1_id, self.player2_id, self.max_rounds
+
 # Getters
 
     def get_curr_round(self):

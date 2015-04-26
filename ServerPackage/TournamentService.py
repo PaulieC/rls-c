@@ -197,11 +197,12 @@ class TournamentService(BaseHandler):
                 break
             temp_list.append(match)
         return_list = self.unique_match_sort(temp_list)
-        print str(self.tournament_data.matches)
+        # print str(y.to_tuple() for y in self.tournament_data.matches)
         self.tournament_data.matches = return_list
-        print str(self.tournament_data.matches)
-        print "create_all_available_matches::> " + str(y.to_tuple for y in return_list)
-        return return_list
+        # print str(self.tournament_data.matches)
+        printable = [y.to_string() for y in return_list]
+        print "create_all_available_matches::> " + str(printable)
+        # return return_list
 
     def unique_match_sort(self, match_list):
         temp_list = match_list
