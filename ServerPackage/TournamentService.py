@@ -313,7 +313,9 @@ class TournamentService(BaseHandler):
                     if match.did_players_retrieve() and (not round_result[2]):
                         # Removes the match if both player's retrieve results AND
                         # there isn't another round for this match
+                        self.update_score_keeper(match)     # updates the scorekeeper for each player win/lose
                         self.tournament_data.matches.remove(match)
+                        # self.is_end_of_tournament()
                         # print "get_round_results :: removed match::> " + str(match.to_tuple)
                         # print "get_round_results :: remaining matches::> " + str(self.tournament_data.matches)
                     self.create_next_match()    # server tries to generate a new match here
@@ -330,6 +332,27 @@ class TournamentService(BaseHandler):
             msg = player_id + " :: " + str(round_result)
         print "get_round_results::> " + msg
         return round_result
+
+    def is_end_of_tournament(self):
+        if self.tournament_data.matches:
+            pass
+        else:
+            print "is_end_of_tournament::> " + str(self.tournament_data.sort_scoreboard())
+
+    def get_tournament_results(self):
+        if self.tournament_data.matches:
+            return False
+        else:
+            return self.tournament_data.sort_scoreboard()
+
+
+    def update_score_keeper(self, match_item):
+        if match_item.get_plr1_score() > match_item.get_plr2_score():
+            self.tournament_data.score_keeper[match_item.get_plr1()].win()
+            self.tournament_data.score_keeper[match_item.get_plr2()].lose()
+        else:
+            self.tournament_data.score_keeper[match_item.get_plr2()].win()
+            self.tournament_data.score_keeper[match_item.get_plr1()].lose()
 
     def get_game(self):
         """

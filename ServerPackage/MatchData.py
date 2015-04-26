@@ -19,6 +19,8 @@ class MatchData:
         """
         self.player1_id = player1
         self.player2_id = player2
+        self.player1_match_score = 0
+        self.player2_match_score = 0
         self.plr1_client_ready = False
         self.plr2_client_ready = False
         self.plr1_retrieved_results = False
@@ -145,6 +147,8 @@ class MatchData:
         round_result = [self.player1_round, self.player2_round]
 
         if self.plr1_retrieved_results and self.plr2_retrieved_results:
+            self.player1_match_score += self.player1_round[3]
+            self.player2_match_score += self.player2_round[3]
             self.prep_next_round()
 
         round_result.append(self.round_num <= self.max_rounds)
@@ -205,5 +209,17 @@ class MatchData:
     def get_curr_round(self):
         return self.round_num
 
+    def get_plr1(self):
+        return self.player1_id
+
+    def get_plr2(self):
+        return self.player2_id
+
     def get_max_round(self):
         return self.max_rounds
+
+    def get_plr1_score(self):
+        return self.player1_match_score
+
+    def get_plr2_score(self):
+        return self.player2_match_score
