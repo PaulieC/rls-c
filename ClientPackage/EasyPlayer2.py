@@ -27,3 +27,4 @@ time.sleep(10)
 #TODO need to query server for number of players and do the math to find out the number of matches we will be participating in
 for x in range(0,3):        #this look here for convenience
     client1.submit_move()
+client1.get_tournament_results()

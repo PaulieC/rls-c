@@ -47,7 +47,7 @@ game_controller.open_tournament_registration()
 # game_controller.close_tournament_registration()
 
 game_controller.set_game_status(True)
-game_controller.set_max_rounds(3)
+game_controller.set_max_rounds(1)
 
 game_controller.get_game_status()
 time.sleep(10)

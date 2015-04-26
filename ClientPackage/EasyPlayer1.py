@@ -26,3 +26,4 @@ client1.verify_registration()
 time.sleep(10)
 for x in range(0,3):
     client1.submit_move()
+client1.get_tournament_results()
