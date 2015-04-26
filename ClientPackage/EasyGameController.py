@@ -13,7 +13,7 @@ from AvailablePlayers.BEPCPlayer import  *
 from AvailablePlayers.TestPlayer2 import *
 
 
-HOST = "150.250.190.192"
+HOST = "150.250.191.238"
 my_player = GMPlayer()
 game_controller = GameMasterClient(my_player)
 # player1 = TestPlayer1()

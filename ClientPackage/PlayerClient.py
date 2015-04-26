@@ -204,7 +204,6 @@ class PlayerClient():
         :return:
         """
         req_get_round_results = self.player_connect.method.get_round_results(self.player.get_player_id())
-        print req_get_round_results
         round_results = req_get_round_results()
         if round_results == 0:
             print "There isn't a match for you to get results from."

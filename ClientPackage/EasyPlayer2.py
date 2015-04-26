@@ -7,14 +7,10 @@ __author__ = 'Paul Council'
 import time
 
 from PlayerClient import *
-
 from AvailablePlayers.TestPlayer2 import *
 
 
-
-
-HOST = "150.250.190.192"
-
+HOST = "150.250.191.238"
 
 player1 = TestPlayer2()
 
@@ -23,9 +19,11 @@ client1 = PlayerClient(player1)
 # attempt to connect game controller to the server room
 
 client1.client_connect(host=HOST)
+client1.set_name("KOALA")
 client1.verify_connection()
 client1.register_player()
 client1.verify_registration()
 time.sleep(10)
-client1.submit_move()
-client1.close_connection()
+#TODO need to query server for number of players and do the math to find out the number of matches we will be participating in
+for x in range(0,3):        #this look here for convenience
+    client1.submit_move()

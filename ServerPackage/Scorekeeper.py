@@ -3,7 +3,7 @@ __version__ = "sprint1"
 __credits__ = ["jeffrey creighton"]
 
 # imports
-from ServerPackage import ScorekeeperHistoryItem, ScoreKeeperListItem
+from ServerPackage import ScoreKeeperListItem
 
 
 class Scorekeeper:

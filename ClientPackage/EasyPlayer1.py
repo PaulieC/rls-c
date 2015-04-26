@@ -7,14 +7,10 @@ __author__ = 'Paul Council'
 import time
 
 from PlayerClient import *
-
 from AvailablePlayers.TestPlayer1 import *
 
 
-
-
-HOST = "150.250.190.192"
-
+HOST = "150.250.191.238"
 
 player1 = TestPlayer1()
 
@@ -23,9 +19,10 @@ client1 = PlayerClient(player1)
 # attempt to connect game controller to the server room
 
 client1.client_connect(host=HOST)
+client1.set_name("PUFFIN")
 client1.verify_connection()
 client1.register_player()
 client1.verify_registration()
 time.sleep(10)
-client1.submit_move()
-client1.close_connection()
+for x in range(0,3):
+    client1.submit_move()
