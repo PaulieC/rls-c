@@ -164,9 +164,10 @@ class GameMasterClient(PlayerClient):
 
     def create_all_available_matches(self):
         req_find_all_available_matches = self.player_connect.method.create_all_available_matches()
-        available_matches = req_find_all_available_matches()
-        print "create_all_available_matches" + str(available_matches)
-        return available_matches
+        req_find_all_available_matches()
+        # available_matches = req_find_all_available_matches()
+        # print "create_all_available_matches" + str(available_matches)
+        # return available_matches
 
     def set_max_rounds(self, max_num):
         req_set_max_rounds = self.player_connect.method.set_max_rounds(max_num)

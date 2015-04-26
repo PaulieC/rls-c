@@ -222,3 +222,7 @@ class PlayerClient():
 
     def if_next_match(self):
         pass
+
+    def get_tournament_results(self):
+        req_get_tournament_results = self.player_connect.method.get_tournament_results()
+        print str(req_get_tournament_results())

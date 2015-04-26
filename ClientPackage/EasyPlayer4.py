@@ -7,14 +7,10 @@ __author__ = 'Paul Council'
 import time
 
 from PlayerClient import *
-
 from AvailablePlayers.TestPlayer2 import *
 
 
-
-
 HOST = "150.250.191.238"
-
 
 player1 = TestPlayer2()
 
@@ -28,5 +24,7 @@ client1.verify_connection()
 client1.register_player()
 client1.verify_registration()
 time.sleep(10)
-for x in range(0, 3):
+#TODO need to query server for number of players and do the math to find out the number of matches we will be participating in
+for x in range(0,3):        #this look here for convenience
     client1.submit_move()
+client1.get_tournament_results()
