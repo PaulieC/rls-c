@@ -4,12 +4,14 @@ This is a companion to the TournamentService as data doesn't stay persistent wit
 for the variable
 """
 import importlib
+import operator
 
 __author__ = 'system1'
 # imports
 from AvailableTournaments.AllPlayAll import *
 from AvailableGames.RockPaperScissors import *
 from ServerPackage.MatchData import *
+from ServerPackage.ScoreKeeperListItem import *
 
 
 class TournamentData:
@@ -23,9 +25,9 @@ class TournamentData:
         self.connected_players = []
         self.registration_open = False
         self.game_open = False
-        self.registered_players = []
         self.ready_pairs = []
         self.matches = []
+        self.score_keeper = {}
         # TODO The following line should be in a function in the future
         self.tournament.game = self.game
 
@@ -43,8 +45,6 @@ class TournamentData:
     def register_player(self, player_id):
         """
         Allows the player to register to the tournament list.
-        The player's unique id is used along with the name of the Tournament when adding to the
-        registered_players list
         :param player_id: The player's unique id
         :type player_id: str
         :return Boolean:
@@ -56,7 +56,7 @@ class TournamentData:
                 return False
         # player unique id isn't in the registered list, so register this player
         self.tournament.register_player(player_id)
-        self.add_registered_players(player_id)
+        self.score_keeper[player_id] = ScorekeeperListItem()
         return True
 
     def add_match(self, player1, player2, num_rounds):
@@ -71,7 +71,7 @@ class TournamentData:
         try:
             new_match = MatchData(player1, player2, num_rounds)
             self.matches.append(new_match)
-            return True
+            return new_match
         except Exception:
             return False
 
@@ -114,8 +114,20 @@ class TournamentData:
         """
         match = self.tournament.create_next_match()
         if match:
-            self.add_match(match[0][0], match[0][1], match[1])
+            match = self.add_match(match[0][0], match[0][1], match[1])
         return match
+
+    def sort_scoreboard(self):
+        """
+        Generates a sorted list of tuples by the highest score
+        :return:
+        """
+        temp_list = []
+        for player_id, score_item in self.score_keeper.items():
+            temp_list.append([player_id, score_item.get_wins(), score_item.get_losses()])
+        sorted_list = sorted(temp_list, key=operator.itemgetter(1))
+        sorted_list.reverse()
+        return sorted_list
 
     def run_match(self):
         # TODO implement
@@ -130,14 +142,6 @@ class TournamentData:
         if player_name not in self.connected_players:
             self.connected_players.append(player_name)
 
-    def add_registered_players(self, player_id):
-        """
-        Add the player id to the list of registered players
-        :param player_id: str
-        """
-        reg_info = (player_id, self.tournament.get_name())
-        self.registered_players.append(reg_info)
-
 # Removers
     def rem_connected_players(self, player):
         """
@@ -145,17 +149,6 @@ class TournamentData:
         :param player: str
         """
         self.connected_players.remove(player)
-
-    def rem_registered_players(self, player_id):
-        """
-        Removes the player id from the list of registered players
-        :param player_id: str
-        """
-        for item in self.registered_players:
-            if player_id in item:
-                self.registered_players.remove(item)
-                self.tournament.playerList.remove(player_id)
-                break
 
 # Setters
     def set_tournament(self, game_type):
@@ -189,13 +182,6 @@ class TournamentData:
         """
         self.registration_open = status
 
-    def set_registered_players(self, player_list):
-        """
-        Allows a list of players to be set to this local player list
-        :param player_list: list
-        """
-        self.registered_players = player_list
-
     def set_game_open(self, status):
         self.game_open = status
 
@@ -221,6 +207,9 @@ class TournamentData:
         """
         return self.id_counter
 
+    def get_registered_players(self):
+        return self.tournament.get_players()
+
     def get_connected_players(self):
         """
         Returns the current list of connected players
@@ -234,13 +223,6 @@ class TournamentData:
         :return: Boolean
         """
         return self.registration_open
-
-    def get_registered_players(self):
-        """
-        Returns the list of registered players
-        :return: list
-        """
-        return self.registered_players
 
     def get_matches(self):
         """

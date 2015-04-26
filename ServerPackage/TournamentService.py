@@ -185,7 +185,7 @@ class TournamentService(BaseHandler):
         result = None
         if match:
             result = match
-        print "create_next_match::> " + str(result)
+        # print "create_next_match::> " + str(result)
         return result
 
     def create_all_available_matches(self):
@@ -196,7 +196,21 @@ class TournamentService(BaseHandler):
             if match is None:
                 break
             temp_list.append(match)
-        return temp_list
+        return_list = self.unique_match_sort(temp_list)
+        # print str(y.to_tuple() for y in self.tournament_data.matches)
+        self.tournament_data.matches = return_list
+        # print str(self.tournament_data.matches)
+        printable = [y.to_string() for y in return_list]
+        print "create_all_available_matches::> " + str(printable)
+        # return return_list
+
+    def unique_match_sort(self, match_list):
+        temp_list = match_list
+        return_list = []
+        while temp_list:
+            return_list.append(temp_list.pop(0))
+            return_list.append(temp_list.pop(len(temp_list) - 1))
+        return return_list
 
     def set_player_move(self, player_id, move):
         """
@@ -299,7 +313,11 @@ class TournamentService(BaseHandler):
                     if match.did_players_retrieve() and (not round_result[2]):
                         # Removes the match if both player's retrieve results AND
                         # there isn't another round for this match
+                        self.update_score_keeper(match)     # updates the scorekeeper for each player win/lose
                         self.tournament_data.matches.remove(match)
+                        # self.is_end_of_tournament()
+                        # print "get_round_results :: removed match::> " + str(match.to_tuple)
+                        # print "get_round_results :: remaining matches::> " + str(self.tournament_data.matches)
                     self.create_next_match()    # server tries to generate a new match here
                     break
             else:
@@ -314,6 +332,27 @@ class TournamentService(BaseHandler):
             msg = player_id + " :: " + str(round_result)
         print "get_round_results::> " + msg
         return round_result
+
+    def is_end_of_tournament(self):
+        if self.tournament_data.matches:
+            pass
+        else:
+            print "is_end_of_tournament::> " + str(self.tournament_data.sort_scoreboard())
+
+    def get_tournament_results(self):
+        if self.tournament_data.matches:
+            return False
+        else:
+            return self.tournament_data.sort_scoreboard()
+
+
+    def update_score_keeper(self, match_item):
+        if match_item.get_plr1_score() > match_item.get_plr2_score():
+            self.tournament_data.score_keeper[match_item.get_plr1()].win()
+            self.tournament_data.score_keeper[match_item.get_plr2()].lose()
+        else:
+            self.tournament_data.score_keeper[match_item.get_plr2()].win()
+            self.tournament_data.score_keeper[match_item.get_plr1()].lose()
 
     def get_game(self):
         """
