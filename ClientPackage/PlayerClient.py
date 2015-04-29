@@ -5,6 +5,8 @@ __version__ = "sprint2"
 import bjsonrpc, time
 from ClientPackage.PlayerService import *
 import os
+import sys
+
 
 
 class PlayerClient():

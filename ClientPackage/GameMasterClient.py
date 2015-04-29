@@ -151,16 +151,16 @@ class GameMasterClient(PlayerClient):
     def end_game(self):
         pass
 
-    def get_game_status(self):
+    def get_tournament_status(self):
         #TODO put this in the GUI
-        req_get_game_status = self.player_connect.method.get_tournament_status()
-        status = req_get_game_status()
+        req_get_tournament_status = self.player_connect.method.get_tournament_status()
+        status = req_get_tournament_status()
         print str(status)
         return status
 
-    def set_game_status(self, status):
-        req_set_game_status = self.player_connect.method.set_tournament_status(status)
-        req_set_game_status()
+    def set_tournament_status(self, status):
+        req_set_tournament_status = self.player_connect.method.set_tournament_status(status)
+        req_set_tournament_status()
 
     def create_all_available_matches(self):
         req_find_all_available_matches = self.player_connect.method.create_all_available_matches()
@@ -173,6 +173,9 @@ class GameMasterClient(PlayerClient):
         req_set_max_rounds = self.player_connect.method.set_max_rounds(max_num)
         req_set_max_rounds()
 
+    def get_num_registered(self):
+        req_get_num_reg = self.player_connect.method.get_num_registered()
+        return req_get_num_reg()
 
 
 # obj = GameMasterClient(BEPCPlayer())
