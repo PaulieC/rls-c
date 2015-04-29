@@ -1,6 +1,11 @@
 from Tkinter import *
 import os
 import tkMessageBox
+from PlayerClient import *
+from AvailablePlayers.TestPlayer1 import *
+
+player = TestPlayer1()
+client = PlayerClient(player)
 
 def list_files(path):
     """
@@ -23,6 +28,7 @@ def quit_game():
         main.quit()
 
 def set_player_name():
+    player.set_name(player_name)
     console.insert(END, player_name.get() + " is now your player's name.\n")
 
 def set_ip_address():
@@ -32,25 +38,30 @@ def set_port():
     console.insert(END, port.get() + " is now the port you are connecting to.\n")
 
 def connect():
+    client.client_connect(ip_address, port)
     console.insert(END, "Attempting to connect...\n")
 
 def verify_connection():
+    client.verify_connection()
     console.insert(END, "Verifying that you are connected...\n")
 
 def register():
+    client.register_player()
     console.insert(END, "Attempting to register...\n")
 
 def verify_registration():
+    client.verify_connection()
     console.insert(END, "Verifying that you are registered...\n")
 
 def change_player():
+    player = selected_player.get().replace(".py", "")
     console.insert(END, "Player changed to: " + player.get() + "\n")
 
 
 main = Tk()
 main.wm_title("Player")
 
-registrationLabel = Label(main, text="Registration Status:").grid(row=0, column=0)
+#registrationLabel = Label(main, text="Registration Status:").grid(row=0, column=0)
 
 # SetPlayerName
 setPlayerNameLabel = Label(main, text="Set Player Name:").grid(row=1, column=0)
@@ -79,9 +90,9 @@ os.chdir(os.curdir + "/AvailablePlayers")
 result = os.path.abspath(os.curdir) + "/"
 players = list_files(result)
 changePlayerLabel = Label(main, text="Change Player:").grid(row=4, column=0)
-player = StringVar()
-player.set("...")
-changePlayerMenu = OptionMenu(main, player, *players, command='').grid(row=4, column=1)
+selected_player = StringVar()
+selected_player.set("...")
+changePlayerMenu = OptionMenu(main, selected_player, *players, command='').grid(row=4, column=1)
 changePlayerButton = Button(main, text="Select", command=change_player).grid(row=4, column=2, columnspan=2)
 
 attemptConnectionLabel = Label(main, text="Attempt Connection:").grid(row=5, column=0)
@@ -96,9 +107,6 @@ attemptRegistrationButton = Button(main, text="Register", command=register).grid
 verifyRegistrationLabel = Label(main, text="Verify Registration:").grid(row=8, column=0)
 verifyRegistrationButton = Button(main, text="Verify", command=verify_registration).grid(row=8, column=1, columnspan=3)
 
-currentGameLabel = Label(main, text="Current Game:").grid(row=9, column=0)
-currentTournamentLabel = Label(main, text="Current Tournament:").grid(row=10, column=0)
-setPlayerReadyLabel = Label(main, text="Set your player:").grid(row=11, column=0)
 
 console = Text(main, bg="#434A54", fg="white")
 console.grid(row=12, columnspan=4)
