@@ -14,7 +14,7 @@ client = PlayerClient(my_player)
 client.client_connect(host="150.250.190.253")
 
 # verify connection
-client.verify_connection()
+client.verify_connection
 
 # attempt to register this player in the tournament
 client.register_player()

@@ -26,7 +26,7 @@ game_controller.client_connect(host=HOST)
 # client2.client_connect(host=HOST)
 #
 # verify connection
-game_controller.verify_connection()
+game_controller.verify_connection
 # client1.verify_connection()
 # client2.verify_connection()
 # TODO set the tournament style

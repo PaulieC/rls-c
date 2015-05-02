@@ -15,7 +15,7 @@ client = GameMasterClient(my_player)
 client.client_connect(host="150.250.190.253")
 
 # verify connection
-client.verify_connection()
+client.verify_connection
 
 # TODO set the tournament style
 # client.set_tournament()
