@@ -8,12 +8,13 @@ from AvailablePlayers.GMPlayer import *
 
 my_player = GMPlayer()
 gmc = GameMasterClient(my_player)
-gmc.client_connect('150.250.142.57')
+#gmc.client_connect('150.250.190.225')
 # verify connection
 # client.verify_connection()
 
 reg_status = "Closed"
 num_connections = 0
+num_registered = 0
 
 
 def list_files(path):
@@ -44,8 +45,8 @@ def print_this(choice):
     print choice
 
 
-def print_player_max():
-    console.insert(END, "The current player count is: " + maxPlayerCount.get() + "\n")
+def set_rounds_max():
+    gmc.set_max_rounds(maxRoundsCount.get())
 
 
 def select_game_type():
@@ -59,21 +60,20 @@ def select_tournament_type():
 
 
 def open_registration():
-    gmc.open_tournament_registration()
-    console.insert(END, "Registration Open\n")
+    console.insert(END, gmc.open_tournament_registration() + '\n')
+    reg_status.set("Open")
 
 
 def close_registration():
-    gmc.close_tournament_registration()
-    console.insert(END, "Registration Closed\n")
-
+    console.insert(END, str(gmc.close_tournament_registration()) + '\n')
+    reg_status.set("Closed")
 
 def get_tournament_status():
     console.insert(END, "The tournament is currently: " + gmc.get_tournament_status() + "\n")
 
 
 def start_tournament():
-    gmc.start_game()
+    gmc.start_tournament()
     console.insert(END, "The tournament has been started.\n")
 
 
@@ -84,7 +84,9 @@ def end_tournament():
 
 
 def update_players_connected():
-    num_connections = gmc.get_num_registered()
+    num = gmc.get_num_registered()
+    console.insert(END, num)
+    num_registered.set(str(num))
 
 
 def print_connections():
@@ -92,13 +94,14 @@ def print_connections():
 
 
 def kill_server():
-    gmc.close_connection()
+    gmc.client_connect.call.stop()
     console.insert(END, "He's dead Jim.")
 
 
 def connect():
-    gmc.client_connect(host=ip, port=port)
-    console.insert(END, str(gmc.verify_connection()))
+    gmc.client_connect(host=ip.get(), port=port.get())
+    console.insert(END, gmc.verify_connection())
+    #console.insert(END, str(gmc.verify_connection()))
 
 
 main = Tk()
@@ -123,14 +126,14 @@ tourney = list_files(result)
 #SetIP
 setIPLabel = Label(main, text="Set the IP Address:").grid(row=0, column=0)
 ip = StringVar()
-ip.set("0.0.0.0")
+ip.set("150.250.190.225")
 setIPField = Entry(main, width=10, textvariable=ip).grid(row=0, column=1)
 
 
 #SetPort
 setPortLabel = Label(main, text="Set the Port:").grid(row=1, column=0)
-port = StringVar()
-port.set("12345")
+port = IntVar()
+port.set(12345)
 setPortField = Entry(main, width=10, textvariable=port).grid(row=1, column=1)
 
 
@@ -140,7 +143,7 @@ connectButton = Button(main, text="Connect", command=connect).grid(row=0, column
 #GAME TYPE
 gameTypeLabel = Label(main, text="Choose a game type:").grid(row=2, column=0)
 selectedGameType = StringVar()
-selectedGameType.set("...")
+selectedGameType.set("RockPaperScissors.py")
 gameTypeMenu = OptionMenu(main, selectedGameType, *listy).grid(row=2, column=1)
 gameTypeButton = Button(main, text="Select", command=select_game_type).grid(row=2, column=2, columnspan=2)
 
@@ -153,27 +156,30 @@ tournamentTypeButton = Button(main, text="Select", command=select_tournament_typ
 
 #Open/Close Registration
 registrationLabel = Label(main, text="Registration Status:").grid(row=4, column=0)
-registrationStatus = Label(main, text=reg_status).grid(row=4, column=1)
+reg_status = StringVar()
+reg_status.set("Closed")
+registrationStatus = Label(main, textvariable=reg_status).grid(row=4, column=1)
 openRegistrationButton = Button(main, text="Open", command=open_registration).grid(row=4, column=2)
 closeRegistrationButton = Button(main, text="Close", command=close_registration).grid(row=4, column=3)
 
-#SET MAX PLAYERS
-setMaxPlayersLabel = Label(main, text="Set the maximum number of players:").grid(row=5, column=0)
-maxPlayerCount = StringVar()
-maxPlayerCount.set("0")
-setMaxPlayerField = Entry(main, width=10, textvariable=maxPlayerCount).grid(row=5, column=1)
-setMaxPlayerButton = Button(main, text="Select", command=print_player_max).grid(row=5, column=2, columnspan=2)
+#SET MAX ROUNDS
+setMaxRoundsLabel = Label(main, text="Set the maximum number of rounds:").grid(row=5, column=0)
+maxRoundsCount = StringVar()
+maxRoundsCount.set("0")
+setMaxRoundsField = Entry(main, width=10, textvariable=maxRoundsCount).grid(row=5, column=1)
+setMaxRoundsButton = Button(main, text="Select", command=set_rounds_max).grid(row=5, column=2, columnspan=2)
 
 #GameStatus
 gameStatusLabel = Label(main, text="Tournament Status:").grid(row=6, column=0)
-gameStatusButton = Button(main, text="STATUS", command=get_tournament_status).grid(row=6, column=1)
-start = Button(main, text="Start", command=start_tournament).grid(row=6, column=2)
-end = Button(main, text="End", command=end_tournament).grid(row=6, column=3)
+gameStatusButton = Button(main, text="Tournament Status", command=get_tournament_status).grid(row=6, column=1)
+
 
 
 #LIST CONNECTED PLAYERS
 connectionsLabel = Label(main, text="Number of players connected:").grid(row=7, column=0)
-connectionsButton = Button(main, text=num_connections, command='').grid(row=7, column=1)
+num_registered = StringVar()
+num_registered.set("0")
+connectionsLabel= Button(main, textvariable=num_registered, command='').grid(row=7, column=1)
 viewConnectionsButton = Button(main, text="Update", command=update_players_connected).grid(row=7, column=2,
                                                                                            columnspan=2)
 
