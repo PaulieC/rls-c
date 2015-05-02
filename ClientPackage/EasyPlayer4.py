@@ -19,7 +19,7 @@ client1 = PlayerClient(player1)
 # attempt to connect game controller to the server room
 
 client1.client_connect(host=HOST)
-client1.set_name("Slazenger")
+client1.set_name("Kilroy")
 client1.verify_connection()
 client1.register_player()
 client1.verify_registration()

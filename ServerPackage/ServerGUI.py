@@ -53,7 +53,10 @@ def open_connection():
     if serve:
         console.insert(END, "Server has started. Opening the connection...\n")
         console.insert(END, "Opened the connection\n")
-        new_server.open_connection()
+        try:
+            new_server.open_connection()
+        except Exception:
+            console.insert(END, "Server has been forced closed...\n")
     elif serve is None:
         console.insert(END, "There was an error in creating the server...\n")
     else:
