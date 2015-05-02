@@ -28,7 +28,7 @@ def quit_game():
         main.quit()
 
 def set_player_name():
-    player.set_name(player_name)
+    client.set_name(str(player_name.get()))
     console.insert(END, player_name.get() + " is now your player's name.\n")
 
 def set_ip_address():
@@ -38,7 +38,7 @@ def set_port():
     console.insert(END, port.get() + " is now the port you are connecting to.\n")
 
 def connect():
-    client.client_connect(ip_address, port)
+    client.client_connect(host = ip_address.get(), port =int(port.get()))
     console.insert(END, "Attempting to connect...\n")
 
 def verify_connection():
@@ -57,6 +57,10 @@ def change_player():
     player = selected_player.get().replace(".py", "")
     console.insert(END, "Player changed to: " + player.get() + "\n")
 
+def submit_move():
+    client.submit_move()
+    console.insert(END, "Submit" + "\n")
+
 
 main = Tk()
 main.wm_title("Player")
@@ -73,7 +77,7 @@ setPlayerNameButton = Button(main, text="Select", command=set_player_name).grid(
 #Set Address
 setGameAddressLabel = Label(main, text="Set IP Address:").grid(row=2, column=0)
 ip_address = StringVar()
-ip_address.set("192.168.0.1")
+ip_address.set("150.250.190.225")
 setIPAddressField = Entry(main, width=15, textvariable=ip_address).grid(row=2, column=1)
 setIPAddressButton = Button(main, text="Select", command=set_ip_address).grid(row=2, column=2, columnspan=2)
 
@@ -106,6 +110,9 @@ attemptRegistrationButton = Button(main, text="Register", command=register).grid
 
 verifyRegistrationLabel = Label(main, text="Verify Registration:").grid(row=8, column=0)
 verifyRegistrationButton = Button(main, text="Verify", command=verify_registration).grid(row=8, column=1, columnspan=3)
+
+submitMoveLabel = Label(main, text="Start submitting moves:").grid(row=9, column=0)
+submitMoveButton = Button(main, text="Submit", command=submit_move).grid(row=9, column=1)
 
 
 console = Text(main, bg="#434A54", fg="white")

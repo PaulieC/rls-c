@@ -58,7 +58,7 @@ class GameMasterClient(PlayerClient):
         msg = "Tournament registration couldn't open"
         if tour_open:
             msg = "Tournament registration is open"
-        print "open_tournament_registration::> " + msg
+        return msg
 
     def close_tournament_registration(self):
         """
@@ -70,7 +70,7 @@ class GameMasterClient(PlayerClient):
         if tour_closed:
             msg = "Tournament registration is closed"
             self.create_all_available_matches()
-        print "close_tournament_registration::> " + msg
+        return tour_closed
 
     def list_registered_players(self):
         """
@@ -144,7 +144,7 @@ class GameMasterClient(PlayerClient):
         # TODO implement similarly to set_tournament
         pass
 
-    def start_game(self):
+    def start_tournament(self):
         # TODO impelment this method to run at least one round
         pass
 
