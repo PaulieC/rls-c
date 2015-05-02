@@ -74,7 +74,10 @@ class TournamentServer():
         success = False
         try:
             self.tournament_server.debug_socket(True)
-            self.tournament_server.serve()
+            try:
+                self.tournament_server.serve()
+            except Exception:
+                raise Exception("The connection has unwillingly stopped.")
             success = True
         except Exception:
             pass

@@ -8,8 +8,13 @@ def set_ip():
     Function to allow the user to set the ip for the running server.
     This new ip is then displayed in the respective GUI label.
     """
-    ip.set(new_server.set_ip(ip.get()))
-    console.insert(END, "The IP Address is now: " + ip.get() + "\n")
+    try:
+        ip.set(new_server.set_ip(ip.get()))
+        console.insert(END, "The IP Address is now: " + ip.get() + "\n")
+    except Exception:
+        console.insert(END, "Error while trying to assign ip address.\n"
+                            "This is likely due to an improper value for the ip.\n"
+                            "Please try again with a different ip setting.\n")
 
 
 def set_port():
@@ -17,8 +22,13 @@ def set_port():
     Functions to allow the user to set the port for the running server.
     This port number is then displayed in the respective GUI label
     """
-    port.set(new_server.set_port(int(port.get())))
-    console.insert(END, "The Port is now set to: " + port.get() + "\n")
+    try:
+        port.set(new_server.set_port(int(port.get())))
+        console.insert(END, "The Port is now set to: " + port.get() + "\n")
+    except Exception:
+        console.insert(END, "Error while trying to assign the port.\n"
+                            "This is likely due to an improper value for the port.\n"
+                            "Please try again with a different port value.\n")
 
 
 def generate_ip():
@@ -28,7 +38,11 @@ def generate_ip():
     NOTE: this call will not work on other operating systems. An error
             handled to print information to the user.
     """
-    new_ip = new_server.generate_ip()
+    new_ip = False
+    try:
+        new_ip = new_server.generate_ip()
+    except Exception:
+        console.insert(END, "Unknown error when trying to generate ip address.")
     if not new_ip:
         console.insert(END, "The ip couldn't be generated...\n"
                             "Please note that at this time ip generation only"
@@ -69,8 +83,13 @@ def close_connection():
     Function to close the server's connection. This should only be accessible from
     the GameController's client.
     """
+    # TODO implement fully or remove option entirely
     if tkMessageBox.askyesno("Close Connection", "Are you sure you want to close your connection?"):
-        closed = new_server.close_connection()
+        closed = False
+        try:
+            closed = new_server.close_connection()
+        except Exception:
+            console.insert(END, "Unknown error when trying to close the server's connection.\n")
         if closed:
             console.insert(END, "Closed the connection\n")
         else:
@@ -78,39 +97,38 @@ def close_connection():
     else:
         console.insert(END, "The connection is still open\n")
 
-
 main = Tk()
 new_server = TournamentServer()
 main.wm_title("Server")
 
 # SetIP
-setIPLabel = Label(main, text="Set the IP Address:").grid(row=1,column=0)
+setIPLabel = Label(main, text="Set the IP Address:").grid(row=1, column=0)
 ip = StringVar()
 ip.set("0.0.0.0")
-setIPField = Entry(main, width=10, textvariable=ip).grid(row=1,column=1)
-setIPButton = Button(main, text="Select", command=set_ip).grid(row=1,column=2,columnspan=2)
+setIPField = Entry(main, width=10, textvariable=ip).grid(row=1, column=1)
+setIPButton = Button(main, text="Select", command=set_ip).grid(row=1, column=2, columnspan=2)
 
 # SetPort
-setPortLabel = Label(main, text="Set the Port:").grid(row=2,column=0)
+setPortLabel = Label(main, text="Set the Port:").grid(row=2, column=0)
 port = StringVar()
 port.set("12345")
-setPortField = Entry(main, width=10, textvariable=port).grid(row=2,column=1)
-setPortButton = Button(main, text="Select", command=set_port).grid(row=2,column=2,columnspan=2)
+setPortField = Entry(main, width=10, textvariable=port).grid(row=2, column=1)
+setPortButton = Button(main, text="Select", command=set_port).grid(row=2, column=2, columnspan=2)
 
 # Generate IP
 generateIPLabel = Label(main, text="Generate an IP:").grid(row=3, column=0)
 generated = StringVar()
 generated.set("-.-.-.-")
 generateIPField = Entry(main, width=10, textvariable=generated).grid(row=3, column=1)
-generateIPButton = Button(main, text="Generate", command=generate_ip).grid(row=3,column=2,columnspan=2)
+generateIPButton = Button(main, text="Generate", command=generate_ip).grid(row=3, column=2, columnspan=2)
 
 # Open/Close serving
-connectionLabel = Label(main, text="Open or Close the connection:").grid(row=4,column=0)
+connectionLabel = Label(main, text="Open or Close the connection:").grid(row=4, column=0)
 openButton = Button(main, text="Open", command=open_connection).grid(row=4, column=2)
 closeButton = Button(main, text="Close", command=close_connection).grid(row=4, column=3)
 
 # console
 console = Text(main, bg="#434A54", fg="white")
-console.grid(row=8,columnspan=4)
+console.grid(row=8, columnspan=4)
 
 main.mainloop()

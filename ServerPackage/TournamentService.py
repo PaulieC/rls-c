@@ -368,6 +368,7 @@ class TournamentService(BaseHandler):
         Tournament commands can't execute unless the game status is
         set to True.
         :param status: boolean
+        :return boolean:
         """
         result = self.tournament_data.set_game_open(status)
         return result
@@ -375,11 +376,15 @@ class TournamentService(BaseHandler):
     def get_tournament_status(self):
         """
         Retrieves the current status of the game for the game controller
-        :return: Boolean
+        :return: boolean
         """
         result = self.tournament_data.get_game_open()
         return result
 
     def get_num_registered(self):
+        """
+        Finds the list of players registered to the tournament
+        :return list:
+        """
         result = len(self.tournament_data.tournament.playerList)
         return result
