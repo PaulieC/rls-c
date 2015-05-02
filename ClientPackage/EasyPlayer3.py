@@ -11,7 +11,7 @@ from AvailablePlayers.TestPlayer1 import *
 
 
 
-HOST = "150.250.191.238"
+HOST = "150.250.190.225"
 
 player1 = TestPlayer1()
 
@@ -20,7 +20,7 @@ client1 = PlayerClient(player1)
 # attempt to connect game controller to the server room
 
 client1.client_connect(host=HOST)
-client1.set_name("Silverback")
+client1.set_name("Wilson")
 client1.verify_connection()
 client1.register_player()
 client1.verify_registration()

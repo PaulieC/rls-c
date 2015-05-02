@@ -74,6 +74,7 @@ class TournamentService(BaseHandler):
         :param max_num: int
         """
         self.tournament_data.tournament.set_max_rounds(max_num)
+        print "Total rounds have been set to " + str(max_num) + "."
 
     def verify_registration(self, player_id):
         """
@@ -105,6 +106,7 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(True)
+            print "Tournament registration is now open!"
             return True
         except Exception:
             return False
@@ -115,6 +117,7 @@ class TournamentService(BaseHandler):
         """
         try:
             self.tournament_data.set_registration_status(False)
+            print "Tournament registration is now closed!"
             return True
         except Exception:
             return False
@@ -186,7 +189,8 @@ class TournamentService(BaseHandler):
         return_list = []
         while temp_list:
             return_list.append(temp_list.pop(0))
-            return_list.append(temp_list.pop(len(temp_list) - 1))
+            if len(temp_list) != 0:
+                return_list.append(temp_list.pop(len(temp_list) - 1))
         return return_list
 
     def set_player_move(self, player_id, move):
