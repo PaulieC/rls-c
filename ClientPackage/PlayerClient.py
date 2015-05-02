@@ -1,20 +1,19 @@
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
-__version__ = "sprint2"
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
 
 # imports
-import bjsonrpc, time
-from ClientPackage.PlayerService import *
+import time
 import os
-import sys
 
+import bjsonrpc
+
+from ClientPackage.PlayerService import *
 
 
 class PlayerClient():
     """
-    TODO
+    Handles all the request creation
     """
-    # TODO needs details
-
     def __init__(self, player):
         """
         :param player: The player associated with this client object
@@ -27,9 +26,10 @@ class PlayerClient():
 
     def client_connect(self, host, port=12345, handler=PlayerService):
         """
-        :param host:
-        :param port:
-        :param handler:
+        Connects to a bjsonrpc server using the given ip, and port.
+        :param host: the ip address of the target server
+        :param port: the port you are trying to connect with
+        :param handler: the class that contains all the handler methods
         :return:
         """
         try:
@@ -37,21 +37,24 @@ class PlayerClient():
             result = 1
             return result
         except Exception:
-            result = 0
-            return result
+            raise Exception('client_connect::> Unable to connect to the server.')
 
     def verify_connection(self):
         """
+        Verifies the player connection based on whether there was a "Hello" in the req_welcome_player() response.
         :return:
         """
-        msg = "Couldn't verify connection"
-        req_welcome_player = self.player_connect.method.verify_connection(self.player_name)
-        if "Hello" in req_welcome_player():
-            msg = "Connection verified"
-        #print "verify_connection::> " + msg
-        return msg
+        try:
+            msg = "Couldn't verify connection"
+            req_welcome_player = self.player_connect.method.verify_connection
+            if "Hello" in req_welcome_player():
+                msg = "Connection verified"
+            return msg
+        except Exception:
+            raise Exception('verify_connection::> Unable to verify connection at this time.')
 
-    def get_dir(self, final_dir):
+    @staticmethod
+    def get_dir(final_dir):
         """
         Used to find the directory of the games or the tournament. This could be used to find
         any directory in the same directory as the ClientPackage...
@@ -64,15 +67,15 @@ class PlayerClient():
         result = os.path.abspath(os.curdir) + "/"
         return result
 
-    def list_files(self, path):
+    @staticmethod
+    def list_files(path):
         """
+        Returns a list of names (with extension, without full path) of all files in the specified folder path
         Web: http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
         Username: Apogentus
         :param path:
         :return:
         """
-        # returns a list of names (with extension, without full path) of all files
-        # in folder path
         files = []
         for name in os.listdir(path):
             if os.path.isfile(os.path.join(path, name)):
@@ -80,7 +83,8 @@ class PlayerClient():
                     files.append(name)
         return files
 
-    def print_list(self, printable_list):
+    @staticmethod
+    def print_list(printable_list):
         num = 0
         for name in printable_list:
             print str(num) + ".   " + name
@@ -89,8 +93,7 @@ class PlayerClient():
     def list_available_players(self):
         """
         Lists the games that are available in the AvailableGames directory.
-        This is printed to the console.
-        :return:
+        :return player_list: the list of files in the AvailablePlayers directory
         """
         player_dir = self.get_dir("AvailablePlayers")
         player_list = self.list_files(player_dir)
@@ -98,30 +101,35 @@ class PlayerClient():
 
     def close_connection(self):
         """
+        Attempts to close the player's connection to the server.
         :return:
         """
         try:
             self.player_connect.close()
         except Exception:
-            print "close_connection::> Couldn't close connection..."
+            raise Exception("close_connection::> Couldn't close connection...")
 
     def check_if_registration_is_open(self):
         """
         Prints to this player the current status of the tournament's registration
+        :return msg: returns open/closed based on the registration status
         """
-        req_registration_status = self.player_connect.method.get_registration_status()
-        if req_registration_status():
-            msg = "Open"
-            print "check_if_registration_is_open::> " + msg
-            return msg
-        else:
-            msg = "Closed"
-            print "check_if_registration_is_open::> " + msg
-            return msg
+        try:
+            req_registration_status = self.player_connect.method.get_registration_status()
+            if req_registration_status():
+                msg = "Open"
+                print "check_if_registration_is_open::> " + msg
+                return msg
+            else:
+                msg = "Closed"
+                print "check_if_registration_is_open::> " + msg
+                return msg
+        except Exception:
+            raise Exception('check_if_registration_is_open::> unable to check if the registation is open')
 
     def register_player(self):
         """
-        :param player:
+        Registers the current player after checking to see if that player isn't already registered.
         :return:
         """
         result = 0
@@ -136,36 +144,42 @@ class PlayerClient():
                     print "register_player::> " + my_id
                     result = 1
                 except Exception:
-                    print "register_player::> Couldn't successfully register the player..."
+                    raise Exception("register_player::> Couldn't successfully register the player...")
         except Exception:
-            print "register_player::> Couldn't successfully obtain a player number..."
+            raise Exception("register_player::> Couldn't successfully obtain a player number...")
         return result
 
     def verify_registration(self):
         """
-        :param player:
+        Attempts to verify that this player is already registered in the tournament
         :return:
         """
-        result = 0
         try:
             req_verify_reg = self.player_connect.method.verify_registration(self.player.get_player_id())
-            print "verify_registration::> " + req_verify_reg()
-            return result
+            return req_verify_reg()
         except Exception:
-            return result
+            raise Exception("verify_registration::> unable to verify")
 
     def get_current_game(self):
+        """
+        Gets the current game the tournament is set to from the server.
+        :return:
+        """
         try:
             req_curr_game = self.player_connect.method.get_game()
             game_name = req_curr_game()
             if game_name is not "":
                 return game_name
             else:
-                return "Unknown"
+                return "No game to return to you."
         except Exception:
-            pass
+            raise Exception('get_current_game::> unable to get current game')
 
     def get_current_tournament(self):
+        """
+        Allows the player to get the name of the current set tournament type (All-Play-All, SingleElimination, etc.)
+        :return:
+        """
         try:
             req_curr_tour = self.player_connect.method.get_tournament()
             tour_name = req_curr_tour()
@@ -174,31 +188,39 @@ class PlayerClient():
             else:
                 return "Unknown"
         except Exception:
-            pass
+            raise Exception('get_current_tournament::> unable to get the current tournament')
 
     def set_name(self, new_name):
-        # This should stop the name from being changed if the player has been registered
-        if self.player.get_player_id() is None:
-            self.player.set_name(new_name)
-            self.player_name = new_name
-        return self.player.get_name()
+        """
+        Allows a player to change their name (not their unique player ID), but only if they haven't been registered.
+        :param new_name:
+        :return:
+        """
+        try:
+            if self.player.get_player_id() is None:
+                self.player.set_name(new_name)
+                self.player_name = new_name
+            return self.player.get_name()
+        except Exception:
+            raise Exception('set_name::> Unable to change the name of a player that is already registered.')
 
     def submit_move(self):
         """
         Allows the player object to generate the next move and send this server side for
         the current round.
         """
-        move = self.player.play()
-        req_set_move = self.player_connect.method.set_player_move(self.player.get_player_id(), move)
-        set_move = req_set_move()
-        result = "..."
-        if set_move:
-            result = "Move has been set!"
-            self.player.set_ready()
-            print self.player.get_name() + " submit_move::> " + result
-        time.sleep(2)
-        if set_move:
-            self.get_round_results()
+        try:
+            move = self.player.play()
+            req_set_move = self.player_connect.method.set_player_move(self.player.get_player_id(), move)
+            set_move = req_set_move()
+            if set_move:
+                self.player.set_ready()
+                print self.player.get_name() + " submit_move::> Move has been set!"
+            time.sleep(2)
+            if set_move:
+                self.get_round_results()
+        except Exception:
+            raise Exception('submit_move::> unable to submit a move at this time')
 
     def get_round_results(self):
         """
@@ -215,7 +237,7 @@ class PlayerClient():
             time.sleep(3)
             return self.get_round_results()
         if round_results:  # If we are handed back a tuple, print them
-            print "round_results::> " + str((round_results[0],round_results[1]))
+            print "round_results::> " + str((round_results[0], round_results[1]))
             if round_results[2]:  # Checks last spot in the tuple for another round or not
                 time.sleep(5)
                 self.submit_move()  # Submits a move
@@ -223,9 +245,12 @@ class PlayerClient():
         else:
             print "round_results::> none"
 
-    def if_next_match(self):
-        pass
-
     def get_tournament_results(self):
-        req_get_tournament_results = self.player_connect.method.get_tournament_results()
-        print str(req_get_tournament_results())
+        """
+        Gets the results of a completed tournament, if the tournament isn't completed/still in progress return "Unknown"
+        """
+        try:
+            req_get_tournament_results = self.player_connect.method.get_tournament_results()
+            print str(req_get_tournament_results())
+        except Exception:
+            raise Exception('get_tournament_results::> unable to grab tournament results')

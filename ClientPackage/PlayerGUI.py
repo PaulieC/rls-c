@@ -1,5 +1,7 @@
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
+
 from Tkinter import *
-import os
 import tkMessageBox
 from PlayerClient import *
 from AvailablePlayers.TestPlayer1 import *
@@ -42,7 +44,7 @@ def connect():
     console.insert(END, "Attempting to connect...\n")
 
 def verify_connection():
-    client.verify_connection()
+    client.verify_connection
     console.insert(END, "Verifying that you are connected...\n")
 
 def register():
@@ -50,7 +52,7 @@ def register():
     console.insert(END, "Attempting to register...\n")
 
 def verify_registration():
-    client.verify_connection()
+    client.verify_connection
     console.insert(END, "Verifying that you are registered...\n")
 
 def change_player():
