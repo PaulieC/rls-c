@@ -30,9 +30,9 @@ class TournamentService(BaseHandler):
                    "\nPlease standby for registration confirmation..." % txt
         try:
             self.tournament_data.add_connected_players(txt)
+            return response
         except Exception:
-            response = "verify_connection::> " + txt + " couldn't connect..."
-        return response
+            raise Exception("verify_connection::> " + txt + " couldn't connect...")
 
     def register_player(self, player_id):
         """
@@ -52,10 +52,14 @@ class TournamentService(BaseHandler):
                 msg = "Can not add player. Tournament room is full"
                 return msg
             else:
-                if self.tournament_data.register_player(player_id):
-                    return player_id
-                else:
-                    return player_id + " has already been registered."
+                try:
+                    if self.tournament_data.register_player(player_id):
+                        return player_id
+                    else:
+                        return player_id + " has already been registered."
+                except Exception:
+                    raise Exception("register_player:: tournament_date couldn't register this player.\n"
+                                    "Check the player's player id for underscores.")
         else:
             msg = "The tournament registration hasn't been opened yet. Please wait for the game controller to request" \
                   " your registration. Thanks!"
@@ -66,21 +70,29 @@ class TournamentService(BaseHandler):
         The player calls this to get a unique number for player_id creation client side
         :return int: A new integer
         """
-        return self.tournament_data.generate_id_counter()
+        try:
+            requested_id = self.tournament_data.generate_id_counter()
+            return requested_id
+        except Exception:
+            raise Exception("request_id:: Couldn't generate a new id. Unsure of erro.")
 
     def set_max_rounds(self, max_num):
         """
         Sets the tournament's maximum amount of rounds
         :param max_num: int
         """
-        self.tournament_data.tournament.set_max_rounds(max_num)
-        print "Total rounds have been set to " + str(max_num) + "."
+        try:
+            self.tournament_data.tournament.set_max_rounds(max_num)
+            print "Total rounds have been set to " + str(max_num) + "."
+        except Exception:
+            raise Exception("set_max_rounds:: Couldn't set number of rounds.\n"
+                            "Input may not be an integer.")
 
     def verify_registration(self, player_id):
         """
         Allows the client to confirm that their unique id is registered to the tournament.
         :param player_id: str
-        :return: str
+        :return str: A message confirming the player has registered.
         """
         player_id = str(player_id)
         player_list = self.tournament_data.get_registered_players()
@@ -95,37 +107,31 @@ class TournamentService(BaseHandler):
     def get_registered_players(self):
         """
         Gets the players registered to the tournament in the form of a list
-        :return result: The list of players registered
+        :return list: The list of registered players
         """
-        result = self.tournament_data.tournament.get_players()
-        return result
+        return self.tournament_data.tournament.get_players()
 
     def open_tournament_registration(self):
         """
         Sets the registration status of the tournament from False to True
+        :return boolean:
         """
-        try:
-            self.tournament_data.set_registration_status(True)
-            print "Tournament registration is now open!"
-            return True
-        except Exception:
-            return False
+        self.tournament_data.set_registration_status(True)
+        print "Tournament registration is now open!"
+        return True
 
     def close_tournament_registration(self):
         """
         Sets the registration status of the tournament from True to False
         """
-        try:
-            self.tournament_data.set_registration_status(False)
-            print "Tournament registration is now closed!"
-            return True
-        except Exception:
-            return False
+        self.tournament_data.set_registration_status(False)
+        print "Tournament registration is now closed!"
+        return True
 
     def get_registration_status(self):
         """
         Returns the current registration status
-        :return Boolean: The current state of the registration status
+        :return boolean: The current state of the registration status
         """
         return self.tournament_data.get_registration_status()
 
@@ -133,16 +139,16 @@ class TournamentService(BaseHandler):
         """
         Allows the game controller to set the current tournament type
         :param tournament_type: str
-        :return: Boolean
+        :return boolean:
         """
         # TODO finish this import issue
-        success = False
         try:
             tournament_type = str(tournament_type)
             self.tournament_data.set_tournament(tournament_type)
             success = True
         except Exception:
-            pass
+            raise Exception("set_tournament:: Couldn't change the tournament type.\n"
+                            "Likely due to a missing/corrupt tournament file.")
         return success
 
     def set_game(self, new_game):
@@ -165,6 +171,7 @@ class TournamentService(BaseHandler):
         """
         Finds the next match and adds this information in the form of a MatchData
         object to the list of matches in TournamentData.
+        :return MatchData:
         """
         match = self.tournament_data.create_next_match()
         result = None
@@ -185,6 +192,11 @@ class TournamentService(BaseHandler):
         # printable = [y.to_string() for y in return_list]
 
     def unique_match_sort(self, match_list):
+        """
+        Sorting function used to generate unique matches for the players to run through.
+        :param match_list: list
+        :return list:
+        """
         temp_list = match_list
         return_list = []
         while temp_list:
@@ -199,29 +211,29 @@ class TournamentService(BaseHandler):
         the matches list.
         :param player_id: str
         :param move: int
-        :return: Boolean
+        :return boolean:
         """
         result = False
         player_id = str(player_id)
-        msg = " There wasn't a match for this move"
         for match in self.tournament_data.matches:
             if match.submit_move(player_id, move):
                 result = True
                 if match.check_for_ready():
                     self.run_ready(match)
                 break
-        if result:
-            msg = str(result)
         return result
 
     def run_ready(self, ready_match):
         """
         Runs the current match that is set to ready. Switches
-        the match's status to not ready upon running
+        the match's status to not ready after match completion
         :param ready_match: MatchData
         """
-        round_result = self.tournament_data.play_round(ready_match)
-        ready_match.switch_ready()
+        try:
+            self.tournament_data.play_round(ready_match)
+            ready_match.switch_ready()
+        except Exception:
+            raise Exception("run_ready:: Error while trying to run the current round.")
 
     def create_match_pairs(self):
         """
@@ -242,15 +254,19 @@ class TournamentService(BaseHandler):
 
     def run_available_matches(self):
         """
-        Runs the matches that have ready players. Returns the number of matches completed.
-        :return: int
+        Runs the matches that have ready players.
+        Returns the number of matches completed.
+        :return int:
         """
         rounds = -1
         if self.tournament_data.get_game_open():
             for match in self.tournament_data.ready_pairs:
                 if match.check_for_ready:
-                    round_result = self.tournament_data.play_round(match)
-                    match.switch_ready()
+                    try:
+                        self.tournament_data.play_round(match)
+                        match.switch_ready()
+                    except Exception:
+                        raise Exception("run_available_matches:: Error trying to play the current round.")
                     self.tournament_data.ready_pairs.remove(match)
                     rounds = match.get_curr_round()
         return rounds
@@ -258,7 +274,7 @@ class TournamentService(BaseHandler):
     def get_all_available_matches(self):
         """
         Returns all matches that are currently set to ready in the form of a list of tuples
-        :return: list
+        :return list:
         """
         avail_match = []
         if self.tournament_data.get_game_open():
@@ -275,7 +291,7 @@ class TournamentService(BaseHandler):
             tuple = Round has completed with the following information:
                 ((player_id, move, round_num, win/lost), (player_id, move, round_num, win/lost), True/False next round)
         :param player_id: str
-        :return:
+        :return Object:
         """
         round_result = 0
         player_id = str(player_id)
@@ -294,26 +310,12 @@ class TournamentService(BaseHandler):
             else:
                 round_result = 1
                 break
-
-        if round_result == 0:
-            msg = player_id + " doesn't have a round waiting."
-        elif round_result == 1:
-            msg = player_id + " is waiting for the opponent to submit their move and/or the round to run."
-        else:
-            msg = player_id + " :: " + str(round_result)
         return round_result
-
-    def is_end_of_tournament(self):
-        """ Functions used for testing """
-        if self.tournament_data.matches:
-            pass
-        else:
-            print "is_end_of_tournament::> " + str(self.tournament_data.sort_scoreboard())
 
     def get_tournament_results(self):
         """
         Returns the scores of the tournament IF all matches have been run
-        :return: list
+        :return list:
         """
         if self.tournament_data.matches:
             return False
@@ -325,17 +327,21 @@ class TournamentService(BaseHandler):
         Adds a win/loss the the correct player in the match parameter.
         :param match_item: MatchData
         """
-        if match_item.get_plr1_score() > match_item.get_plr2_score():
-            self.tournament_data.score_keeper[match_item.get_plr1()].win()
-            self.tournament_data.score_keeper[match_item.get_plr2()].lose()
-        else:
-            self.tournament_data.score_keeper[match_item.get_plr2()].win()
-            self.tournament_data.score_keeper[match_item.get_plr1()].lose()
+        try:
+            if match_item.get_plr1_score() > match_item.get_plr2_score():
+                self.tournament_data.score_keeper[match_item.get_plr1()].win()
+                self.tournament_data.score_keeper[match_item.get_plr2()].lose()
+            else:
+                self.tournament_data.score_keeper[match_item.get_plr2()].win()
+                self.tournament_data.score_keeper[match_item.get_plr1()].lose()
+        except Exception:
+            raise Exception("update_score_keeper:: Something other than a MatchData object "
+                            "was passed as a parameter into this function.")
 
     def get_game(self):
         """
         Gets the name of the current game
-        :return: str
+        :return str:
         """
         result = ""
         if self.tournament_data.tournament.game is not None:
@@ -361,7 +367,7 @@ class TournamentService(BaseHandler):
         Allows the game controller to dictate when the game can run.
         Tournament commands can't execute unless the game status is
         set to True.
-        :param status: Boolean
+        :param status: boolean
         """
         result = self.tournament_data.set_game_open(status)
         return result

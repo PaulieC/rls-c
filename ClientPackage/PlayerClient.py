@@ -121,7 +121,6 @@ class PlayerClient():
 
     def register_player(self):
         """
-        :param player:
         :return:
         """
         result = 0
