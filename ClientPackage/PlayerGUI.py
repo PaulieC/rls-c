@@ -9,6 +9,7 @@ from AvailablePlayers.TestPlayer1 import *
 player = TestPlayer1()
 client = PlayerClient(player)
 
+
 def list_files(path):
     """
     Web: http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
@@ -25,47 +26,101 @@ def list_files(path):
                 files.append(name)
     return files
 
+
 def quit_game():
-    if tkMessageBox.askyesno("Quit Game", "Are you sure you want to quit?"):
-        main.quit()
+    try:
+        if tkMessageBox.askyesno("Quit Game", "Are you sure you want to quit?"):
+            main.quit()
+    except Exception:
+        console.insert(END, "Unknown error thrown in quit_game.\n")
+
 
 def set_player_name():
-    client.set_name(str(player_name.get()))
-    console.insert(END, player_name.get() + " is now your player's name.\n")
+    try:
+        client.set_name(str(player_name.get()))
+        console.insert(END, player_name.get() + " is now your player's name.\n")
+    except Exception:
+        console.insert(END, "Error trying to set the player's name.\n"
+                            "The name should not include an underscore or special character.\n" + network_error_message)
+
 
 def set_ip_address():
-    console.insert(END, ip_address.get() + " is now the address you are connecting to.\n")
+    try:
+        console.insert(END, ip_address.get() + " is now the address you are connecting to.\n")
+    except Exception:
+        console.insert(END, "Error trying to set the ip address.\n"
+                            "Check your values.\n"
+                            "An IP address should consist of 4 groups of digits.\n"
+                            "EXAMPLE: 000.000.000.000\n"
+                            "NOTE: they aren't necessarily groups of 3.\n")
+
 
 def set_port():
-    console.insert(END, port.get() + " is now the port you are connecting to.\n")
+    try:
+        console.insert(END, port.get() + " is now the port you are connecting to.\n")
+    except Exception:
+        console.insert(END, "Error trying to set the port value.\n"
+                            "Remember that the port should be 5 digits.\n"
+                            "EXAMPLE: 12345\n"
+                            "Try again.\n")
+
 
 def connect():
-    client.client_connect(host = ip_address.get(), port =int(port.get()))
     console.insert(END, "Attempting to connect...\n")
+    try:
+        client.client_connect(host=ip_address.get(), port=int(port.get()))
+    except Exception:
+        console.insert(END, "Error trying to connect to server.\n"
+                            "Check ip address as well as port number.\n"
+                            "Verify values with the game admin.\n" + network_error_message)
+
 
 def verify_connection():
-    client.verify_connection
     console.insert(END, "Verifying that you are connected...\n")
+    try:
+        client.verify_connection()
+    except Exception:
+        console.insert(END, "Error verifying connection.\n" + network_error_message)
+
 
 def register():
-    client.register_player()
     console.insert(END, "Attempting to register...\n")
+    try:
+        client.register_player()
+    except Exception:
+        console.insert(END, "Error trying to register to tournament.\n" + network_error_message)
+
 
 def verify_registration():
-    client.verify_connection
     console.insert(END, "Verifying that you are registered...\n")
+    try:
+        client.verify_connection()
+    except Exception:
+        console.insert(END, "Error trying to verify registration.\n" + network_error_message)
+
 
 def change_player():
-    player = selected_player.get().replace(".py", "")
-    console.insert(END, "Player changed to: " + player.get() + "\n")
+    try:
+        player = selected_player.get().replace(".py", "")
+        console.insert(END, "Player changed to: " + player.get() + "\n")
+    except Exception:
+        console.insert(END, "Error trying to load in player.\n"
+                            "This may be due to a corrupt/missing player file.\n"
+                            "Notify the game admin.\n")
+
 
 def submit_move():
-    client.submit_move()
-    console.insert(END, "Submit" + "\n")
+    try:
+        client.submit_move()
+        console.insert(END, "Submit" + "\n")
+    except Exception:
+        console.insert(END, "Error trying to submit the move.\n" + network_error_message)
 
 
 main = Tk()
 main.wm_title("Player")
+network_error_message = "Check physical network adapter.\n" \
+                        "If error occurs again, notify the game admin.\n"
 
 #registrationLabel = Label(main, text="Registration Status:").grid(row=0, column=0)
 
