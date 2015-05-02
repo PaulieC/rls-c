@@ -13,7 +13,7 @@ from AvailablePlayers.BEPCPlayer import  *
 from AvailablePlayers.TestPlayer2 import *
 
 
-HOST = "150.250.191.238"
+HOST = "150.250.190.225"
 my_player = GMPlayer()
 game_controller = GameMasterClient(my_player)
 # player1 = TestPlayer1()
@@ -46,10 +46,10 @@ game_controller.open_tournament_registration()
 # close the room for registration
 # game_controller.close_tournament_registration()
 
-game_controller.set_game_status(True)
-game_controller.set_max_rounds(1)
+game_controller.set_tournament_status(True)
+game_controller.set_max_rounds(3)
 
-game_controller.get_game_status()
+game_controller.get_tournament_status()
 time.sleep(10)
 # get list of ready players
 game_controller.list_registered_players()

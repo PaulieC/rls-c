@@ -48,7 +48,7 @@ class PlayerClient():
         req_welcome_player = self.player_connect.method.verify_connection(self.player_name)
         if "Hello" in req_welcome_player():
             msg = "Connection verified"
-        print "verify_connection::> " + msg
+        #print "verify_connection::> " + msg
         return msg
 
     def get_dir(self, final_dir):
@@ -180,6 +180,7 @@ class PlayerClient():
         # This should stop the name from being changed if the player has been registered
         if self.player.get_player_id() is None:
             self.player.set_name(new_name)
+            self.player_name = new_name
         return self.player.get_name()
 
     def submit_move(self):
@@ -190,11 +191,11 @@ class PlayerClient():
         move = self.player.play()
         req_set_move = self.player_connect.method.set_player_move(self.player.get_player_id(), move)
         set_move = req_set_move()
-        result = "Move wasn't set..."
+        result = "..."
         if set_move:
             result = "Move has been set!"
             self.player.set_ready()
-        print self.player.get_name() + " submit_move::> " + result
+            print self.player.get_name() + " submit_move::> " + result
         time.sleep(2)
         if set_move:
             self.get_round_results()
@@ -214,7 +215,7 @@ class PlayerClient():
             time.sleep(3)
             return self.get_round_results()
         if round_results:  # If we are handed back a tuple, print them
-            print "round_results::> " + str(round_results)
+            print "round_results::> " + str((round_results[0],round_results[1]))
             if round_results[2]:  # Checks last spot in the tuple for another round or not
                 time.sleep(5)
                 self.submit_move()  # Submits a move
