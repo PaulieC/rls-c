@@ -1,5 +1,7 @@
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
+
 from Tkinter import *
-import os
 import tkMessageBox
 from PlayerClient import *
 from AvailablePlayers.TestPlayer1 import *

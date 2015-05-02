@@ -21,7 +21,7 @@ client1 = PlayerClient(player1)
 
 client1.client_connect(host=HOST)
 client1.set_name("Wilson")
-client1.verify_connection()
+client1.verify_connection
 client1.register_player()
 client1.verify_registration()
 time.sleep(10)

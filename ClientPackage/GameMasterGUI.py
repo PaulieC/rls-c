@@ -100,7 +100,7 @@ def kill_server():
 
 def connect():
     gmc.client_connect(host=ip.get(), port=port.get())
-    console.insert(END, gmc.verify_connection())
+    console.insert(END, gmc.verify_connection)
     #console.insert(END, str(gmc.verify_connection()))
 
 
