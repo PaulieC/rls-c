@@ -15,6 +15,9 @@ gmc = GameMasterClient(my_player)
 reg_status = "Closed"
 num_connections = 0
 num_registered = 0
+network_error = "Verify your physical network adapter settings.\n" \
+                "Check the server's connection.\n" \
+                "Is the server running at this time?\n"
 
 
 def list_files(path):
@@ -46,48 +49,81 @@ def print_this(choice):
 
 
 def set_rounds_max():
-    gmc.set_max_rounds(maxRoundsCount.get())
+    try:
+        gmc.set_max_rounds(maxRoundsCount.get())
+    except Exception:
+        console.insert(END, "\nUnknown error when trying to set the number of rounds.\n" + network_error)
 
 
 def select_game_type():
-    console.insert(END, "The selected game type is now: " + selectedGameType.get() + "\n")
     game_type = selectedGameType.get().replace(".py", "")
-    gmc.set_game(game_type)
+    try:
+        gmc.set_game(game_type)
+        console.insert(END, "\nThe selected game type is now: " + selectedGameType.get() + "\n")
+    except Exception:
+        console.insert(END, "\nError changing the game type.\n"
+                            "This is likely due to a corrupt/missing .py file on either/both server and admin sides.\n"
+                            + network_error)
 
 
 def select_tournament_type():
-    console.insert(END, "The selected tournament type is now: " + selectedTournamentType.get() + "\n")
-    gmc.set_tournament((selectedTournamentType.get().replace(".py", "")))
+    try:
+        gmc.set_tournament((selectedTournamentType.get().replace(".py", "")))
+        console.insert(END, "\nThe selected tournament type is now: " + selectedTournamentType.get() + "\n")
+    except Exception:
+        console.insert(END, "\nError changing the tournament type.\n"
+                            "This is likely due to a corrupt/missing .py file on either/both server and admin sides.\n"
+                       + network_error)
 
 
 def open_registration():
-    console.insert(END, gmc.open_tournament_registration() + '\n')
-    reg_status.set("Open")
+    try:
+        console.insert(END, "\n" + gmc.open_tournament_registration() + "\n")
+        reg_status.set("Open")
+    except Exception:
+        console.insert(END, "Error trying to open the tournament's registration.\n" + network_error)
 
 
 def close_registration():
-    console.insert(END, str(gmc.close_tournament_registration()) + '\n')
-    reg_status.set("Closed")
+    try:
+        console.insert(END, "\n" + gmc.close_tournament_registration() + "\n")
+        reg_status.set("Closed")
+    except Exception:
+        console.insert(END, "\nError trying to close the tournament's registration.\n" + network_error)
 
 def get_tournament_status():
-    console.insert(END, "The tournament is currently: " + gmc.get_tournament_status() + "\n")
+    try:
+        console.insert(END, "\nThe tournament is currently: " + str(gmc.get_tournament_status()) + "\n")
+    except Exception:
+        console.insert(END, "\nError trying to retrieve the server's tournament status.\n" + network_error)
 
 
 def start_tournament():
-    gmc.start_tournament()
-    console.insert(END, "The tournament has been started.\n")
+    try:
+        gmc.start_tournament()
+        console.insert(END, "\nThe tournament has been started.\n")
+    except Exception:
+        console.insert(END, "\nError trying to start the tournament.\n" + network_error)
 
 
 def end_tournament():
-    if tkMessageBox.askyesno("End Tournament", "Are you sure you want to end this tournament?"):
-        gmc.end_game()
-        console.insert(END, "The tournament has been stopped\n")
+    try:
+        if tkMessageBox.askyesno("End Tournament", "Are you sure you want to end this tournament?"):
+            gmc.end_game()
+            console.insert(END, "\nThe tournament has been stopped.\n")
+        else:
+            console.insert(END, "\nThe tournament is still running.\n")
+    except Exception:
+        console.insert(END, "Error trying to end the tournament.\n" + network_error)
 
 
 def update_players_connected():
-    num = gmc.get_num_registered()
-    console.insert(END, num)
-    num_registered.set(str(num))
+    try:
+        num = gmc.get_num_registered()
+        console.insert(END, num)
+        num_registered.set(str(num))
+    except Exception:
+        console.insert(END, "Error trying to retrieve the number of players.\n" + network_error)
 
 
 def print_connections():
@@ -95,14 +131,26 @@ def print_connections():
 
 
 def kill_server():
-    gmc.client_connect.call.stop()
-    console.insert(END, "He's dead Jim.")
+    try:
+        gmc.client_connect.call.stop()
+        console.insert(END, "He's dead Jim.")
+    except Exception:
+        console.insert(END, "Error trying to destroy the server.\n"
+                            "Is it running?\n" + network_error)
 
 
 def connect():
-    gmc.client_connect(host=ip.get(), port=port.get())
-    console.insert(END, gmc.verify_connection)
-    #console.insert(END, str(gmc.verify_connection()))
+    try:
+        console.insert(END, "Attempting to connect...\n")
+        gmc.client_connect(host=ip.get(), port=port.get())      # TODO client quits if it has nothing to connect to.
+        try:
+            console.insert(END, gmc.verify_connection() + "\n")
+        except Exception:
+            console.insert(END, "Unable to verify connection at this time.\n"
+                                "Try again after checking ip/port settings.\n")
+    except Exception:
+        console.insert(END, "Unable to make a connection at this time.\n"
+                            "Try again after checking ip/port settings.\n")
 
 
 main = Tk()

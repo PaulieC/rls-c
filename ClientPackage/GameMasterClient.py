@@ -83,11 +83,17 @@ class GameMasterClient(PlayerClient):
         try:
             req_close_registration = self.player_connect.method.close_tournament_registration()
             tour_closed = req_close_registration()
+            msg = "Tournament registration couldn't close"
             if tour_closed:
-                self.create_all_available_matches()
-            return tour_closed
+                try:
+                    self.create_all_available_matches()
+                except Exception:
+                    raise Exception("Unable to create matches at this time.\n"
+                                    "Have players been registered?...")
+                msg = "Tournament registration is closed"
+            return msg
         except Exception:
-            raise Exception('close_tournament_registration::> unable to close the tournament registration at thsi time')
+            raise Exception("close_tournament_registration::> unable to close the tournament registration at this time")
 
     def list_registered_players(self):
         """
@@ -163,16 +169,23 @@ class GameMasterClient(PlayerClient):
         except Exception:
             raise Exception('run_available_matches::> unable to run available matches')
 
-    def set_tournament(self, game_type):
+    def set_tournament(self, tour_type):
         """
         Sends a request to the server to set the specified tournament type
         :param game_type: the game_type that we want to set
         """
         try:
-            req_set_tournament = self.player_connect.method.set_tournament(game_type)
+            req_set_tournament = self.player_connect.method.set_tournament(tour_type)
             req_set_tournament()
         except Exception:
             raise Exception('set_tournament::> unable to set the specified tournament')
+
+    def set_game(self, game_type):
+        try:
+            req_set_game = self.player_connect.method.set_game(game_type)
+            req_set_game()
+        except Exception:
+            raise Exception('set_game::> unable to set the specified tournament')
 
     def get_tournament_status(self):
         """

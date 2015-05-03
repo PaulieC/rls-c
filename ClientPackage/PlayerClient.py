@@ -54,8 +54,10 @@ class PlayerClient():
         """
         try:
             msg = "Couldn't verify connection"
-            req_welcome_player = self.player_connect.method.verify_connection
-            if "Hello" in req_welcome_player():
+            req_welcome_player = self.player_connect.method.verify_connection(self.player_name)
+            welcome_player = req_welcome_player()
+            welcome_player = str(welcome_player)
+            if "Hello" in welcome_player:
                 msg = "Connection verified"
             return msg
         except Exception:
