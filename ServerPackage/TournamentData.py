@@ -129,10 +129,6 @@ class TournamentData:
         sorted_list.reverse()
         return sorted_list
 
-    def run_match(self):
-        # TODO implement
-        pass
-
 # Adders
     def add_connected_players(self, player_name):
         """
@@ -151,29 +147,40 @@ class TournamentData:
         self.connected_players.remove(player)
 
 # Setters
-    def set_tournament(self, game_type):
-        tour = importlib.import_module("AvailableTournaments." + game_type)
-        self.tournament = getattr(tour, game_type)()
-        print "Tournament type is now: ", self.tournament.get_name()
+    def set_tournament(self, tour_type):
+        """
+        Assigns the current tournament type to the parameter value if it exists
+        in the AvailableTournaments directory. Throws an error otherwise which
+        should be pushed all the way up to the GameController GUI
+        :param tour_type: str
+        :return:
+        """
+        try:
+            mod = importlib.import_module("AvailableTournaments." + tour_type)
+            my_class = getattr(mod, tour_type)
+            self.tournament = my_class()
+            print "Tournament type is now: ", self.tournament.get_name()
+        except Exception:
+            raise Exception("The selected tournament doesn't exist in the AvailableTournaments directory.")
 
     def set_game(self, game_name):
-        # TODO initialize this function
-        pass
+        """
+        Assigns the current tournament type to the parameter value if it exists
+        in the AvailableTournaments directory. Throws an error otherwise which
+        should be pushed all the way up to the GameController GUI
+        :param game_name: str
+        :return:
+        """
+        try:
+            mod = importlib.import_module("AvailableGames." + game_name)
+            my_class = getattr(mod, game_name)
+            self.tournament.set_game(my_class())
+            print "Game type is now: ", self.tournament.game.get_name()
+        except Exception:
+            raise Exception("The selected game doesn't exist in the AvailableGames directory.")
 
     def set_id_counter(self, num):
         self.id_counter = num
-
-    def set_connected_players(self, player_list):
-        # TODO initialize this function
-        pass
-
-    def set_player_move_info(self):
-        # TODO initialize this function
-        pass
-
-    def set_tournament_round_info(self):
-        # TODO initialize this function
-        pass
 
     def set_registration_status(self, status):
         """

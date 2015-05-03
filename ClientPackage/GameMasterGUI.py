@@ -51,7 +51,8 @@ def set_rounds_max():
 
 def select_game_type():
     console.insert(END, "The selected game type is now: " + selectedGameType.get() + "\n")
-    gmc.set_game((selectedGameType.get().replace(".py", "")))
+    game_type = selectedGameType.get().replace(".py", "")
+    gmc.set_game(game_type)
 
 
 def select_tournament_type():
