@@ -1,4 +1,4 @@
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__author__ = "Paul Council, Anand Patel"
 __version__ = "sprint1"
 __credits__ = ["Tony"]
 
@@ -6,7 +6,6 @@ __credits__ = ["Tony"]
 from ServerPackage.TournamentService import *
 from AvailablePlayers.RPSPlayerExample import *
 from AvailableGames.RockPaperScissors import *
-from ServerPackage.Display import *
 from AvailablePlayers.BEPCPlayer import *
 
 

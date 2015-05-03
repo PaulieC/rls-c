@@ -3,10 +3,9 @@ __version__ = "sprint1"
 __credits__ = ["Samantha Holloway, Joe Pannizzo"]
 
 # imports
-from ServerPackage import Observer
 
 
-class Player(Observer.Observer):
+class Player():
     """
     Class Player is used as the top level class abstraction to play in a Tournament
     It specifies what a concrete Player must do to be a part of the Tournament

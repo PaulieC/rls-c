@@ -1,13 +1,12 @@
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
-__version__ = "sprint1"
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
 __credits__ = ["Alex Ciaramella, Greg Suner"]
 
 # imports
-from ServerPackage import Display, Message, Observable
 import time
 
 
-class Tournament(Observable.Observable):
+class Tournament():
     """
     Abstract Tournament Class
     Tournament is observable while players are observers
@@ -20,23 +19,13 @@ class Tournament(Observable.Observable):
 
     def __init__(self, rounds=1):
         """ set up a list of players when tournament is initialized """
-        Observable.Observable.__init__(self)
         self.name = None
         self.playerList = []
         self.game = None
-        self.display = None
         self.rounds = rounds
         self.num_players = 0
         self.max_players = 30
 
-    def attach_display(self, display):
-        """
-        Register the display to this Tournament
-        :param display: the display to sync with this Tournament
-        :type display: Display.Display
-        """
-        self.display = display
-        self.add_observer(self.display)
 
     def get_players(self):
         """
@@ -102,6 +91,11 @@ class Tournament(Observable.Observable):
         self.end_match(players, result)
 
     def play_round(self, match):
+        """
+        This method plays a single round within the given match
+        :param match:
+        :return:
+        """
         players = [match.player1_round, match.player2_round]
         # self.start_round(players)
         moves = []
@@ -148,8 +142,6 @@ class Tournament(Observable.Observable):
         :param players: the list of players registered to this tournament
         :type players: list
         """
-        message = Message.Message.get_match_start_message(players)
-        self.notify_all(message)
         time.sleep(3)
 
     def end_match(self, players, result):
@@ -160,8 +152,6 @@ class Tournament(Observable.Observable):
         :param result: the results of the match
         :type result: Match
         """
-        message = Message.Message.get_match_end_message(players, result)
-        self.notify_all(message)
 
     def start_round(self, players):
         """
@@ -169,8 +159,6 @@ class Tournament(Observable.Observable):
         :param players: the players to participate in the match
         :type players: list
         """
-        message = Message.Message.get_round_start_message(players)
-        self.notify_all(message)
 
     def end_round(self, players, moves, result):
         """
@@ -182,8 +170,6 @@ class Tournament(Observable.Observable):
         :param result: the message concerning the round results
         :type result: str
         """
-        message = Message.Message.get_round_end_message(players, moves, result)
-        self.notify_all(message)
         time.sleep(3)
 
     def set_max_rounds(self, max_num):

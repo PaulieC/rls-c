@@ -1,15 +1,10 @@
-"""
-This class should be called in TournamentData once a new match has been created.
-It should exist for the players to keep track of round information as it is
-updated each round in TournamentData.
-"""
 __author__ = "Paul Council, Anand Patel"
 __version__ = "sprint3"
 
 
 class MatchData:
     """
-    Class to track the match information between two players
+    Called by TournamentData to track individual matches.
     """
     def __init__(self, player1, player2, num_rounds):
         """

@@ -1,3 +1,6 @@
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint2"
+
 """
 This file will be used to hold instances of the current tournament and player information.
 This is a companion to the TournamentService as data doesn't stay persistent without an instance
