@@ -1,4 +1,4 @@
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__author__ = "Paul Council, Anand Patel"
 __version__ = "sprint2"
 
 # imports
@@ -7,7 +7,7 @@ from bjsonrpc.handlers import BaseHandler
 
 class PlayerService(BaseHandler):
     """
-    TODO
+    This class is currently unused, but may be used in the future.
     """
     # TODO fill information
 

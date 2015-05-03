@@ -2,7 +2,9 @@
 This class will act like the game administrator. It should be connected by the person handling the
 tournament. This 'player' will manage the current tournament, game, number of players, etc...
 """
-__author__ = 'Paul Council'
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
+
 import time
 
 from ClientPackage.GameMasterClient import *

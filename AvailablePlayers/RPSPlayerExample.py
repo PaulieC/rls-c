@@ -1,9 +1,8 @@
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__author__ = "Paul Council, Anand Patel"
 __version__ = "sprint1"
 __credits__ = ["geebzter"]
 
 # imports
-from ServerPackage import Message
 from ClientPackage import Player
 
 
@@ -110,8 +109,5 @@ if __name__ == "__main__":
     fake_moves = [1, 2]
     fake_result = [0, 1]
 
-    player.notify(Message.Message.get_match_start_message(players))
-    player.notify(Message.Message.get_round_start_message(players))
     move = player.play()
     print "Move played: ", move
-    player.notify(Message.Message.get_round_end_message(players, fake_moves, fake_result))

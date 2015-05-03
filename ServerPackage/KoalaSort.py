@@ -1,5 +1,5 @@
-__author__ = 'paulie'
-
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
 
 def unique_match_sort(match_list):
     temp_list = match_list
