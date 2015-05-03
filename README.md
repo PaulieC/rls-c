@@ -8,9 +8,9 @@ Provides a robust game framework for hosting competitions of games akin to Rock 
 
 ### Supported Game Types
 
-- **Rock, Paper, Scissors**  
-- **Rock, Paper, Scissors, Lizard, Spock** 
-- **Prisoner's Dilemma**
+- **Rock, Paper, Scissors**: Traditional Game.  
+- **Rock, Paper, Scissors, Lizard, Spock**: Variation that adds two additional moves.
+- **Prisoner's Dilemma**: Two players make decisions to accumulate the least jail time they can.
 
 ### Supported Tournament Types
 
