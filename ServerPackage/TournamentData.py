@@ -151,10 +151,21 @@ class TournamentData:
         self.connected_players.remove(player)
 
 # Setters
-    def set_tournament(self, game_type):
-        tour = importlib.import_module("AvailableTournaments." + game_type)
-        self.tournament = getattr(tour, game_type)()
-        print "Tournament type is now: ", self.tournament.get_name()
+    def set_tournament(self, tour_type):
+        """
+        Assigns the current tournament type to the parameter value if it exists
+        in the AvailableTournaments directory. Throws an error otherwise which
+        should be pushed all the way up to the GameController GUI
+        :param tour_type: str
+        :return:
+        """
+        try:
+            mod = importlib.import_module("AvailableTournaments." + tour_type)
+            my_class = getattr(mod, tour_type)
+            self.tournament = my_class()
+            print "Tournament type is now: ", self.tournament.get_name()
+        except Exception:
+            raise Exception("The selected tournament doesn't exist in the AvailableTournaments directory.")
 
     def set_game(self, game_name):
         # TODO initialize this function
