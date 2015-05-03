@@ -5,6 +5,7 @@ from Tkinter import *
 import tkMessageBox
 from PlayerClient import *
 from AvailablePlayers.TestPlayer1 import *
+import importlib
 
 player = TestPlayer1()
 client = PlayerClient(player)
@@ -101,8 +102,9 @@ def verify_registration():
 
 def change_player():
     try:
-        player = selected_player.get().replace(".py", "")
-        console.insert(END, "Player changed to: " + player.get() + "\n")
+        player_type = selected_player.get().replace(".py", "")
+        client.change_player(player_type)
+        console.insert(END, "Player changed to: " + client.player.get_name() + "\n")
     except Exception:
         console.insert(END, "Error trying to load in player.\n"
                             "This may be due to a corrupt/missing player file.\n"

@@ -4,9 +4,8 @@ __version__ = "sprint5"
 # imports
 import time
 import os
-
+import importlib
 import bjsonrpc
-
 from ClientPackage.PlayerService import *
 
 
@@ -23,6 +22,15 @@ class PlayerClient():
         self.player = player
         self.player_name = self.player.get_name()
         self.player_connect = None
+
+    def change_player(self, player_type):
+        try:
+            mod = importlib.import_module("AvailablePlayers." + player_type)
+            my_class = getattr(mod, player_type)
+            self.player = my_class()
+            print "Player type is now: ", self.player.get_name()
+        except Exception:
+            raise Exception("The selected tournament doesn't exist in the AvailableTournaments directory.")
 
     def client_connect(self, host, port=12345, handler=PlayerService):
         """

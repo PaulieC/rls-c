@@ -240,6 +240,3 @@ class TournamentData:
 
     def get_game_open(self):
         return self.game_open
-
-obj = TournamentData()
-obj.set_game("RockPaperScissorsLizardSpock")
