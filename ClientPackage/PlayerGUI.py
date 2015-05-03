@@ -12,13 +12,12 @@ client = PlayerClient(player)
 
 def list_files(path):
     """
+    Lists files inside the given path
     Web: http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
     Username: Apogentus
-    :param path:
-    :return:
+    :param path: the path we want to search
+    :return files: the list of files
     """
-    # returns a list of names (with extension, without full path) of all files
-    # in folder path
     files = []
     for name in os.listdir(path):
         if os.path.isfile(os.path.join(path, name)):
@@ -122,30 +121,37 @@ main.wm_title("Player")
 network_error_message = "Check physical network adapter.\n" \
                         "If error occurs again, notify the game admin.\n"
 
-#registrationLabel = Label(main, text="Registration Status:").grid(row=0, column=0)
 
-# SetPlayerName
+"""
+Set Player Name row
+"""
 setPlayerNameLabel = Label(main, text="Set Player Name:").grid(row=1, column=0)
 player_name = StringVar()
 player_name.set("Fuzzy Dunlop")
 setPlayerNameField = Entry(main, width=15, textvariable=player_name).grid(row=1, column=1)
 setPlayerNameButton = Button(main, text="Select", command=set_player_name).grid(row=1, column=2, columnspan=2)
 
-#Set Address
+"""
+Set Game Address row
+"""
 setGameAddressLabel = Label(main, text="Set IP Address:").grid(row=2, column=0)
 ip_address = StringVar()
 ip_address.set("150.250.190.225")
 setIPAddressField = Entry(main, width=15, textvariable=ip_address).grid(row=2, column=1)
 setIPAddressButton = Button(main, text="Select", command=set_ip_address).grid(row=2, column=2, columnspan=2)
 
-#SetPort
+"""
+Set Port row
+"""
 setPortLabel = Label(main, text="Set Port:").grid(row=3, column=0)
 port = StringVar()
 port.set("12345")
-setPortField = Entry(main, width=15, textvariable=port).grid(row=3,column=1)
-setPortButton = Button(main, text="Select", command=set_port).grid(row=3, column=2,columnspan=2)
+setPortField = Entry(main, width=15, textvariable=port).grid(row=3, column=1)
+setPortButton = Button(main, text="Select", command=set_port).grid(row=3, column=2, columnspan=2)
 
-#ChangePlayerAI
+"""
+Change AI row
+"""
 os.chdir("..")
 os.chdir(os.curdir + "/AvailablePlayers")
 result = os.path.abspath(os.curdir) + "/"
@@ -156,25 +162,46 @@ selected_player.set("...")
 changePlayerMenu = OptionMenu(main, selected_player, *players, command='').grid(row=4, column=1)
 changePlayerButton = Button(main, text="Select", command=change_player).grid(row=4, column=2, columnspan=2)
 
+"""
+Attempt Connection row
+"""
 attemptConnectionLabel = Label(main, text="Attempt Connection:").grid(row=5, column=0)
-attemptConnectionButton = Button(main, text="Connect", command=connect).grid(row=5, column=1,columnspan=3)
+attemptConnectionButton = Button(main, text="Connect", command=connect).grid(row=5, column=1, columnspan=3)
 
+"""
+Verify Connection row
+"""
 verifyConnectionLabel = Label(main, text="Verify Connection:").grid(row=6, column=0)
-verifyConnectionButton = Button(main, text="Verify", command=verify_connection).grid(row=6,column=1,columnspan=3)
+verifyConnectionButton = Button(main, text="Verify", command=verify_connection).grid(row=6, column=1, columnspan=3)
 
+"""
+Attempt Registration row
+"""
 attemptRegistrationLabel = Label(main, text="Attempt Registration:").grid(row=7, column=0)
-attemptRegistrationButton = Button(main, text="Register", command=register).grid(row=7,column=1,columnspan=3)
+attemptRegistrationButton = Button(main, text="Register", command=register).grid(row=7, column=1, columnspan=3)
 
+"""
+Verify Registration row
+"""
 verifyRegistrationLabel = Label(main, text="Verify Registration:").grid(row=8, column=0)
 verifyRegistrationButton = Button(main, text="Verify", command=verify_registration).grid(row=8, column=1, columnspan=3)
 
+"""
+Submit Move row
+"""
 submitMoveLabel = Label(main, text="Start submitting moves:").grid(row=9, column=0)
-submitMoveButton = Button(main, text="Submit", command=submit_move).grid(row=9, column=1)
+submitMoveButton = Button(main, text="Submit", command=submit_move).grid(row=9, column=1, columnspan=3)
 
-
+"""
+Console block
+"""
 console = Text(main, bg="#434A54", fg="white")
 console.grid(row=12, columnspan=4)
 
+"""
+Quit Button
+"""
 quitButton = Button(main, text="Quit", command=quit_game).grid(row=13, columnspan=4)
 
+# Begin the mainloop
 main.mainloop()
