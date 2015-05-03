@@ -1,6 +1,6 @@
 #TODO Deal with pass/illegal moves.
 
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__author__ = "Paul Council, Anand Patel"
 __version__ = "sprint1"
 
 # imports
@@ -9,7 +9,7 @@ from ServerPackage import Game
 
 class PrisonersDilemma(Game.Game):
     """
-     This game simulates Prisoner's Dilema. Result will return the number of years in jail for each player respectively
+     This game simulates Prisoner's Dilemma. Result will return the number of years in jail for each player respectively
     """
 
     def __init__(self):

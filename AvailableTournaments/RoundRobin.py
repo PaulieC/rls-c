@@ -1,6 +1,6 @@
 #TODO: Implement
 
-__author__ = "Paul Council, Joseph Gonzoph, Anand Patel"
+__author__ = "Paul Council, Anand Patel"
 __version__ = "sprint1"
 __credits__ = ["William Ezekiel"]
 

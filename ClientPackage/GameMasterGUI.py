@@ -1,16 +1,14 @@
+__author__ = "Paul Council, Anand Patel"
+__version__ = "sprint5"
+
 from Tkinter import *
-import os
 import tkMessageBox
-import importlib
 from ClientPackage.GameMasterClient import *
 from AvailablePlayers.GMPlayer import *
 
 
 my_player = GMPlayer()
 gmc = GameMasterClient(my_player)
-#gmc.client_connect('150.250.190.225')
-# verify connection
-# client.verify_connection()
 
 reg_status = "Closed"
 num_connections = 0
@@ -102,7 +100,6 @@ def kill_server():
 def connect():
     gmc.client_connect(host=ip.get(), port=port.get())
     console.insert(END, gmc.verify_connection)
-    #console.insert(END, str(gmc.verify_connection()))
 
 
 main = Tk()
