@@ -141,19 +141,39 @@ class TournamentService(BaseHandler):
         :param tournament_type: str
         :return boolean:
         """
-        # TODO finish this import issue
-        try:
-            tournament_type = str(tournament_type)
-            self.tournament_data.set_tournament(tournament_type)
-            success = True
-        except Exception:
-            raise Exception("set_tournament:: Couldn't change the tournament type.\n"
-                            "Likely due to a missing/corrupt tournament file.")
+        success = False
+        # check the game has been opened
+        # We don't want to change the tournament type after the players are ready
+        # to register
+        if not self.tournament_data.game_open:
+            try:
+                tournament_type = str(tournament_type)
+                self.tournament_data.set_tournament(tournament_type)
+                success = True
+            except Exception:
+                raise Exception("set_tournament:: Couldn't change the tournament type.\n"
+                                "Likely due to a missing/corrupt tournament file.")
         return success
 
-    def set_game(self, new_game):
-        # TODO finish this import issue
-        pass
+    def set_game(self, game_type):
+        """
+        Allows the game controller to set the current game type
+        :param game_type: str
+        :return: boolean
+        """
+        success = False
+        # check the game has been opened
+        # We don't want to change the tournament type after the players are ready
+        # to register
+        if not self.tournament_data.game_open:
+            try:
+                game_type = str(game_type)
+                self.tournament_data.set_game(game_type)
+                success = True
+            except Exception:
+                raise Exception("set_game:: Couldn't change the game type.\n"
+                                "Likely due to a missing/corrupt game file.")
+        return success
 
     def set_num_players(self, max_players):
         """

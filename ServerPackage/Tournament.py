@@ -6,8 +6,6 @@ __credits__ = ["Alex Ciaramella, Greg Suner"]
 from ServerPackage import Display, Message, Observable
 import time
 
-#
-
 
 class Tournament(Observable.Observable):
     """
