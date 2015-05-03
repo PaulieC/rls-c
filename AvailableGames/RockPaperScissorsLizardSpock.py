@@ -12,7 +12,6 @@ class RockPaperScissorsLizardSpock(Game.Game):
     """ this class simulates two players playing a game of rock, paper, scissors, lizard, spock """
 
     def __init__(self):
-        super(RockPaperScissorsLizardSpock, self).__init__()
         self.name = "Rock-Paper-Scissors-Lizard-Spock"
 
     def get_result(self, moves):
